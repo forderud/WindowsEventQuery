@@ -31,7 +31,7 @@ int wmain(void)
     PBYTE pTemp = NULL;
 
     // The source name (provider) must exist as a subkey of Application.
-    hEventLog = OpenEventLog(NULL, PROVIDER_NAME);
+    hEventLog = OpenEventLogW(NULL, PROVIDER_NAME);
     if (NULL == hEventLog)
     {
         wprintf(L"OpenEventLog failed with 0x%x.\n", GetLastError());
@@ -64,7 +64,7 @@ int wmain(void)
     // is not big enough to hold a complete event record, reallocate the buffer.
     while (ERROR_SUCCESS == status)
     {
-        if (!ReadEventLog(hEventLog, 
+        if (!ReadEventLogW(hEventLog, 
             EVENTLOG_SEQUENTIAL_READ | EVENTLOG_BACKWARDS_READ,
             0, 
             pBuffer,
@@ -125,7 +125,7 @@ HANDLE GetMessageResources()
 {
     HANDLE hResources = NULL;
 
-    hResources = LoadLibraryEx(RESOURCE_DLL, NULL, LOAD_LIBRARY_AS_IMAGE_RESOURCE | LOAD_LIBRARY_AS_DATAFILE);
+    hResources = LoadLibraryExW(RESOURCE_DLL, NULL, LOAD_LIBRARY_AS_IMAGE_RESOURCE | LOAD_LIBRARY_AS_DATAFILE);
     if (NULL == hResources)
     {
         wprintf(L"LoadLibrary failed with %lu.\n", GetLastError());
@@ -265,7 +265,7 @@ LPWSTR GetMessageString(DWORD MessageId, DWORD argc, LPWSTR argv)
         }
     }
 
-    if (!FormatMessage(dwFormatFlags,
+    if (!FormatMessageW(dwFormatFlags,
                        g_hResources,
                        MessageId,
                        0,  
@@ -486,6 +486,6 @@ void GetTimestamp(const DWORD Time, WCHAR DisplayString[])
     
     FileTimeToLocalFileTime(&ft, &ftLocal);
     FileTimeToSystemTime(&ftLocal, &st);
-    StringCchPrintf(DisplayString, MAX_TIMESTAMP_LEN, L"%d/%d/%d %.2d:%.2d:%.2d", 
+    StringCchPrintfW(DisplayString, MAX_TIMESTAMP_LEN, L"%d/%d/%d %.2d:%.2d:%.2d", 
         st.wMonth, st.wDay, st.wYear, st.wHour, st.wMinute, st.wSecond);
 }
