@@ -17,10 +17,29 @@ void GetTimestamp(const DWORD Time, WCHAR DisplayString[]);
 
 const wchar_t* pEventTypeNames[] = {L"Error", L"Warning", L"Informational", L"Audit Success", L"Audit Failure"};
 
+class EventLog {
+public:
+    EventLog(const wchar_t* source) {
+        m_handle = OpenEventLogW(/*localhost*/NULL, PROVIDER_NAME);
+        assert(m_handle);
+    }
+
+    ~EventLog() {
+        if (m_handle)
+            CloseEventLog(m_handle);
+
+    }
+
+    operator HANDLE () {
+        return m_handle;
+    }
+
+private:
+    HANDLE m_handle = 0;
+};
 
 int wmain(void)
 {
-    HANDLE hEventLog = NULL;
     DWORD status = ERROR_SUCCESS;
     DWORD dwBytesToRead = 0;
     DWORD dwBytesRead = 0;
@@ -35,11 +54,11 @@ int wmain(void)
     std::vector<BYTE> pBuffer(dwBytesToRead);
 
     // The source name (provider) must exist as a subkey of Application.
-    hEventLog = OpenEventLogW(/*localhost*/NULL, PROVIDER_NAME);
+    EventLog hEventLog (PROVIDER_NAME);
     if (NULL == hEventLog)
     {
         wprintf(L"OpenEventLog failed with 0x%x.\n", GetLastError());
-        goto cleanup;
+        return -1;
     }
 
     // Read blocks of records until you reach the end of the log or an 
@@ -67,7 +86,7 @@ int wmain(void)
                 if (ERROR_HANDLE_EOF != status)
                 {
                     wprintf(L"ReadEventLog failed with %lu.\n", status);
-                    goto cleanup;
+                    return 1;
                 }
             }
         }
@@ -78,9 +97,7 @@ int wmain(void)
         }
     }
 
-cleanup:
-    if (hEventLog)
-        CloseEventLog(hEventLog);
+    return 0;
 }
 
 
