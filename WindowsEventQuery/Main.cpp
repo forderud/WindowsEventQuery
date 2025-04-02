@@ -125,11 +125,11 @@ DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead)
         wprintf(L"event type: %s\n", pEventTypeNames[GetEventTypeName(((PEVENTLOGRECORD)pRecord)->EventType)]);
 
         std::wstring pMessage = GetMessageString(((PEVENTLOGRECORD)pRecord)->EventCategory, 0, NULL);
-        wprintf(L"event category: %s", pMessage.c_str());
+        wprintf(L"event category: %s\n", pMessage.c_str());
 
         pMessage = GetMessageString(((PEVENTLOGRECORD)pRecord)->EventID, 
             ((PEVENTLOGRECORD)pRecord)->NumStrings, (LPWSTR)(pRecord + ((PEVENTLOGRECORD)pRecord)->StringOffset));
-        wprintf(L"event message: %s", pMessage.c_str());
+        wprintf(L"event message: %s\n", pMessage.c_str());
 
         // To write the event data, you need to know the format of the data. In
         // this example, we know that the event data is a null-terminated string.
@@ -138,7 +138,7 @@ DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead)
             wprintf(L"event data: %s\n", (LPWSTR)(pRecord + ((PEVENTLOGRECORD)pRecord)->DataOffset));
         }
 
-        wprintf(L"\n\n");
+        wprintf(L"\n");
 
         pRecord += ((PEVENTLOGRECORD)pRecord)->Length;
     }
