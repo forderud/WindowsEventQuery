@@ -1,23 +1,19 @@
 #include <windows.h>
 #include <stdio.h>
 #include <strsafe.h>
+#include <string>
 
-#define PROVIDER_NAME           L"MyEventProvider"
-#define RESOURCE_DLL            L"<path>\\Provider.dll"
+#define PROVIDER_NAME           L"System"
 #define MAX_TIMESTAMP_LEN       23 + 1   // mm/dd/yyyy hh:mm:ss.mmm
 #define MAX_RECORD_BUFFER_SIZE  0x10000  // 64K
 
 HANDLE GetMessageResources();
 DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead);
 DWORD GetEventTypeName(DWORD EventType);
-LPWSTR GetMessageString(DWORD Id, DWORD argc, LPWSTR args);
+std::wstring GetMessageString(DWORD Id, DWORD argc, LPWSTR args);
 void GetTimestamp(const DWORD Time, WCHAR DisplayString[]);
-DWORD ApplyParameterStringsToMessage(CONST LPCWSTR pMessage, LPWSTR & pFinalMessage);
 
 const wchar_t* pEventTypeNames[] = {L"Error", L"Warning", L"Informational", L"Audit Success", L"Audit Failure"};
-
-
-HANDLE g_hResources = NULL;
 
 
 int wmain(void)
@@ -35,14 +31,6 @@ int wmain(void)
     if (NULL == hEventLog)
     {
         wprintf(L"OpenEventLog failed with 0x%x.\n", GetLastError());
-        goto cleanup;
-    }
-
-    // Get the DLL that contains the string resources for the provider.
-    g_hResources = GetMessageResources();
-    if (NULL == g_hResources)
-    {
-        wprintf(L"GetMessageResources failed.\n");
         goto cleanup;
     }
 
@@ -113,28 +101,6 @@ cleanup:
 }
 
 
-// Get the provider DLL that contains the string resources for the
-// category strings, event message strings, and parameter insert strings.
-// For this example, the path to the DLL is hardcoded but typically,
-// you would read the CategoryMessageFile, EventMessageFile, and 
-// ParameterMessageFile registry values under the source's registry key located 
-// under \SYSTEM\CurrentControlSet\Services\Eventlog\Application in
-// the HKLM registry hive. In this example, all resources are included in
-// the same resource-only DLL.
-HANDLE GetMessageResources()
-{
-    HANDLE hResources = NULL;
-
-    hResources = LoadLibraryExW(RESOURCE_DLL, NULL, LOAD_LIBRARY_AS_IMAGE_RESOURCE | LOAD_LIBRARY_AS_DATAFILE);
-    if (NULL == hResources)
-    {
-        wprintf(L"LoadLibrary failed with %lu.\n", GetLastError());
-    }
-
-    return hResources;
-}
-
-
 // Loop through the buffer and print the contents of each record 
 // in the buffer.
 DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead)
@@ -142,14 +108,13 @@ DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead)
     DWORD status = ERROR_SUCCESS;
     PBYTE pRecord = pBuffer;
     PBYTE pEndOfRecords = pBuffer + dwBytesRead;
-    LPWSTR pMessage = NULL;
-    LPWSTR pFinalMessage = NULL;
     WCHAR TimeStamp[MAX_TIMESTAMP_LEN];
 
     while (pRecord < pEndOfRecords)
     {
         // If the event was written by our provider, write the contents of the event.
-        if (0 == wcscmp(PROVIDER_NAME, (LPWSTR)(pRecord + sizeof(EVENTLOGRECORD))))
+        const wchar_t* SourceName = (LPWSTR)(pRecord + sizeof(EVENTLOGRECORD));
+        //if (0 == wcscmp(PROVIDER_NAME, SourceName))
         {
             GetTimestamp(((PEVENTLOGRECORD)pRecord)->TimeGenerated, TimeStamp);
             wprintf(L"Time stamp: %s\n", TimeStamp);
@@ -157,33 +122,12 @@ DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead)
             wprintf(L"status code: %d\n", ((PEVENTLOGRECORD)pRecord)->EventID & 0xFFFF);
             wprintf(L"event type: %s\n", pEventTypeNames[GetEventTypeName(((PEVENTLOGRECORD)pRecord)->EventType)]);
 
-            pMessage = GetMessageString(((PEVENTLOGRECORD)pRecord)->EventCategory, 0, NULL);
-
-            if (pMessage)
-            {
-                wprintf(L"event category: %s", pMessage);
-                LocalFree(pMessage);
-                pMessage = NULL;
-            }
+            std::wstring pMessage = GetMessageString(((PEVENTLOGRECORD)pRecord)->EventCategory, 0, NULL);
+            wprintf(L"event category: %s", pMessage.c_str());
 
             pMessage = GetMessageString(((PEVENTLOGRECORD)pRecord)->EventID, 
                 ((PEVENTLOGRECORD)pRecord)->NumStrings, (LPWSTR)(pRecord + ((PEVENTLOGRECORD)pRecord)->StringOffset));
-
-            if (pMessage)
-            {
-                status = ApplyParameterStringsToMessage(pMessage, pFinalMessage);
-
-                wprintf(L"event message: %s", (pFinalMessage) ? pFinalMessage : pMessage);
-                LocalFree(pMessage);
-                pMessage = NULL;
-
-                if (pFinalMessage)
-                {
-                    free(pFinalMessage);
-                    pFinalMessage = NULL;
-                }
-            }
-
+            wprintf(L"event message: %s", pMessage.c_str());
 
             // To write the event data, you need to know the format of the data. In
             // this example, we know that the event data is a null-terminated string.
@@ -233,11 +177,9 @@ DWORD GetEventTypeName(DWORD EventType)
 
 // Formats the specified message. If the message uses inserts, build
 // the argument list to pass to FormatMessage.
-LPWSTR GetMessageString(DWORD MessageId, DWORD argc, LPWSTR argv)
+std::wstring GetMessageString(DWORD MessageId, DWORD argc, LPWSTR argv)
 {
-    LPWSTR pMessage = NULL;
-    DWORD dwFormatFlags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_ALLOCATE_BUFFER;
-    DWORD_PTR* pArgs = NULL;
+    std::wstring pMessage;
     LPWSTR pString = argv;
 
     // The insertion strings appended to the end of the event record
@@ -245,231 +187,15 @@ LPWSTR GetMessageString(DWORD MessageId, DWORD argc, LPWSTR argv)
     // an array of addresses. Create an array of DWORD_PTRs based on
     // the count of strings. Assign the address of each string
     // to an element in the array (maintaining the same order).
-    if (argc > 0)
+    for (DWORD i = 0; i < argc; i++)
     {
-        pArgs = (DWORD_PTR*)malloc(sizeof(DWORD_PTR) * argc);
-        if (pArgs)
-        {
-            dwFormatFlags |= FORMAT_MESSAGE_ARGUMENT_ARRAY;
-
-            for (DWORD i = 0; i < argc; i++)
-            {
-                pArgs[i] = (DWORD_PTR)pString;
-                pString += wcslen(pString) + 1;
-            }
-        }
-        else
-        {
-            dwFormatFlags |= FORMAT_MESSAGE_IGNORE_INSERTS;
-            wprintf(L"Failed to allocate memory for the insert string array.\n");
-        }
+        pMessage += L", ";
+        pMessage += pString;
+        pString += wcslen(pString) + 1;
     }
-
-    if (!FormatMessageW(dwFormatFlags,
-                       g_hResources,
-                       MessageId,
-                       0,  
-                       (LPWSTR)&pMessage, 
-                       0, 
-                       (va_list*)pArgs))
-    {
-        wprintf(L"Format message failed with %lu\n", GetLastError());
-    }
-
-    if (pArgs)
-        free(pArgs);
 
     return pMessage;
 }
-
-// If the message string contains parameter insertion strings (for example, %%4096),
-// you must perform the parameter substitution yourself. To get the parameter message 
-// string, call FormatMessage with the message identifier found in the parameter insertion 
-// string (for example, 4096 is the message identifier if the parameter insertion string
-// is %%4096). You then substitute the parameter insertion string in the message 
-// string with the actual parameter message string. 
-DWORD ApplyParameterStringsToMessage(CONST LPCWSTR pMessage, LPWSTR & pFinalMessage)
-{
-    DWORD status = ERROR_SUCCESS;
-    DWORD dwParameterCount = 0;  // Number of insertion strings found in pMessage
-    size_t cbBuffer = 0;         // Size of the buffer in bytes
-    size_t cchBuffer = 0;        // Size of the buffer in characters
-    size_t cchParameters = 0;    // Number of characters in all the parameter strings
-    size_t cch = 0;
-    DWORD i = 0;
-    LPWSTR* pStartingAddresses = NULL;  // Array of pointers to the beginning of each parameter string in pMessage
-    LPWSTR* pEndingAddresses = NULL;    // Array of pointers to the end of each parameter string in pMessage
-    DWORD* pParameterIDs = NULL;        // Array of parameter identifiers found in pMessage
-    LPWSTR* pParameters = NULL;         // Array of the actual parameter strings
-    LPWSTR pTempMessage = (LPWSTR)pMessage;
-    LPWSTR pTempFinalMessage = NULL;
-
-    // Determine the number of parameter insertion strings in pMessage.
-    while (pTempMessage = wcschr(pTempMessage, L'%'))
-    {
-        if (isdigit(*(pTempMessage + 1))) {
-            dwParameterCount++;
-        }
-        pTempMessage++;
-    }
-
-    // If there are no parameter insertion strings in pMessage, return.
-    if (0 == dwParameterCount)
-    {
-        pFinalMessage = NULL;
-        goto cleanup;
-    }
-
-    // Allocate an array of pointers that will contain the beginning address 
-    // of each parameter insertion string.
-    cbBuffer = sizeof(LPWSTR) * dwParameterCount;
-    pStartingAddresses = (LPWSTR*)malloc(cbBuffer);
-    if (NULL == pStartingAddresses)
-    {
-        wprintf(L"Failed to allocate memory for pStartingAddresses.\n");
-        status = ERROR_OUTOFMEMORY;
-        goto cleanup;
-    }
-
-    RtlZeroMemory(pStartingAddresses, cbBuffer);
-
-    // Allocate an array of pointers that will contain the ending address (one
-    // character past the of the identifier) of the each parameter insertion string.
-    pEndingAddresses = (LPWSTR*)malloc(cbBuffer);
-    if (NULL == pEndingAddresses)
-    {
-        wprintf(L"Failed to allocate memory for pEndingAddresses.\n");
-        status = ERROR_OUTOFMEMORY;
-        goto cleanup;
-    }
-
-    RtlZeroMemory(pEndingAddresses, cbBuffer);
-
-    // Allocate an array of pointers that will contain pointers to the actual
-    // parameter strings.
-    pParameters = (LPWSTR*)malloc(cbBuffer);
-    if (NULL == pParameters)
-    {
-        wprintf(L"Failed to allocate memory for pEndingAddresses.\n");
-        status = ERROR_OUTOFMEMORY;
-        goto cleanup;
-    }
-
-    RtlZeroMemory(pParameters, cbBuffer);
-
-    // Allocate an array of DWORDs that will contain the message identifier
-    // for each parameter.
-    pParameterIDs = (DWORD*)malloc(cbBuffer);
-    if (NULL == pParameterIDs)
-    {
-        wprintf(L"Failed to allocate memory for pParameterIDs.\n");
-        status = ERROR_OUTOFMEMORY;
-        goto cleanup;
-    }
-
-    RtlZeroMemory(pParameterIDs, cbBuffer);
-
-    // Find each parameter in pMessage and get the pointer to the
-    // beginning of the insertion string, the end of the insertion string,
-    // and the message identifier of the parameter.
-    pTempMessage = (LPWSTR)pMessage;
-    while (pTempMessage = wcschr(pTempMessage, L'%'))
-    {
-        if (isdigit(*(pTempMessage+1)))
-        {
-            pStartingAddresses[i] = pTempMessage;
-
-            pTempMessage++;
-            pParameterIDs[i] = (DWORD)_wtoi(pTempMessage);
-
-            while (isdigit(*++pTempMessage))
-                ;
-
-            pEndingAddresses[i] = pTempMessage;
-
-            i++;
-        }
-        else {
-            pTempMessage++;
-        }
-    }
-
-    // For each parameter, use the message identifier to get the
-    // actual parameter string.
-    for (DWORD i = 0; i < dwParameterCount; i++)
-    {
-        pParameters[i] = GetMessageString(pParameterIDs[i], 0, NULL);
-        if (NULL == pParameters[i])
-        {
-            wprintf(L"GetMessageString could not find parameter string for insert %lu.\n", i);
-            status = ERROR_INVALID_PARAMETER;
-            goto cleanup;
-        }
-
-        cchParameters += wcslen(pParameters[i]);
-    }
-
-    // Allocate enough memory for pFinalMessage based on the length of pMessage
-    // and the length of each parameter string. The pFinalMessage buffer will contain 
-    // the completed parameter substitution.
-    pTempMessage = (LPWSTR)pMessage;
-    cbBuffer = (wcslen(pMessage) + cchParameters + 1) * sizeof(WCHAR);
-    pFinalMessage = (LPWSTR)malloc(cbBuffer);
-    if (NULL == pFinalMessage)
-    {
-        wprintf(L"Failed to allocate memory for pFinalMessage.\n");
-        status = ERROR_OUTOFMEMORY;
-        goto cleanup;
-    }
-
-    RtlZeroMemory(pFinalMessage, cbBuffer);
-    cchBuffer = cbBuffer / sizeof(WCHAR);
-    pTempFinalMessage = pFinalMessage;
-
-    // Build the final message string.
-    for (DWORD i = 0; i < dwParameterCount; i++)
-    {
-        // Append the segment from pMessage. In the first iteration, this is "8 " and in the
-        // second iteration, this is " = 2 ".
-        wcsncpy_s(pTempFinalMessage, cchBuffer, pTempMessage, cch = (pStartingAddresses[i] - pTempMessage));
-        pTempMessage = pEndingAddresses[i];
-        cchBuffer -= cch;
-
-        // Append the parameter string. In the first iteration, this is "quarts" and in the
-        // second iteration, this is "gallons"
-        pTempFinalMessage += cch;
-        wcscpy_s(pTempFinalMessage, cchBuffer, pParameters[i]);
-        cchBuffer -= cch = wcslen(pParameters[i]);
-
-        pTempFinalMessage += cch;
-    }
-
-    // Append the last segment from pMessage, which is ".".
-    wcscpy_s(pTempFinalMessage, cchBuffer, pTempMessage);
-
-cleanup:
-
-    if (ERROR_SUCCESS != status)
-        pFinalMessage = (LPWSTR)pMessage;
-
-    if (pStartingAddresses)
-        free(pStartingAddresses);
-
-    if (pEndingAddresses)
-        free(pEndingAddresses);
-
-    if (pParameterIDs)
-        free(pParameterIDs);
-
-    for (DWORD i = 0; i < dwParameterCount; i++)
-    {
-        if (pParameters[i])
-            LocalFree(pParameters[i]);
-    }
-
-    return status;
-}
-
 
 // Get a string that contains the time stamp of when the event 
 // was generated.
