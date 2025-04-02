@@ -18,7 +18,7 @@ void GetTimestamp(const DWORD Time, WCHAR DisplayString[]);
 class EventLog {
 public:
     EventLog(const wchar_t* source) {
-        m_handle = OpenEventLogW(/*localhost*/NULL, PROVIDER_NAME);
+        m_handle = OpenEventLogW(/*localhost*/NULL, source);
         assert(m_handle);
     }
 
