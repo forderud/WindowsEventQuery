@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <strsafe.h>
 #include <string>
+#include <cassert>
 
 #define PROVIDER_NAME           L"System"
 #define MAX_TIMESTAMP_LEN       23 + 1   // mm/dd/yyyy hh:mm:ss.mmm
@@ -66,12 +67,7 @@ int wmain(void)
                 status = ERROR_SUCCESS;
 
                 pTemp = (PBYTE)realloc(pBuffer, dwMinimumBytesToRead);
-                if (NULL == pTemp)
-                {
-                    wprintf(L"Failed to reallocate the memory for the record buffer (%d bytes).\n", dwMinimumBytesToRead);
-                    goto cleanup;
-                }
-
+                assert(pTemp);
                 pBuffer = pTemp;
                 dwBytesToRead = dwMinimumBytesToRead;
             }
