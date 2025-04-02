@@ -57,27 +57,23 @@ int wmain() {
     // error occurs. The records are read from newest to oldest. If the buffer
     // is not big enough to hold a complete event record, reallocate the buffer.
     DWORD status = ERROR_SUCCESS;
-    while (ERROR_SUCCESS == status)
-    {
+    while (ERROR_SUCCESS == status) {
         DWORD dwBytesRead = 0;
         DWORD dwMinimumBytesToRead = 0;
 
-        if (!ReadEventLogW(hEventLog, 
-            EVENTLOG_SEQUENTIAL_READ | EVENTLOG_BACKWARDS_READ,
-            0, 
-            pBuffer.data(),
-            (DWORD)pBuffer.size(),
-            &dwBytesRead,
-            &dwMinimumBytesToRead)) {
+        if (!ReadEventLogW(hEventLog, EVENTLOG_SEQUENTIAL_READ | EVENTLOG_BACKWARDS_READ, 0, pBuffer.data(), (DWORD)pBuffer.size(), &dwBytesRead, &dwMinimumBytesToRead)) {
+            // call failed
             status = GetLastError();
             if (ERROR_INSUFFICIENT_BUFFER == status) {
+                // retry with larger buffer
                 status = ERROR_SUCCESS;
                 pBuffer.resize(dwMinimumBytesToRead);
+            } else if (status == ERROR_HANDLE_EOF) {
+                // reached the end 
+                break;
             } else  {
-                if (ERROR_HANDLE_EOF != status) {
-                    wprintf(L"ReadEventLog failed with %lu.\n", status);
-                    return 1;
-                }
+                wprintf(L"ReadEventLog failed with %lu.\n", status);
+                return 1;
             }
         } else {
             // Print the contents of each record in the buffer.
