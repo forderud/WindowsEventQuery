@@ -190,8 +190,9 @@ std::wstring GetMessageString(DWORD MessageId, DWORD argc, LPWSTR argv)
     // to an element in the array (maintaining the same order).
     for (DWORD i = 0; i < argc; i++)
     {
-        pMessage += L", ";
         pMessage += pString;
+        if (i < argc-1)
+            pMessage += L", ";
         pString += wcslen(pString) + 1;
     }
 
