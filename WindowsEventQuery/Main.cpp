@@ -148,21 +148,19 @@ DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead)
 
 /** Get an index value to the pEventTypeNames array based on the event type value. */
 const wchar_t* GetEventTypeName(DWORD EventType) {
-    const wchar_t* pEventTypeNames[] = { L"Error", L"Warning", L"Informational", L"Audit Success", L"Audit Failure" };
-
     switch (EventType) {
         case EVENTLOG_ERROR_TYPE:
-            return pEventTypeNames[0];
+            return L"Error";
         case EVENTLOG_WARNING_TYPE:
-            return pEventTypeNames[1];
+            return L"Warning";
         case EVENTLOG_INFORMATION_TYPE:
-            return pEventTypeNames[2];
+            return L"Informational";
         case EVENTLOG_AUDIT_SUCCESS:
-            return pEventTypeNames[3];
+            return L"Audit Success";
         case EVENTLOG_AUDIT_FAILURE:
-            return pEventTypeNames[4];
+            return L"Audit Failure";
         default:
-            return pEventTypeNames[0];
+            return L"Unknown";
     }
 }
 
