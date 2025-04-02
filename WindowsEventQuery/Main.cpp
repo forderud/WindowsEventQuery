@@ -136,7 +136,7 @@ DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead)
                 wprintf(L"event data: %s\n", (LPWSTR)(pRecord + ((PEVENTLOGRECORD)pRecord)->DataOffset));
             }
 
-            wprintf(L"\n");
+            wprintf(L"\n\n");
         }
 
         pRecord += ((PEVENTLOGRECORD)pRecord)->Length;
