@@ -193,17 +193,18 @@ std::wstring GetMessageString(DWORD MessageId, DWORD argc, LPWSTR argv)
 // was generated.
 void GetTimestamp(const DWORD Time, WCHAR DisplayString[])
 {
-    ULONGLONG ullTimeStamp = 0;
-    ULONGLONG SecsTo1970 = 116444736000000000;
-    SYSTEMTIME st;
-    FILETIME ft, ftLocal;
+    const ULONGLONG SecsTo1970 = 116444736000000000;
+    ULONGLONG ullTimeStamp = Int32x32To64(Time, 10000000) + SecsTo1970;
 
-    ullTimeStamp = Int32x32To64(Time, 10000000) + SecsTo1970;
+    FILETIME ft;
     ft.dwHighDateTime = (DWORD)((ullTimeStamp >> 32) & 0xFFFFFFFF);
     ft.dwLowDateTime = (DWORD)(ullTimeStamp & 0xFFFFFFFF);
     
+    FILETIME ftLocal;
     FileTimeToLocalFileTime(&ft, &ftLocal);
+
+    SYSTEMTIME st;
     FileTimeToSystemTime(&ftLocal, &st);
-    StringCchPrintfW(DisplayString, MAX_TIMESTAMP_LEN, L"%d/%d/%d %.2d:%.2d:%.2d", 
-        st.wMonth, st.wDay, st.wYear, st.wHour, st.wMinute, st.wSecond);
+
+    StringCchPrintfW(DisplayString, MAX_TIMESTAMP_LEN, L"%d/%d/%d %.2d:%.2d:%.2d", st.wMonth, st.wDay, st.wYear, st.wHour, st.wMinute, st.wSecond);
 }
