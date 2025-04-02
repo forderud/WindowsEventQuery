@@ -124,7 +124,7 @@ DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead)
 
         wprintf(L"event type: %s\n", pEventTypeNames[GetEventTypeName(((PEVENTLOGRECORD)pRecord)->EventType)]);
 
-        std::wstring pMessage = GetMessageString(((PEVENTLOGRECORD)pRecord)->EventCategory, 0, NULL);
+        std::wstring pMessage = std::to_wstring(((PEVENTLOGRECORD)pRecord)->EventCategory);
         wprintf(L"event category: %s\n", pMessage.c_str());
 
         pMessage = GetMessageString(((PEVENTLOGRECORD)pRecord)->EventID, 
