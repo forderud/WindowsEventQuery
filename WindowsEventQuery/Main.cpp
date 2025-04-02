@@ -147,32 +147,22 @@ DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead)
 }
 
 
-// Get an index value to the pEventTypeNames array based on 
-// the event type value.
-DWORD GetEventTypeName(DWORD EventType)
-{
-    DWORD index = 0;
-
-    switch (EventType)
-    {
+/** Get an index value to the pEventTypeNames array based on the event type value. */
+DWORD GetEventTypeName(DWORD EventType) {
+    switch (EventType) {
         case EVENTLOG_ERROR_TYPE:
-            index = 0;
-            break;
+            return 0;
         case EVENTLOG_WARNING_TYPE:
-            index = 1;
-            break;
+            return 1;
         case EVENTLOG_INFORMATION_TYPE:
-            index = 2;
-            break;
+            return 2;
         case EVENTLOG_AUDIT_SUCCESS:
-            index = 3;
-            break;
+            return 3;
         case EVENTLOG_AUDIT_FAILURE:
-            index = 4;
-            break;
+            return 4;
+        default:
+            return 0;
     }
-
-    return index;
 }
 
 
