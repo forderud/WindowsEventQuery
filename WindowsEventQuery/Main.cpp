@@ -7,9 +7,8 @@
 
 #define PROVIDER_NAME           L"System"
 #define MAX_TIMESTAMP_LEN       23 + 1   // mm/dd/yyyy hh:mm:ss.mmm
-#define MAX_RECORD_BUFFER_SIZE  0x10000  // 64K
 
-HANDLE GetMessageResources();
+
 DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead);
 const wchar_t* GetEventTypeName(DWORD EventType);
 std::wstring GetMessageString(DWORD Id, DWORD argc, LPWSTR args);
@@ -37,57 +36,50 @@ private:
     HANDLE m_handle = 0;
 };
 
-int wmain(void)
-{
-    DWORD status = ERROR_SUCCESS;
-    DWORD dwBytesRead = 0;
-    DWORD dwMinimumBytesToRead = 0;
 
-    // Allocate an initial block of memory used to read event records. The number 
-    // of records read into the buffer will vary depending on the size of each event.
-    // The size of each event will vary based on the size of the user-defined
-    // data included with each event, the number and length of insertion 
-    // strings, and other data appended to the end of the event record.
-    std::vector<BYTE> pBuffer(MAX_RECORD_BUFFER_SIZE);
-
+int wmain() {
     // The source name (provider) must exist as a subkey of Application.
-    EventLog hEventLog (PROVIDER_NAME);
+    EventLog hEventLog(PROVIDER_NAME);
     if (NULL == hEventLog)
     {
         wprintf(L"OpenEventLog failed with 0x%x.\n", GetLastError());
         return -1;
     }
 
+    // Allocate an initial block of memory used to read event records. The number 
+    // of records read into the buffer will vary depending on the size of each event.
+    // The size of each event will vary based on the size of the user-defined
+    // data included with each event, the number and length of insertion 
+    // strings, and other data appended to the end of the event record.
+    std::vector<BYTE> pBuffer(0x10000); // 64K
+
     // Read blocks of records until you reach the end of the log or an 
     // error occurs. The records are read from newest to oldest. If the buffer
     // is not big enough to hold a complete event record, reallocate the buffer.
+    DWORD status = ERROR_SUCCESS;
     while (ERROR_SUCCESS == status)
     {
+        DWORD dwBytesRead = 0;
+        DWORD dwMinimumBytesToRead = 0;
+
         if (!ReadEventLogW(hEventLog, 
             EVENTLOG_SEQUENTIAL_READ | EVENTLOG_BACKWARDS_READ,
             0, 
             pBuffer.data(),
             (DWORD)pBuffer.size(),
             &dwBytesRead,
-            &dwMinimumBytesToRead))
-        {
+            &dwMinimumBytesToRead)) {
             status = GetLastError();
-            if (ERROR_INSUFFICIENT_BUFFER == status)
-            {
+            if (ERROR_INSUFFICIENT_BUFFER == status) {
                 status = ERROR_SUCCESS;
                 pBuffer.resize(dwMinimumBytesToRead);
-            }
-            else 
-            {
-                if (ERROR_HANDLE_EOF != status)
-                {
+            } else  {
+                if (ERROR_HANDLE_EOF != status) {
                     wprintf(L"ReadEventLog failed with %lu.\n", status);
                     return 1;
                 }
             }
-        }
-        else
-        {
+        } else {
             // Print the contents of each record in the buffer.
             DumpRecordsInBuffer(pBuffer.data(), dwBytesRead);
         }
