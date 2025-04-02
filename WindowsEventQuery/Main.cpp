@@ -165,27 +165,20 @@ const wchar_t* GetEventTypeName(DWORD EventType) {
 }
 
 
-// Formats the specified message. If the message uses inserts, build
-// the argument list to pass to FormatMessage.
-std::wstring GetMessageString(DWORD MessageId, DWORD argc, LPWSTR argv)
-{
-    std::wstring pMessage = L"ID=" + std::to_wstring(MessageId) + L", ";
-    LPWSTR pString = argv;
+/** Formats the specified message. */
+std::wstring GetMessageString(DWORD MessageId, DWORD argc, LPWSTR argv) {
+    std::wstring message = L"ID=" + std::to_wstring(MessageId) + L", ";
 
-    // The insertion strings appended to the end of the event record
-    // are an array of strings; however, FormatMessage requires
-    // an array of addresses. Create an array of DWORD_PTRs based on
-    // the count of strings. Assign the address of each string
-    // to an element in the array (maintaining the same order).
-    for (DWORD i = 0; i < argc; i++)
-    {
-        pMessage += pString;
+    for (DWORD i = 0; i < argc; i++) {
+        message += argv;
+
         if (i < argc-1)
-            pMessage += L", ";
-        pString += wcslen(pString) + 1;
+            message += L", ";
+
+        argv += wcslen(argv) + 1;
     }
 
-    return pMessage;
+    return message;
 }
 
 // Get a string that contains the time stamp of when the event 
