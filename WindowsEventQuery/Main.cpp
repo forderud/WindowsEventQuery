@@ -105,13 +105,12 @@ cleanup:
 // in the buffer.
 DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead)
 {
-    DWORD status = ERROR_SUCCESS;
     PBYTE pRecord = pBuffer;
     PBYTE pEndOfRecords = pBuffer + dwBytesRead;
-    WCHAR TimeStamp[MAX_TIMESTAMP_LEN];
 
     while (pRecord < pEndOfRecords)
     {
+        WCHAR TimeStamp[MAX_TIMESTAMP_LEN];
         GetTimestamp(((PEVENTLOGRECORD)pRecord)->TimeGenerated, TimeStamp);
         wprintf(L"Time stamp: %s\n", TimeStamp);
 
@@ -143,7 +142,7 @@ DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead)
         pRecord += ((PEVENTLOGRECORD)pRecord)->Length;
     }
 
-    return status;
+    return ERROR_SUCCESS;
 }
 
 
