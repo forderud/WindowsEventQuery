@@ -14,13 +14,13 @@ LPWSTR GetMessageString(DWORD Id, DWORD argc, LPWSTR args);
 void GetTimestamp(const DWORD Time, WCHAR DisplayString[]);
 DWORD ApplyParameterStringsToMessage(CONST LPCWSTR pMessage, LPWSTR & pFinalMessage);
 
-CONST LPWSTR pEventTypeNames[] = {L"Error", L"Warning", L"Informational", L"Audit Success", L"Audit Failure"};
+const wchar_t* pEventTypeNames[] = {L"Error", L"Warning", L"Informational", L"Audit Success", L"Audit Failure"};
 
 
 HANDLE g_hResources = NULL;
 
 
-void wmain(void)
+int wmain(void)
 {
     HANDLE hEventLog = NULL;
     DWORD status = ERROR_SUCCESS;
