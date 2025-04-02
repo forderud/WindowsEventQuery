@@ -100,15 +100,11 @@ int wmain(void)
 }
 
 
-// Loop through the buffer and print the contents of each record 
-// in the buffer.
-DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead)
-{
+/** Print the contents of each record in the buffer. */
+DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead) {
     PBYTE pRecord = pBuffer;
-    PBYTE pEndOfRecords = pBuffer + dwBytesRead;
 
-    while (pRecord < pEndOfRecords)
-    {
+    while (pRecord < pBuffer + dwBytesRead) {
         EVENTLOGRECORD* record = (PEVENTLOGRECORD)pRecord;
 
         WCHAR TimeStamp[MAX_TIMESTAMP_LEN];
