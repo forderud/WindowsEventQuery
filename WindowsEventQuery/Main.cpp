@@ -110,36 +110,37 @@ DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead)
 
     while (pRecord < pEndOfRecords)
     {
+        EVENTLOGRECORD* record = (PEVENTLOGRECORD)pRecord;
+
         WCHAR TimeStamp[MAX_TIMESTAMP_LEN];
-        GetTimestamp(((PEVENTLOGRECORD)pRecord)->TimeGenerated, TimeStamp);
+        GetTimestamp(record->TimeGenerated, TimeStamp);
         wprintf(L"Time stamp: %s\n", TimeStamp);
 
         const wchar_t* SourceName = (LPWSTR)(pRecord + sizeof(EVENTLOGRECORD));
         wprintf(L"Source: %s\n", SourceName);
 
-        wprintf(L"record number: %lu\n", ((PEVENTLOGRECORD)pRecord)->RecordNumber);
+        wprintf(L"record number: %lu\n", record->RecordNumber);
 
-        wprintf(L"status code: %d\n", ((PEVENTLOGRECORD)pRecord)->EventID & 0xFFFF);
+        wprintf(L"status code: %d\n", record->EventID & 0xFFFF);
 
-        wprintf(L"event type: %s\n", pEventTypeNames[GetEventTypeName(((PEVENTLOGRECORD)pRecord)->EventType)]);
+        wprintf(L"event type: %s\n", pEventTypeNames[GetEventTypeName(record->EventType)]);
 
-        std::wstring pMessage = std::to_wstring(((PEVENTLOGRECORD)pRecord)->EventCategory);
+        std::wstring pMessage = std::to_wstring(record->EventCategory);
         wprintf(L"event category: %s\n", pMessage.c_str());
 
-        pMessage = GetMessageString(((PEVENTLOGRECORD)pRecord)->EventID, 
-            ((PEVENTLOGRECORD)pRecord)->NumStrings, (LPWSTR)(pRecord + ((PEVENTLOGRECORD)pRecord)->StringOffset));
+        pMessage = GetMessageString(record->EventID, record->NumStrings, (LPWSTR)(pRecord + record->StringOffset));
         wprintf(L"event message: %s\n", pMessage.c_str());
 
         // To write the event data, you need to know the format of the data. In
         // this example, we know that the event data is a null-terminated string.
-        if (((PEVENTLOGRECORD)pRecord)->DataLength > 0)
+        if (record->DataLength > 0)
         {
-            wprintf(L"event data: %s\n", (LPWSTR)(pRecord + ((PEVENTLOGRECORD)pRecord)->DataOffset));
+            wprintf(L"event data: %s\n", (LPWSTR)(pRecord + record->DataOffset));
         }
 
         wprintf(L"\n");
 
-        pRecord += ((PEVENTLOGRECORD)pRecord)->Length;
+        pRecord += record->Length;
     }
 
     return ERROR_SUCCESS;
