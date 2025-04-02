@@ -11,11 +11,10 @@
 
 HANDLE GetMessageResources();
 DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead);
-DWORD GetEventTypeName(DWORD EventType);
+const wchar_t* GetEventTypeName(DWORD EventType);
 std::wstring GetMessageString(DWORD Id, DWORD argc, LPWSTR args);
 void GetTimestamp(const DWORD Time, WCHAR DisplayString[]);
 
-const wchar_t* pEventTypeNames[] = {L"Error", L"Warning", L"Informational", L"Audit Success", L"Audit Failure"};
 
 class EventLog {
 public:
@@ -123,7 +122,7 @@ DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead)
 
         wprintf(L"status code: %d\n", record->EventID & 0xFFFF);
 
-        wprintf(L"event type: %s\n", pEventTypeNames[GetEventTypeName(record->EventType)]);
+        wprintf(L"event type: %s\n", GetEventTypeName(record->EventType));
 
         std::wstring pMessage = std::to_wstring(record->EventCategory);
         wprintf(L"event category: %s\n", pMessage.c_str());
@@ -148,20 +147,22 @@ DWORD DumpRecordsInBuffer(PBYTE pBuffer, DWORD dwBytesRead)
 
 
 /** Get an index value to the pEventTypeNames array based on the event type value. */
-DWORD GetEventTypeName(DWORD EventType) {
+const wchar_t* GetEventTypeName(DWORD EventType) {
+    const wchar_t* pEventTypeNames[] = { L"Error", L"Warning", L"Informational", L"Audit Success", L"Audit Failure" };
+
     switch (EventType) {
         case EVENTLOG_ERROR_TYPE:
-            return 0;
+            return pEventTypeNames[0];
         case EVENTLOG_WARNING_TYPE:
-            return 1;
+            return pEventTypeNames[1];
         case EVENTLOG_INFORMATION_TYPE:
-            return 2;
+            return pEventTypeNames[2];
         case EVENTLOG_AUDIT_SUCCESS:
-            return 3;
+            return pEventTypeNames[3];
         case EVENTLOG_AUDIT_FAILURE:
-            return 4;
+            return pEventTypeNames[4];
         default:
-            return 0;
+            return pEventTypeNames[0];
     }
 }
 
