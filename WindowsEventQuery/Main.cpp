@@ -180,7 +180,7 @@ DWORD GetEventTypeName(DWORD EventType)
 // the argument list to pass to FormatMessage.
 std::wstring GetMessageString(DWORD MessageId, DWORD argc, LPWSTR argv)
 {
-    std::wstring pMessage;
+    std::wstring pMessage = L"ID=" + std::to_wstring(MessageId) + L", ";
     LPWSTR pString = argv;
 
     // The insertion strings appended to the end of the event record
