@@ -31,7 +31,7 @@ int wmain(void)
     PBYTE pTemp = NULL;
 
     // The source name (provider) must exist as a subkey of Application.
-    hEventLog = OpenEventLogW(NULL, PROVIDER_NAME);
+    hEventLog = OpenEventLogW(/*localhost*/NULL, PROVIDER_NAME);
     if (NULL == hEventLog)
     {
         wprintf(L"OpenEventLog failed with 0x%x.\n", GetLastError());
