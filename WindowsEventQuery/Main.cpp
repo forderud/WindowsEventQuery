@@ -3,6 +3,7 @@
 #include <strsafe.h>
 #include <string>
 #include <cassert>
+#include <vector>
 
 #define PROVIDER_NAME           L"System"
 #define MAX_TIMESTAMP_LEN       23 + 1   // mm/dd/yyyy hh:mm:ss.mmm
@@ -24,16 +25,6 @@ int wmain(void)
     DWORD dwBytesToRead = 0;
     DWORD dwBytesRead = 0;
     DWORD dwMinimumBytesToRead = 0;
-    PBYTE pBuffer = NULL;
-    PBYTE pTemp = NULL;
-
-    // The source name (provider) must exist as a subkey of Application.
-    hEventLog = OpenEventLogW(/*localhost*/NULL, PROVIDER_NAME);
-    if (NULL == hEventLog)
-    {
-        wprintf(L"OpenEventLog failed with 0x%x.\n", GetLastError());
-        goto cleanup;
-    }
 
     // Allocate an initial block of memory used to read event records. The number 
     // of records read into the buffer will vary depending on the size of each event.
@@ -41,10 +32,13 @@ int wmain(void)
     // data included with each event, the number and length of insertion 
     // strings, and other data appended to the end of the event record.
     dwBytesToRead = MAX_RECORD_BUFFER_SIZE;
-    pBuffer = (PBYTE)malloc(dwBytesToRead);
-    if (NULL == pBuffer)
+    std::vector<BYTE> pBuffer(dwBytesToRead);
+
+    // The source name (provider) must exist as a subkey of Application.
+    hEventLog = OpenEventLogW(/*localhost*/NULL, PROVIDER_NAME);
+    if (NULL == hEventLog)
     {
-        wprintf(L"Failed to allocate the initial memory for the record buffer.\n");
+        wprintf(L"OpenEventLog failed with 0x%x.\n", GetLastError());
         goto cleanup;
     }
 
@@ -56,7 +50,7 @@ int wmain(void)
         if (!ReadEventLogW(hEventLog, 
             EVENTLOG_SEQUENTIAL_READ | EVENTLOG_BACKWARDS_READ,
             0, 
-            pBuffer,
+            pBuffer.data(),
             dwBytesToRead,
             &dwBytesRead,
             &dwMinimumBytesToRead))
@@ -65,10 +59,7 @@ int wmain(void)
             if (ERROR_INSUFFICIENT_BUFFER == status)
             {
                 status = ERROR_SUCCESS;
-
-                pTemp = (PBYTE)realloc(pBuffer, dwMinimumBytesToRead);
-                assert(pTemp);
-                pBuffer = pTemp;
+                pBuffer.resize(dwMinimumBytesToRead);
                 dwBytesToRead = dwMinimumBytesToRead;
             }
             else 
@@ -83,17 +74,13 @@ int wmain(void)
         else
         {
             // Print the contents of each record in the buffer.
-            DumpRecordsInBuffer(pBuffer, dwBytesRead);
+            DumpRecordsInBuffer(pBuffer.data(), dwBytesRead);
         }
     }
 
 cleanup:
-
     if (hEventLog)
         CloseEventLog(hEventLog);
-
-    if (pBuffer)
-        free(pBuffer);
 }
 
 
