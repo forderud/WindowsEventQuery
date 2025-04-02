@@ -40,7 +40,6 @@ private:
 int wmain(void)
 {
     DWORD status = ERROR_SUCCESS;
-    DWORD dwBytesToRead = 0;
     DWORD dwBytesRead = 0;
     DWORD dwMinimumBytesToRead = 0;
 
@@ -49,8 +48,7 @@ int wmain(void)
     // The size of each event will vary based on the size of the user-defined
     // data included with each event, the number and length of insertion 
     // strings, and other data appended to the end of the event record.
-    dwBytesToRead = MAX_RECORD_BUFFER_SIZE;
-    std::vector<BYTE> pBuffer(dwBytesToRead);
+    std::vector<BYTE> pBuffer(MAX_RECORD_BUFFER_SIZE);
 
     // The source name (provider) must exist as a subkey of Application.
     EventLog hEventLog (PROVIDER_NAME);
@@ -69,7 +67,7 @@ int wmain(void)
             EVENTLOG_SEQUENTIAL_READ | EVENTLOG_BACKWARDS_READ,
             0, 
             pBuffer.data(),
-            dwBytesToRead,
+            (DWORD)pBuffer.size(),
             &dwBytesRead,
             &dwMinimumBytesToRead))
         {
@@ -78,7 +76,6 @@ int wmain(void)
             {
                 status = ERROR_SUCCESS;
                 pBuffer.resize(dwMinimumBytesToRead);
-                dwBytesToRead = dwMinimumBytesToRead;
             }
             else 
             {
