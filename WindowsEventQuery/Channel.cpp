@@ -18,7 +18,6 @@ public:
     ~EvtChannelEnum() {
         if (m_channels)
             EvtClose(m_channels);
-
     }
 
     operator EVT_HANDLE() {
@@ -30,8 +29,7 @@ private:
 };
 
 
-std::vector<std::wstring> EnumerateChannels()
-{
+std::vector<std::wstring> EnumerateChannels() {
     // Get a handle to an enumerator that contains all the names of the 
     // channels registered on the computer.
     EvtChannelEnum channels;
