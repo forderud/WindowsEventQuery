@@ -1,3 +1,5 @@
 #pragma once
+#include <string>
+#include <vector>
 
-void EnumerateChannels();
+std::vector<std::wstring> EnumerateChannels();

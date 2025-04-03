@@ -1,70 +1,66 @@
 #include <windows.h>
 #include <stdio.h>
 #include <winevt.h>
+#include <cassert>
+#include "Channel.hpp"
 
 #pragma comment(lib, "wevtapi.lib")
 
 
-void EnumerateChannels()
-{
-    LPWSTR pBuffer = NULL;
-    LPWSTR pTemp = NULL;
-    DWORD dwBufferSize = 0;
-    DWORD dwBufferUsed = 0;
-    DWORD status = ERROR_SUCCESS;
-
-    // Get a handle to an enumerator that contains all the names of the 
-    // channels registered on the computer.
-    EVT_HANDLE hChannels = EvtOpenChannelEnum(NULL, 0);
-    if (!hChannels) {
-        wprintf(L"EvtOpenChannelEnum failed with %lu.\n", GetLastError());
-        goto cleanup;
+/** RAII wrapper to avoid goto. */
+class EvtChannelEnum {
+public:
+    EvtChannelEnum() {
+        m_channels = EvtOpenChannelEnum(NULL, 0);
+        assert(m_channels);
     }
 
-    wprintf(L"List of Channels\n\n");
+    ~EvtChannelEnum() {
+        if (m_channels)
+            EvtClose(m_channels);
 
-    // Enumerate through the list of channel names. If the buffer is not big
-    // enough reallocate the buffer. To get the configuration information for
-    // a channel, call the EvtOpenChannelConfig function.
+    }
+
+    operator EVT_HANDLE() {
+        return m_channels;
+    }
+
+private:
+    EVT_HANDLE m_channels = 0;
+};
+
+
+std::vector<std::wstring> EnumerateChannels()
+{
+    // Get a handle to an enumerator that contains all the names of the 
+    // channels registered on the computer.
+    EvtChannelEnum channels;
+
+    std::wstring buffer;
+    std::vector<std::wstring> result;
+
+    // Enumerate through the list of channel names.
+    // To get the configuration information for a channel, call the EvtOpenChannelConfig function.
     while (true) {
-        if (!EvtNextChannelPath(hChannels, dwBufferSize, pBuffer, &dwBufferUsed))
-        {
-            status = GetLastError();
+        DWORD dwBufferUsed = 0;
+        if (!EvtNextChannelPath(channels, (DWORD)buffer.size(), (wchar_t*)buffer.data(), &dwBufferUsed)) {
+            DWORD status = GetLastError();
 
-            if (ERROR_NO_MORE_ITEMS == status)
-            {
+            if (ERROR_NO_MORE_ITEMS == status) {
+                // reached the end
                 break;
-            }
-            else if (ERROR_INSUFFICIENT_BUFFER == status)
-            {
-                dwBufferSize = dwBufferUsed;
-                pTemp = (LPWSTR)realloc(pBuffer, dwBufferSize * sizeof(WCHAR));
-                if (pTemp)
-                {
-                    pBuffer = pTemp;
-                    pTemp = NULL;
-                    EvtNextChannelPath(hChannels, dwBufferSize, pBuffer, &dwBufferUsed);
-                }
-                else
-                {
-                    wprintf(L"realloc failed\n");
-                    status = ERROR_OUTOFMEMORY;
-                    goto cleanup;
-                }
-            }
-            else
-            {
+            } else if (ERROR_INSUFFICIENT_BUFFER == status) {
+                // repeat call with larger buffer
+                buffer.resize(dwBufferUsed);
+                EvtNextChannelPath(channels, (DWORD)buffer.size(), (wchar_t*)buffer.data(), &dwBufferUsed);
+            } else {
                 wprintf(L"EvtNextChannelPath failed with %lu.\n", status);
+                abort();
             }
         }
 
-        wprintf(L"%s\n", pBuffer);
+        result.push_back(buffer);
     }
 
-cleanup:
-    if (hChannels)
-        EvtClose(hChannels);
-
-    if (pBuffer)
-        free(pBuffer);
+    return result;
 }
