@@ -7,7 +7,7 @@
     <ClCompile Include="Event.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LegactEventAPI.hpp" />
+    <ClInclude Include="LegacyEventAPI.hpp" />
     <ClInclude Include="Channel.hpp" />
     <ClInclude Include="Event.hpp" />
   </ItemGroup>

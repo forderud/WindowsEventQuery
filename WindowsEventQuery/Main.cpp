@@ -1,4 +1,4 @@
-#include "LegactEventAPI.hpp"
+#include "LegacyEventAPI.hpp"
 #include "Channel.hpp"
 #include "Event.hpp"
 

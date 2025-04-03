@@ -19,7 +19,7 @@
   <ItemGroup>
     <ClInclude Include="Channel.hpp" />
     <ClInclude Include="Event.hpp" />
-    <ClInclude Include="LegactEventAPI.hpp" />
+    <ClInclude Include="LegacyEventAPI.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
