@@ -14,7 +14,9 @@ int wmain() {
         //wprintf(L"\n");
     }
 
-    EventQuery(L"System", L"Event/System[EventID=7023]");
+    // perform event query
+    std::wstring query = L"Event/System[EventID=7023]";
+    EventQuery(L"System", query);
 
     //return LegacyEventQuery();
 }
