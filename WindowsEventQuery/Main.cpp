@@ -1,7 +1,8 @@
 #include "LegactEventAPI.hpp"
-
+#include "Channel.hpp"
 
 
 int wmain() {
-    return LegacyEventQuery();
+    EnumerateChannels();
+    //return LegacyEventQuery();
 }
