@@ -42,7 +42,8 @@ public:
     }
 
     std::wstring ChannelPath() const {
-        return m_buffer;
+        // m_buffer might be too large so return the raw pointer to auto-shrink the string length
+        return m_buffer.c_str();
     }
 
 private:
