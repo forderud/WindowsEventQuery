@@ -104,16 +104,14 @@ cleanup:
 
 void EventQuery (std::wstring channel, std::wstring query) {
     DWORD status = ERROR_SUCCESS;
-    EVT_HANDLE hResults = NULL;
 
-    hResults = EvtQuery(NULL, channel.c_str(), query.c_str(), EvtQueryChannelPath | EvtQueryReverseDirection);
-    if (NULL == hResults)
-    {
+    EVT_HANDLE hResults = EvtQuery(NULL, channel.c_str(), query.c_str(), EvtQueryChannelPath | EvtQueryReverseDirection);
+    if (NULL == hResults) {
         status = GetLastError();
 
-        if (ERROR_EVT_CHANNEL_NOT_FOUND == status)
+        if (status == ERROR_EVT_CHANNEL_NOT_FOUND)
             wprintf(L"The channel was not found.\n");
-        else if (ERROR_EVT_INVALID_QUERY == status)
+        else if (status == ERROR_EVT_INVALID_QUERY)
             // You can call the EvtGetExtendedStatus function to try to get 
             // additional information as to what is wrong with the query.
             wprintf(L"The query is not valid.\n");
@@ -126,8 +124,6 @@ void EventQuery (std::wstring channel, std::wstring query) {
     PrintResults(hResults);
 
 cleanup:
-
     if (hResults)
         EvtClose(hResults);
-
 }
