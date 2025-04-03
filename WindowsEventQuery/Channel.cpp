@@ -7,7 +7,6 @@
 
 void EnumerateChannels()
 {
-    EVT_HANDLE hChannels = NULL;
     LPWSTR pBuffer = NULL;
     LPWSTR pTemp = NULL;
     DWORD dwBufferSize = 0;
@@ -16,10 +15,8 @@ void EnumerateChannels()
 
     // Get a handle to an enumerator that contains all the names of the 
     // channels registered on the computer.
-    hChannels = EvtOpenChannelEnum(NULL, 0);
-
-    if (NULL == hChannels)
-    {
+    EVT_HANDLE hChannels = EvtOpenChannelEnum(NULL, 0);
+    if (!hChannels) {
         wprintf(L"EvtOpenChannelEnum failed with %lu.\n", GetLastError());
         goto cleanup;
     }
@@ -29,8 +26,7 @@ void EnumerateChannels()
     // Enumerate through the list of channel names. If the buffer is not big
     // enough reallocate the buffer. To get the configuration information for
     // a channel, call the EvtOpenChannelConfig function.
-    while (true)
-    {
+    while (true) {
         if (!EvtNextChannelPath(hChannels, dwBufferSize, pBuffer, &dwBufferUsed))
         {
             status = GetLastError();
@@ -66,7 +62,6 @@ void EnumerateChannels()
     }
 
 cleanup:
-
     if (hChannels)
         EvtClose(hChannels);
 
