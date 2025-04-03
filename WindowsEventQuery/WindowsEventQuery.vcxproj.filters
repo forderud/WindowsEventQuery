@@ -4,9 +4,11 @@
     <ClCompile Include="LegacyEventAPI.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Channel.cpp" />
+    <ClCompile Include="Event.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LegactEventAPI.hpp" />
     <ClInclude Include="Channel.hpp" />
+    <ClInclude Include="Event.hpp" />
   </ItemGroup>
 </Project>

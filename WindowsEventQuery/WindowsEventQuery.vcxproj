@@ -12,11 +12,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Channel.cpp" />
+    <ClCompile Include="Event.cpp" />
     <ClCompile Include="LegacyEventAPI.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Channel.hpp" />
+    <ClInclude Include="Event.hpp" />
     <ClInclude Include="LegactEventAPI.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
