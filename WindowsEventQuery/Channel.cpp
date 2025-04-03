@@ -20,12 +20,34 @@ public:
             EvtClose(m_channels);
     }
 
-    operator EVT_HANDLE() {
-        return m_channels;
+    bool Next() {
+        DWORD dwBufferUsed = 0;
+        if (!EvtNextChannelPath(m_channels, (DWORD)m_buffer.size(), (wchar_t*)m_buffer.data(), &dwBufferUsed)) {
+            DWORD status = GetLastError();
+
+            if (status == ERROR_NO_MORE_ITEMS) {
+                // reached the end
+                return false;
+            } else if (status == ERROR_INSUFFICIENT_BUFFER) {
+                // repeat call with larger buffer
+                m_buffer.resize(dwBufferUsed);
+                return EvtNextChannelPath(m_channels, (DWORD)m_buffer.size(), (wchar_t*)m_buffer.data(), &dwBufferUsed);
+            } else {
+                wprintf(L"EvtNextChannelPath failed with %lu.\n", status);
+                abort();
+            }
+        }
+
+        return true;
+    }
+
+    std::wstring ChannelPath() const {
+        return m_buffer;
     }
 
 private:
     EVT_HANDLE m_channels = 0;
+    std::wstring m_buffer;
 };
 
 
@@ -34,30 +56,12 @@ std::vector<std::wstring> EnumerateChannels() {
     // channels registered on the computer.
     EvtChannelEnum channels;
 
-    std::wstring buffer;
     std::vector<std::wstring> result;
 
     // Enumerate through the list of channel names.
     // To get the configuration information for a channel, call the EvtOpenChannelConfig function.
-    while (true) {
-        DWORD dwBufferUsed = 0;
-        if (!EvtNextChannelPath(channels, (DWORD)buffer.size(), (wchar_t*)buffer.data(), &dwBufferUsed)) {
-            DWORD status = GetLastError();
-
-            if (ERROR_NO_MORE_ITEMS == status) {
-                // reached the end
-                break;
-            } else if (ERROR_INSUFFICIENT_BUFFER == status) {
-                // repeat call with larger buffer
-                buffer.resize(dwBufferUsed);
-                EvtNextChannelPath(channels, (DWORD)buffer.size(), (wchar_t*)buffer.data(), &dwBufferUsed);
-            } else {
-                wprintf(L"EvtNextChannelPath failed with %lu.\n", status);
-                abort();
-            }
-        }
-
-        result.push_back(buffer);
+    while (channels.Next()) {
+        result.push_back(channels.ChannelPath());
     }
 
     return result;
