@@ -1,7 +1,4 @@
-#include <windows.h>
-#include <sddl.h>
 #include <stdio.h>
-#include <winevt.h>
 #include "Event.hpp"
 #include <vector>
 
@@ -9,36 +6,6 @@
 
 #define ARRAY_SIZE 10
 #define TIMEOUT 1000  // 1 second; Set and use in place of INFINITE in EvtNext call
-
-
-/** RAII wrapper to avoid goto. */
-class Event {
-public:
-    Event() = default;
-
-    Event(EVT_HANDLE event) : m_event(event) {
-    }
-
-    ~Event() {
-        Close();
-    }
-
-    void Close() {
-        if (m_event) {
-            EvtClose(m_event);
-            m_event = 0;
-        }
-    }
-
-    operator EVT_HANDLE& () {
-        return m_event;
-    }
-
-private:
-    EVT_HANDLE m_event = 0;
-};
-static_assert(sizeof(Event) == sizeof(EVT_HANDLE), "Event size mismatch");
-
 
 
 DWORD PrintEvent(EVT_HANDLE hEvent) {
