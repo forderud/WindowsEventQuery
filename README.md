@@ -42,7 +42,8 @@ Reason for unexpected system reboots:
 
 
 ### SW installation failure
-TODO: Add screenshot to show how installation failures are logged.
+![image](https://github.com/user-attachments/assets/da112412-972e-4bca-a979-61ce2ec05be2)  
+TODO: Update screenshot with installation failure example.
 
 Documentation: [Windows Installer Event Logging](https://learn.microsoft.com/en-us/windows/win32/msi/event-logging)
 
