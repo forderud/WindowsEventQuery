@@ -8,7 +8,8 @@ Disk and filesystem problems are automaticaly logged:
 ![image](https://github.com/user-attachments/assets/8011024f-be1d-4dd7-8a46-c9b9023a25ec)
 
 #### HW device failures
-HW device failures are automatically logged:
+HW device failures are automatically logged:  
+![image](https://github.com/user-attachments/assets/5afba146-c45d-406c-be31-d7031a236b73)  
 ![image](https://github.com/user-attachments/assets/feef2cd2-43f1-4b77-84e3-bf74db077977)
 
 ### GPU problems
