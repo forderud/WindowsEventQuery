@@ -31,8 +31,7 @@ void PrintEventAsXML(EVT_HANDLE event) {
 }
 
 
-// Gets the specified message string from the event. If the event does not
-// contain the specified message, the function returns NULL.
+/** Gets the specified message string from the event.Returns empty string if the event does not contain the specified message. */
 std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMAT_MESSAGE_FLAGS FormatId) {
     // determine required buffer size
     DWORD bufferUsed = 0; // in characters
@@ -41,7 +40,7 @@ std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMA
 
         if (status == ERROR_INSUFFICIENT_BUFFER) {
             // expected failure
-        } else if (ERROR_EVT_MESSAGE_NOT_FOUND == status || ERROR_EVT_MESSAGE_ID_NOT_FOUND == status) {
+        } else if (status == ERROR_EVT_MESSAGE_NOT_FOUND || status == ERROR_EVT_MESSAGE_ID_NOT_FOUND) {
             return L"";
         } else {
             wprintf(L"EvtFormatMessage failed with %u\n", status);
@@ -52,7 +51,7 @@ std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMA
     std::wstring pBuffer(bufferUsed, L'\0');
 
     // repeat call with larger buffer
-    EvtFormatMessage(hMetadata, hEvent, 0, 0, NULL, FormatId, (DWORD)pBuffer.size(), (wchar_t*)pBuffer.data(), &dwbufferUsedBufferUsed);
+    EvtFormatMessage(hMetadata, hEvent, 0, 0, NULL, FormatId, (DWORD)pBuffer.size(), (wchar_t*)pBuffer.data(), &bufferUsed);
 
     // terminate the list of strings with a second null terminator character
     if ((EvtFormatMessageKeyword == FormatId))
