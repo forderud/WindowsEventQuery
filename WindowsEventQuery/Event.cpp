@@ -1,34 +1,32 @@
 #include <stdio.h>
 #include "Event.hpp"
 #include <vector>
+#include <cassert>
 
 #pragma comment(lib, "wevtapi.lib")
 
 
 DWORD PrintEventAsXML(EVT_HANDLE hEvent) {
-    DWORD status = ERROR_SUCCESS;
+    // query for required buffer size
     DWORD dwBufferUsed = 0;
     DWORD dwPropertyCount = 0;
-    std::vector<wchar_t> pRenderedContent;
+    BOOL ok = EvtRender(NULL, hEvent, EvtRenderEventXml, 0, nullptr, &dwBufferUsed, &dwPropertyCount);
+    if (!ok) {
+        DWORD status = GetLastError();
+        assert(status == ERROR_INSUFFICIENT_BUFFER);
+    }
 
     // render event as XML string
-    if (!EvtRender(NULL, hEvent, EvtRenderEventXml, (DWORD)(sizeof(wchar_t)*pRenderedContent.size()), pRenderedContent.data(), &dwBufferUsed, &dwPropertyCount)) {
-        status = GetLastError();
-        if (status == ERROR_INSUFFICIENT_BUFFER) {
-            // repeat query with larger buffer
-            pRenderedContent.resize(dwBufferUsed/sizeof(wchar_t));
-            EvtRender(NULL, hEvent, EvtRenderEventXml, (DWORD)(sizeof(wchar_t)*pRenderedContent.size()), pRenderedContent.data(), &dwBufferUsed, &dwPropertyCount);
-        }
-
-        status = GetLastError();
-        if (status != ERROR_SUCCESS) {
-            wprintf(L"EvtRender failed with %d\n", GetLastError());
-            return status;
-        }
+    std::vector<wchar_t> pRenderedContent(dwBufferUsed/sizeof(wchar_t));
+    ok = EvtRender(NULL, hEvent, EvtRenderEventXml, (DWORD)(sizeof(wchar_t)*pRenderedContent.size()), pRenderedContent.data(), &dwBufferUsed, &dwPropertyCount);
+    if (!ok) {
+        DWORD status = GetLastError();
+        wprintf(L"EvtRender failed with %d\n", status);
+        return status;
     }
 
     wprintf(L"\n\n%s", pRenderedContent.data());
-    return status;
+    return ERROR_SUCCESS;
 }
 
 
