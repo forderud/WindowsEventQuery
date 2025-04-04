@@ -34,39 +34,30 @@ void PrintEventAsXML(EVT_HANDLE event) {
 // Gets the specified message string from the event. If the event does not
 // contain the specified message, the function returns NULL.
 std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMAT_MESSAGE_FLAGS FormatId) {
-    LPWSTR pBuffer = NULL;
-
     // determine required buffer size
     DWORD dwBufferUsed = 0; // in characters
     if (!EvtFormatMessage(hMetadata, hEvent, 0, 0, NULL, FormatId, 0, nullptr, &dwBufferUsed)) {
         DWORD status = GetLastError();
 
         if (status == ERROR_INSUFFICIENT_BUFFER) {
-            DWORD dwBufferSize = 0;
-            // An event can contain one or more keywords. The function returns keywords
-            // as a list of keyword strings. To process the list, you need to know the
-            // size of the buffer, so you know when you have read the last string, or you
-            // can terminate the list of strings with a second null terminator character 
-            // as this example does.
-            if ((EvtFormatMessageKeyword == FormatId))
-                pBuffer[dwBufferSize - 1] = L'\0';
-            else
-                dwBufferSize = dwBufferUsed;
-
-            pBuffer = (LPWSTR)malloc(dwBufferSize * sizeof(WCHAR));
-            {
-                // repeat call with larger buffer
-                EvtFormatMessage(hMetadata, hEvent, 0, 0, NULL, FormatId, dwBufferSize, pBuffer, &dwBufferUsed);
-
-                // Add the second null terminator character.
-                if ((EvtFormatMessageKeyword == FormatId))
-                    pBuffer[dwBufferUsed - 1] = L'\0';
-            }
+            // expected failure
         } else if (ERROR_EVT_MESSAGE_NOT_FOUND == status || ERROR_EVT_MESSAGE_ID_NOT_FOUND == status) {
-            ;
+            return L"";
         } else {
             wprintf(L"EvtFormatMessage failed with %u\n", status);
+            return L"";
         }
+    }
+
+    DWORD dwBufferSize = dwBufferUsed;
+    LPWSTR pBuffer = (LPWSTR)malloc(dwBufferSize * sizeof(WCHAR));
+    {
+        // repeat call with larger buffer
+        EvtFormatMessage(hMetadata, hEvent, 0, 0, NULL, FormatId, dwBufferSize, pBuffer, &dwBufferUsed);
+
+        // terminate the list of strings with a second null terminator character
+        if ((EvtFormatMessageKeyword == FormatId))
+            pBuffer[dwBufferUsed - 1] = L'\0';
     }
 
     std::wstring result(pBuffer);
