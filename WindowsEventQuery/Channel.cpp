@@ -194,19 +194,25 @@ DWORD PrintChannelProperty(int Id, PEVT_VARIANT pProperty)
 
 // Print the channel's configuration properties. Use the EVT_CHANNEL_CONFIG_PROPERTY_ID
 // enumeration values to loop through all the properties.
-void PrintChannelProperties(EVT_HANDLE hChannel) {
+void PrintChannelProperties(std::wstring channelPath) {
+    Event channel(EvtOpenChannelConfig(NULL, channelPath.c_str(), 0));
+    if (!channel) {// Fails with 15007 (ERROR_EVT_CHANNEL_NOT_FOUND) if the channel is not found
+        wprintf(L"EvtOpenChannelConfig failed with %lu.\n", GetLastError());
+        return;
+    }
+
     std::vector<BYTE> pProperty; // EVT_VARIANT buffer that receives the property value
     DWORD dwBufferUsed = 0;
     DWORD status = ERROR_SUCCESS;
 
     for (int Id = 0; Id < EvtChannelConfigPropertyIdEND; Id++) {
         // Get the specified property. If the buffer is too small, reallocate it.
-        if (!EvtGetChannelConfigProperty(hChannel, (EVT_CHANNEL_CONFIG_PROPERTY_ID)Id, 0, (DWORD)pProperty.size(), (EVT_VARIANT*)pProperty.data(), &dwBufferUsed)) {
+        if (!EvtGetChannelConfigProperty(channel, (EVT_CHANNEL_CONFIG_PROPERTY_ID)Id, 0, (DWORD)pProperty.size(), (EVT_VARIANT*)pProperty.data(), &dwBufferUsed)) {
             status = GetLastError();
             if (status == ERROR_INSUFFICIENT_BUFFER) {
                 // repeat call with larger buffer
                 pProperty.resize(dwBufferUsed);
-                EvtGetChannelConfigProperty(hChannel, (EVT_CHANNEL_CONFIG_PROPERTY_ID)Id, 0, (DWORD)pProperty.size(), (EVT_VARIANT*)pProperty.data(), &dwBufferUsed);
+                EvtGetChannelConfigProperty(channel, (EVT_CHANNEL_CONFIG_PROPERTY_ID)Id, 0, (DWORD)pProperty.size(), (EVT_VARIANT*)pProperty.data(), &dwBufferUsed);
             }
 
             status = GetLastError();
@@ -220,15 +226,4 @@ void PrintChannelProperties(EVT_HANDLE hChannel) {
         if (status != ERROR_SUCCESS)
             break;
     }
-}
-
-
-void PrintChannelProperties(std::wstring channelPath) {
-    Event channel(EvtOpenChannelConfig(NULL, channelPath.c_str(), 0));
-    if (!channel) {// Fails with 15007 (ERROR_EVT_CHANNEL_NOT_FOUND) if the channel is not found
-        wprintf(L"EvtOpenChannelConfig failed with %lu.\n", GetLastError());
-        return;
-    }
-
-    PrintChannelProperties(channel);
 }
