@@ -4,6 +4,7 @@ Sample code for querying the Windows event logs. Based on Microsoft's [Consuming
 
 #### Disk failures
 Disk and filesystem problems are automaticaly logged:  
+![image](https://github.com/user-attachments/assets/b148863a-3d67-4b81-a64f-4bb66384e136)  
 ![image](https://github.com/user-attachments/assets/8011024f-be1d-4dd7-8a46-c9b9023a25ec)
 
 #### HW device failures
