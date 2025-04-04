@@ -38,12 +38,12 @@ DWORD PrintEvent(EVT_HANDLE hEvent) {
 // Enumerate all the events in the result set. 
 DWORD PrintResults(EVT_HANDLE hResults) {
     DWORD status = ERROR_SUCCESS;
-    Event hEvents[ARRAY_SIZE];
+    Event events[ARRAY_SIZE];
 
     while (true) {
         DWORD dwReturned = 0;
         // Get a block of events from the result set.
-        if (!EvtNext(hResults, ARRAY_SIZE, (EVT_HANDLE*)hEvents, INFINITE, 0, &dwReturned)) {
+        if (!EvtNext(hResults, ARRAY_SIZE, (EVT_HANDLE*)events, INFINITE, 0, &dwReturned)) {
             status = GetLastError();
             if (status != ERROR_NO_MORE_ITEMS)
                 wprintf(L"EvtNext failed with %lu\n", status);
@@ -53,9 +53,9 @@ DWORD PrintResults(EVT_HANDLE hResults) {
 
         // For each event, call the PrintEvent function which renders the event for display
         for (DWORD i = 0; i < dwReturned; i++) {
-            status = PrintEvent(hEvents[i]);
+            status = PrintEvent(events[i]);
             if (status == ERROR_SUCCESS)
-                hEvents[i].Close();
+                events[i].Close();
             else
                 break;
         }
@@ -66,9 +66,9 @@ DWORD PrintResults(EVT_HANDLE hResults) {
 
 
 void EventQuery (std::wstring channel, std::wstring query) {
-    Event hResults(EvtQuery(NULL, channel.c_str(), query.c_str(), EvtQueryChannelPath | EvtQueryReverseDirection));
+    Event results(EvtQuery(NULL, channel.c_str(), query.c_str(), EvtQueryChannelPath | EvtQueryReverseDirection));
 
-    if (!hResults) {
+    if (!results) {
         DWORD status = GetLastError();
 
         if (status == ERROR_EVT_CHANNEL_NOT_FOUND)
@@ -83,5 +83,5 @@ void EventQuery (std::wstring channel, std::wstring query) {
         return;
     }
 
-    PrintResults(hResults);
+    PrintResults(results);
 }
