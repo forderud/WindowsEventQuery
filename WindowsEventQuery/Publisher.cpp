@@ -5,7 +5,11 @@
 
 std::vector<std::wstring> GetPublisherList(EVT_HANDLE session) {
     Event providerList(EvtOpenPublisherEnum(session, 0));
-    assert(providerList);
+    if (!providerList) {
+        DWORD status = GetLastError();
+        wprintf(L"EvtOpenPublisherEnum failed with %lu.\n", status);
+        abort();
+    }
 
     std::vector<std::wstring> result;
 
