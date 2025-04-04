@@ -9,8 +9,8 @@ int wmain() {
     for (const std::wstring& channel : channels) {
         wprintf(L"* %s\n", channel.c_str());
 
-        //PrintChannelProperties(channel);
-        //wprintf(L"\n");
+        PrintChannelProperties(channel);
+        wprintf(L"\n");
     }
 #endif
 
