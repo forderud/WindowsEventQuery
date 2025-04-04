@@ -33,6 +33,9 @@ Applications not starting due to insufficient whitelisting:
 ### Background service problems
 ![image](https://github.com/user-attachments/assets/75f05ab9-e45a-494f-9471-5d9f3a775eb0)
 
+### Application hang or crash
+![image](https://github.com/user-attachments/assets/4f5a6796-943e-4948-be40-1f8c4ff30af4)
+
 ### Critical OS failure
 Reason for unexpected system reboots:  
 ![image](https://github.com/user-attachments/assets/0164914d-c894-4347-904b-bfa60e65bda7)
