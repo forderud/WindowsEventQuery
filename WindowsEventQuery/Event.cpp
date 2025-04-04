@@ -40,9 +40,7 @@ static_assert(sizeof(Event) == sizeof(EVT_HANDLE), "Event size mismatch");
 
 
 
-
-DWORD PrintEvent(EVT_HANDLE hEvent)
-{
+DWORD PrintEvent(EVT_HANDLE hEvent) {
     DWORD status = ERROR_SUCCESS;
     DWORD dwBufferSize = 0;
     DWORD dwBufferUsed = 0;
@@ -50,26 +48,23 @@ DWORD PrintEvent(EVT_HANDLE hEvent)
     LPWSTR pRenderedContent = NULL;
 
     // The EvtRenderEventXml flag tells EvtRender to render the event as an XML string.
-    if (!EvtRender(NULL, hEvent, EvtRenderEventXml, dwBufferSize, pRenderedContent, &dwBufferUsed, &dwPropertyCount))
-    {
-        if (ERROR_INSUFFICIENT_BUFFER == (status = GetLastError()))
-        {
+    if (!EvtRender(NULL, hEvent, EvtRenderEventXml, dwBufferSize, pRenderedContent, &dwBufferUsed, &dwPropertyCount)) {
+        status = GetLastError();
+        if (status == ERROR_INSUFFICIENT_BUFFER) {
             dwBufferSize = dwBufferUsed;
             pRenderedContent = (LPWSTR)malloc(dwBufferSize);
-            if (pRenderedContent)
-            {
+
+            if (pRenderedContent) {
                 EvtRender(NULL, hEvent, EvtRenderEventXml, dwBufferSize, pRenderedContent, &dwBufferUsed, &dwPropertyCount);
-            }
-            else
-            {
+            } else {
                 wprintf(L"malloc failed\n");
                 status = ERROR_OUTOFMEMORY;
                 goto cleanup;
             }
         }
 
-        if (ERROR_SUCCESS != (status = GetLastError()))
-        {
+        status = GetLastError();
+        if (status != ERROR_SUCCESS) {
             wprintf(L"EvtRender failed with %d\n", GetLastError());
             goto cleanup;
         }
@@ -78,12 +73,12 @@ DWORD PrintEvent(EVT_HANDLE hEvent)
     wprintf(L"\n\n%s", pRenderedContent);
 
 cleanup:
-
     if (pRenderedContent)
         free(pRenderedContent);
 
     return status;
 }
+
 
 // Enumerate all the events in the result set. 
 DWORD PrintResults(EVT_HANDLE hResults) {
@@ -101,8 +96,7 @@ DWORD PrintResults(EVT_HANDLE hResults) {
             break;
         }
 
-        // For each event, call the PrintEvent function which renders the
-        // event for display. PrintEvent is shown in RenderingEvents.
+        // For each event, call the PrintEvent function which renders the event for display
         for (DWORD i = 0; i < dwReturned; i++) {
             status = PrintEvent(hEvents[i]);
             if (status == ERROR_SUCCESS)
