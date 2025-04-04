@@ -26,6 +26,7 @@ Logging of dropped packets by the firewall: (logging _not_ enabled by default)
 ![image](https://github.com/user-attachments/assets/4c01cd9f-2a6b-4963-9d30-c2a2b776a5c7)
 
 #### Application whitelising (WDAC) problems
+Applications not starting due to insufficient whitelisting:  
 ![image](https://github.com/user-attachments/assets/c034b43e-fb26-470a-903b-e1c37dc1fef9)
 
 
