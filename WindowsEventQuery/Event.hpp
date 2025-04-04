@@ -34,4 +34,4 @@ protected:
 static_assert(sizeof(Event) == sizeof(EVT_HANDLE), "Event size mismatch");
 
 
-void EventQuery(std::wstring channel, std::wstring query);
+void EventQuery(std::wstring channel, std::wstring query, std::wstring publisherName);

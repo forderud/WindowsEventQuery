@@ -17,5 +17,6 @@ int wmain() {
     // perform event query
     std::wstring channel = L"System";
     std::wstring query = L"Event/System[EventID=7023]";
-    EventQuery(channel, query);
+    std::wstring publisherName = L"";
+    EventQuery(channel, query, publisherName);
 }

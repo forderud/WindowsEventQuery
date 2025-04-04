@@ -103,7 +103,7 @@ void PrintEventStrings(EVT_HANDLE hEvent, std::wstring publisherName) {
 
 
 // Enumerate all the events in the result set. 
-DWORD PrintResults(EVT_HANDLE hResults) {
+DWORD PrintResults(EVT_HANDLE hResults, std::wstring publisherName) {
     DWORD status = ERROR_SUCCESS;
     Event events[10];
 
@@ -120,7 +120,10 @@ DWORD PrintResults(EVT_HANDLE hResults) {
 
         for (DWORD i = 0; i < dwReturned; i++) {
             // print event details to console
-            PrintEventAsXML(events[i]);
+            if (publisherName.size() > 0)
+                PrintEventStrings(events[i], publisherName);
+            else
+                PrintEventAsXML(events[i]);
             events[i].Close();
         }
     }
@@ -129,7 +132,7 @@ DWORD PrintResults(EVT_HANDLE hResults) {
 }
 
 
-void EventQuery (std::wstring channel, std::wstring query) {
+void EventQuery (std::wstring channel, std::wstring query, std::wstring publisherName) {
     Event results(EvtQuery(NULL, channel.c_str(), query.c_str(), EvtQueryChannelPath | EvtQueryReverseDirection));
 
     if (!results) {
@@ -147,5 +150,5 @@ void EventQuery (std::wstring channel, std::wstring query) {
         return;
     }
 
-    PrintResults(results);
+    PrintResults(results, publisherName);
 }
