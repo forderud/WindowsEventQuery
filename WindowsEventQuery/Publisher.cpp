@@ -1,9 +1,11 @@
 #include "Publisher.hpp"
 #include "Event.hpp"
+#include <cassert>
 
 
 std::vector<std::wstring> GetPublisherList(EVT_HANDLE session) {
     Event providerList(EvtOpenPublisherEnum(session, 0));
+    assert(providerList);
 
     std::vector<std::wstring> result;
 
