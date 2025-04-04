@@ -33,6 +33,7 @@ std::vector<std::wstring> EnumeratePublishers() {
             }
         }
 
+        buffer.resize(bufferUsed - 1); // remove null-termination
         result.push_back(buffer);
     }
 
