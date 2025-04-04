@@ -59,9 +59,9 @@ std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMA
     return pBuffer;
 }
 
-void PrintEventStrings(EVT_HANDLE hEvent, std::wstring publisherName) {
+void PrintEventStrings(EVT_HANDLE hEvent, std::wstring publisherId) {
     // Get the handle to the provider's metadata that contains the message strings.
-    Event hProviderMetadata(EvtOpenPublisherMetadata(NULL, publisherName.c_str(), NULL, 0, 0));
+    Event hProviderMetadata(EvtOpenPublisherMetadata(NULL, publisherId.c_str(), NULL, 0, 0));
     if (!hProviderMetadata) {
         wprintf(L"EvtOpenPublisherMetadata failed with %d\n", GetLastError());
         return;
@@ -103,7 +103,7 @@ void PrintEventStrings(EVT_HANDLE hEvent, std::wstring publisherName) {
 
 
 // Enumerate all the events in the result set. 
-DWORD PrintResults(EVT_HANDLE hResults, std::wstring publisherName) {
+DWORD PrintResults(EVT_HANDLE hResults, std::wstring publisherId) {
     DWORD status = ERROR_SUCCESS;
     Event events[10];
 
@@ -120,10 +120,9 @@ DWORD PrintResults(EVT_HANDLE hResults, std::wstring publisherName) {
 
         for (DWORD i = 0; i < dwReturned; i++) {
             // print event details to console
-            if (publisherName.size() > 0)
-                PrintEventStrings(events[i], publisherName);
-            else
-                PrintEventAsXML(events[i]);
+            //PrintEventAsXML(events[i]);
+            PrintEventStrings(events[i], publisherId);
+
             events[i].Close();
         }
     }
@@ -132,7 +131,7 @@ DWORD PrintResults(EVT_HANDLE hResults, std::wstring publisherName) {
 }
 
 
-void EventQuery (std::wstring channel, std::wstring query, std::wstring publisherName) {
+void EventQuery (std::wstring channel, std::wstring query, std::wstring publisherId) {
     Event results(EvtQuery(NULL, channel.c_str(), query.c_str(), EvtQueryChannelPath | EvtQueryReverseDirection));
 
     if (!results) {
@@ -150,5 +149,5 @@ void EventQuery (std::wstring channel, std::wstring query, std::wstring publishe
         return;
     }
 
-    PrintResults(results, publisherName);
+    PrintResults(results, publisherId);
 }
