@@ -13,22 +13,30 @@
 /** RAII wrapper to avoid goto. */
 class Event {
 public:
+    Event() = default;
+
     Event(EVT_HANDLE event) : m_event(event) {
     }
 
     ~Event() {
-        if (m_event)
-            EvtClose(m_event);
+        Close();
     }
 
-    operator EVT_HANDLE () const {
+    void Close() {
+        if (m_event) {
+            EvtClose(m_event);
+            m_event = 0;
+        }
+    }
+
+    operator EVT_HANDLE& () {
         return m_event;
     }
 
 private:
     EVT_HANDLE m_event = 0;
 };
-
+static_assert(sizeof(Event) == sizeof(EVT_HANDLE), "Event size mismatch");
 
 
 
@@ -78,47 +86,30 @@ cleanup:
 }
 
 // Enumerate all the events in the result set. 
-DWORD PrintResults(EVT_HANDLE hResults)
-{
+DWORD PrintResults(EVT_HANDLE hResults) {
     DWORD status = ERROR_SUCCESS;
-    EVT_HANDLE hEvents[ARRAY_SIZE];
-    DWORD dwReturned = 0;
+    Event hEvents[ARRAY_SIZE];
 
-    while (true)
-    {
+    while (true) {
+        DWORD dwReturned = 0;
         // Get a block of events from the result set.
-        if (!EvtNext(hResults, ARRAY_SIZE, hEvents, INFINITE, 0, &dwReturned))
-        {
-            if (ERROR_NO_MORE_ITEMS != (status = GetLastError()))
-            {
+        if (!EvtNext(hResults, ARRAY_SIZE, (EVT_HANDLE*)hEvents, INFINITE, 0, &dwReturned)) {
+            status = GetLastError();
+            if (status != ERROR_NO_MORE_ITEMS)
                 wprintf(L"EvtNext failed with %lu\n", status);
-            }
 
-            goto cleanup;
+            break;
         }
 
         // For each event, call the PrintEvent function which renders the
         // event for display. PrintEvent is shown in RenderingEvents.
-        for (DWORD i = 0; i < dwReturned; i++)
-        {
-            if (ERROR_SUCCESS == (status = PrintEvent(hEvents[i])))
-            {
-                EvtClose(hEvents[i]);
-                hEvents[i] = NULL;
-            }
+        for (DWORD i = 0; i < dwReturned; i++) {
+            status = PrintEvent(hEvents[i]);
+            if (status == ERROR_SUCCESS)
+                hEvents[i].Close();
             else
-            {
-                goto cleanup;
-            }
+                break;
         }
-    }
-
-cleanup:
-
-    for (DWORD i = 0; i < dwReturned; i++)
-    {
-        if (NULL != hEvents[i])
-            EvtClose(hEvents[i]);
     }
 
     return status;
