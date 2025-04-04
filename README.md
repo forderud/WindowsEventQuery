@@ -10,6 +10,7 @@ Disk and filesystem problems are automaticaly logged:
 
 #### HW device failures
 HW device failures are automatically logged:  
+![image](https://github.com/user-attachments/assets/723867a3-6bb5-4405-8719-967240e72781)
 ![image](https://github.com/user-attachments/assets/5afba146-c45d-406c-be31-d7031a236b73)  
 ![image](https://github.com/user-attachments/assets/feef2cd2-43f1-4b77-84e3-bf74db077977)
 
