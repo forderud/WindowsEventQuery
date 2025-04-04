@@ -2,19 +2,21 @@ Sample code for querying the Windows event logs. Based on Microsoft's [Consuming
 
 ## Examples of logged events
 
-Disk failures:  
+#### Disk failures
+Disk and filesystem problems are automaticaly logged:  
 ![image](https://github.com/user-attachments/assets/8011024f-be1d-4dd7-8a46-c9b9023a25ec)
 
-HW device failures:  
+#### HW device failures
+HW device failures are automatically logged:
 ![image](https://github.com/user-attachments/assets/feef2cd2-43f1-4b77-84e3-bf74db077977)
 
-Firewall blocking network traffic:  
+#### Firewall blocking network traffic
 TODO: Add screenshot.
 
-Application whitelising (WDAC) problems:  
+#### Application whitelising (WDAC) problems
 TODO: Add screenshot.
 
-Graphics driver failures:  
+#### Graphics driver failures
 TODO: Add screenshot.
 
 
