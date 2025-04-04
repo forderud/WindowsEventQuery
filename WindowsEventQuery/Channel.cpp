@@ -1,28 +1,24 @@
-#include <windows.h>
 #include <stdio.h>
-#include <winevt.h>
 #include <cassert>
 #include "Channel.hpp"
+#include "Event.hpp"
 
 #pragma comment(lib, "wevtapi.lib")
 
 
 /** RAII wrapper to avoid goto. */
-class EvtChannelEnum {
+class EvtChannelEnum : public Event {
 public:
-    EvtChannelEnum() {
-        m_channels = EvtOpenChannelEnum(NULL, 0);
-        assert(m_channels);
+    EvtChannelEnum() : Event(EvtOpenChannelEnum(NULL, 0)) {
+        assert(m_event);
     }
 
     ~EvtChannelEnum() {
-        if (m_channels)
-            EvtClose(m_channels);
     }
 
     bool Next() {
         DWORD dwBufferUsed = 0;
-        if (!EvtNextChannelPath(m_channels, (DWORD)m_buffer.size(), (wchar_t*)m_buffer.data(), &dwBufferUsed)) {
+        if (!EvtNextChannelPath(m_event, (DWORD)m_buffer.size(), (wchar_t*)m_buffer.data(), &dwBufferUsed)) {
             DWORD status = GetLastError();
 
             if (status == ERROR_NO_MORE_ITEMS) {
@@ -31,7 +27,7 @@ public:
             } else if (status == ERROR_INSUFFICIENT_BUFFER) {
                 // repeat call with larger buffer
                 m_buffer.resize(dwBufferUsed);
-                return EvtNextChannelPath(m_channels, (DWORD)m_buffer.size(), (wchar_t*)m_buffer.data(), &dwBufferUsed);
+                return EvtNextChannelPath(m_event, (DWORD)m_buffer.size(), (wchar_t*)m_buffer.data(), &dwBufferUsed);
             } else {
                 wprintf(L"EvtNextChannelPath failed with %lu.\n", status);
                 abort();
@@ -47,7 +43,6 @@ public:
     }
 
 private:
-    EVT_HANDLE m_channels = 0;
     std::wstring m_buffer;
 };
 
@@ -248,13 +243,11 @@ cleanup:
 
 
 void PrintChannelProperties(std::wstring channelPath) {
-    EVT_HANDLE channel = EvtOpenChannelConfig(NULL, channelPath.c_str(), 0);
+    Event channel(EvtOpenChannelConfig(NULL, channelPath.c_str(), 0));
     if (!channel) {// Fails with 15007 (ERROR_EVT_CHANNEL_NOT_FOUND) if the channel is not found
         wprintf(L"EvtOpenChannelConfig failed with %lu.\n", GetLastError());
         return;
     }
 
     PrintChannelProperties(channel);
-
-    EvtClose(channel);
 }
