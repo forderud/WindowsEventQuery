@@ -17,8 +17,8 @@ public:
     }
 
     bool Next() {
-        DWORD dwBufferUsed = 0;
-        if (!EvtNextChannelPath(m_event, (DWORD)m_buffer.size(), (wchar_t*)m_buffer.data(), &dwBufferUsed)) {
+        DWORD bufferUsed = 0;
+        if (!EvtNextChannelPath(m_event, (DWORD)m_buffer.size(), (wchar_t*)m_buffer.data(), &bufferUsed)) {
             DWORD status = GetLastError();
 
             if (status == ERROR_NO_MORE_ITEMS) {
@@ -26,8 +26,8 @@ public:
                 return false;
             } else if (status == ERROR_INSUFFICIENT_BUFFER) {
                 // repeat call with larger buffer
-                m_buffer.resize(dwBufferUsed);
-                return EvtNextChannelPath(m_event, (DWORD)m_buffer.size(), (wchar_t*)m_buffer.data(), &dwBufferUsed);
+                m_buffer.resize(bufferUsed);
+                return EvtNextChannelPath(m_event, (DWORD)m_buffer.size(), (wchar_t*)m_buffer.data(), &bufferUsed);
             } else {
                 wprintf(L"EvtNextChannelPath failed with %lu.\n", status);
                 abort();
