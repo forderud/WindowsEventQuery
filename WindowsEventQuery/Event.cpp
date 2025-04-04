@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <winevt.h>
 #include "Event.hpp"
+#include <vector>
 
 #pragma comment(lib, "wevtapi.lib")
 
@@ -42,40 +43,27 @@ static_assert(sizeof(Event) == sizeof(EVT_HANDLE), "Event size mismatch");
 
 DWORD PrintEvent(EVT_HANDLE hEvent) {
     DWORD status = ERROR_SUCCESS;
-    DWORD dwBufferSize = 0;
     DWORD dwBufferUsed = 0;
     DWORD dwPropertyCount = 0;
-    LPWSTR pRenderedContent = NULL;
+    std::vector<wchar_t> pRenderedContent;
 
     // The EvtRenderEventXml flag tells EvtRender to render the event as an XML string.
-    if (!EvtRender(NULL, hEvent, EvtRenderEventXml, dwBufferSize, pRenderedContent, &dwBufferUsed, &dwPropertyCount)) {
+    if (!EvtRender(NULL, hEvent, EvtRenderEventXml, (DWORD)(sizeof(wchar_t)*pRenderedContent.size()), pRenderedContent.data(), &dwBufferUsed, &dwPropertyCount)) {
         status = GetLastError();
         if (status == ERROR_INSUFFICIENT_BUFFER) {
-            dwBufferSize = dwBufferUsed;
-            pRenderedContent = (LPWSTR)malloc(dwBufferSize);
-
-            if (pRenderedContent) {
-                EvtRender(NULL, hEvent, EvtRenderEventXml, dwBufferSize, pRenderedContent, &dwBufferUsed, &dwPropertyCount);
-            } else {
-                wprintf(L"malloc failed\n");
-                status = ERROR_OUTOFMEMORY;
-                goto cleanup;
-            }
+            // repeat query with larger buffer
+            pRenderedContent.resize(dwBufferUsed/sizeof(wchar_t));
+            EvtRender(NULL, hEvent, EvtRenderEventXml, (DWORD)(sizeof(wchar_t)*pRenderedContent.size()), pRenderedContent.data(), &dwBufferUsed, &dwPropertyCount);
         }
 
         status = GetLastError();
         if (status != ERROR_SUCCESS) {
             wprintf(L"EvtRender failed with %d\n", GetLastError());
-            goto cleanup;
+            return status;
         }
     }
 
-    wprintf(L"\n\n%s", pRenderedContent);
-
-cleanup:
-    if (pRenderedContent)
-        free(pRenderedContent);
-
+    wprintf(L"\n\n%s", pRenderedContent.data());
     return status;
 }
 
