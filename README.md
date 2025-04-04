@@ -1,7 +1,7 @@
 Sample code for querying the Windows event logs. Based on Microsoft's [Consuming Events (Windows Event Log)](https://learn.microsoft.com/en-us/windows/win32/wes/consuming-events) article.
 
 ## Examples of logged events
-Some examples of system problems automatically logged by Windows.
+Some examples of system problems automatically logged by Windows. All of these events can also be accessed through the Windows Event Log APIs.
 
 ### Disk failures
 Disk and filesystem problems are automaticaly logged:  
