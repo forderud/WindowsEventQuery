@@ -48,9 +48,8 @@ std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMA
         }
     }
 
-    std::wstring pBuffer(bufferUsed, L'\0');
-
     // repeat call with larger buffer
+    std::wstring pBuffer(bufferUsed, L'\0');
     EvtFormatMessage(hMetadata, hEvent, 0, 0, NULL, FormatId, (DWORD)pBuffer.size(), (wchar_t*)pBuffer.data(), &bufferUsed);
 
     // terminate the list of strings with a second null terminator character
