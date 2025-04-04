@@ -3,8 +3,8 @@
 #include <cassert>
 
 
-std::vector<std::wstring> GetPublisherList(EVT_HANDLE session) {
-    Event providerList(EvtOpenPublisherEnum(session, 0));
+std::vector<std::wstring> GetPublisherList() {
+    Event providerList(EvtOpenPublisherEnum(NULL, 0));
     if (!providerList) {
         DWORD status = GetLastError();
         wprintf(L"EvtOpenPublisherEnum failed with %lu.\n", status);

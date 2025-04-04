@@ -6,4 +6,4 @@
 #include <vector>
 
 
-std::vector<std::wstring> GetPublisherList(EVT_HANDLE session);
+std::vector<std::wstring> GetPublisherList();
