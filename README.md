@@ -11,15 +11,18 @@ Disk and filesystem problems are automaticaly logged:
 HW device failures are automatically logged:
 ![image](https://github.com/user-attachments/assets/feef2cd2-43f1-4b77-84e3-bf74db077977)
 
+### GPU problems
+High resource usage:  
+![image](https://github.com/user-attachments/assets/ea8aaa33-fb50-4640-8506-5c7f01570471)
+
+GPU reset error:  
+TODO: Add screenshot.
+
 #### Firewall blocking network traffic
 TODO: Add screenshot.
 
 #### Application whitelising (WDAC) problems
 TODO: Add screenshot.
-
-#### Graphics driver failures
-TODO: Add screenshot.
-
 
 
 ## Documentation
