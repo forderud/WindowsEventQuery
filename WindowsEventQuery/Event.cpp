@@ -10,6 +10,29 @@
 #define TIMEOUT 1000  // 1 second; Set and use in place of INFINITE in EvtNext call
 
 
+/** RAII wrapper to avoid goto. */
+class Event {
+public:
+    Event(EVT_HANDLE event) : m_event(event) {
+    }
+
+    ~Event() {
+        if (m_event)
+            EvtClose(m_event);
+    }
+
+    operator EVT_HANDLE () const {
+        return m_event;
+    }
+
+private:
+    EVT_HANDLE m_event = 0;
+};
+
+
+
+
+
 DWORD PrintEvent(EVT_HANDLE hEvent)
 {
     DWORD status = ERROR_SUCCESS;
@@ -103,11 +126,10 @@ cleanup:
 
 
 void EventQuery (std::wstring channel, std::wstring query) {
-    DWORD status = ERROR_SUCCESS;
+    Event hResults(EvtQuery(NULL, channel.c_str(), query.c_str(), EvtQueryChannelPath | EvtQueryReverseDirection));
 
-    EVT_HANDLE hResults = EvtQuery(NULL, channel.c_str(), query.c_str(), EvtQueryChannelPath | EvtQueryReverseDirection);
-    if (NULL == hResults) {
-        status = GetLastError();
+    if (!hResults) {
+        DWORD status = GetLastError();
 
         if (status == ERROR_EVT_CHANNEL_NOT_FOUND)
             wprintf(L"The channel was not found.\n");
@@ -118,12 +140,8 @@ void EventQuery (std::wstring channel, std::wstring query) {
         else
             wprintf(L"EvtQuery failed with %lu.\n", status);
 
-        goto cleanup;
+        return;
     }
 
     PrintResults(hResults);
-
-cleanup:
-    if (hResults)
-        EvtClose(hResults);
 }
