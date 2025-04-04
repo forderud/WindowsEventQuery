@@ -4,9 +4,6 @@
 
 #pragma comment(lib, "wevtapi.lib")
 
-#define ARRAY_SIZE 10
-#define TIMEOUT 1000  // 1 second; Set and use in place of INFINITE in EvtNext call
-
 
 DWORD PrintEvent(EVT_HANDLE hEvent) {
     DWORD status = ERROR_SUCCESS;
@@ -38,12 +35,12 @@ DWORD PrintEvent(EVT_HANDLE hEvent) {
 // Enumerate all the events in the result set. 
 DWORD PrintResults(EVT_HANDLE hResults) {
     DWORD status = ERROR_SUCCESS;
-    Event events[ARRAY_SIZE];
+    Event events[10];
 
     while (true) {
         DWORD dwReturned = 0;
         // Get a block of events from the result set.
-        if (!EvtNext(hResults, ARRAY_SIZE, (EVT_HANDLE*)events, INFINITE, 0, &dwReturned)) {
+        if (!EvtNext(hResults, std::size(events), (EVT_HANDLE*)events, INFINITE, 0, &dwReturned)) {
             status = GetLastError();
             if (status != ERROR_NO_MORE_ITEMS)
                 wprintf(L"EvtNext failed with %lu\n", status);
