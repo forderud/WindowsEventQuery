@@ -3,7 +3,7 @@
 #include <cassert>
 
 
-std::vector<std::wstring> GetPublisherList() {
+std::vector<std::wstring> EnumeratePublishers() {
     Event providerList(EvtOpenPublisherEnum(NULL, 0));
     if (!providerList) {
         DWORD status = GetLastError();

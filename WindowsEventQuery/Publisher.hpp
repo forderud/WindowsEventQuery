@@ -6,4 +6,4 @@
 #include <vector>
 
 
-std::vector<std::wstring> GetPublisherList();
+std::vector<std::wstring> EnumeratePublishers();

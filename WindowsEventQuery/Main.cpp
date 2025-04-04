@@ -1,5 +1,6 @@
 #include "Channel.hpp"
 #include "Event.hpp"
+#include "Publisher.hpp"
 
 
 int wmain() {
@@ -7,11 +8,18 @@ int wmain() {
     wprintf(L"List of Channels:\n");
     std::vector<std::wstring> channels = EnumerateChannels();
     for (const std::wstring& channel : channels) {
-        wprintf(L"* %s\n", channel.c_str());
+        wprintf(L"  %s\n", channel.c_str());
 
         PrintChannelProperties(channel);
         wprintf(L"\n");
     }
+#endif
+
+#if 0
+    wprintf(L"List of publishers:\n");
+    std::vector<std::wstring> publishers = EnumeratePublishers();
+    for (const std::wstring& publisher : publishers)
+        wprintf(L"  %s\n", publisher.c_str());
 #endif
 
     // perform event query
