@@ -5,10 +5,12 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Channel.cpp" />
     <ClCompile Include="Event.cpp" />
+    <ClCompile Include="Publisher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LegacyEventAPI.hpp" />
     <ClInclude Include="Channel.hpp" />
     <ClInclude Include="Event.hpp" />
+    <ClInclude Include="Publisher.hpp" />
   </ItemGroup>
 </Project>
