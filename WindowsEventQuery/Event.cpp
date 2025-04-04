@@ -6,10 +6,10 @@
 #pragma comment(lib, "wevtapi.lib")
 
 
-void PrintEventAsXML(EVT_HANDLE hEvent) {
+void PrintEventAsXML(EVT_HANDLE event) {
     // determine required buffer size
     DWORD bufferSize = 0; // in bytes
-    BOOL ok = EvtRender(NULL, hEvent, EvtRenderEventXml, 0, nullptr, &bufferSize, nullptr);
+    BOOL ok = EvtRender(NULL, event, EvtRenderEventXml, 0, nullptr, &bufferSize, nullptr);
     if (!ok) {
         // expected to fail with ERROR_INSUFFICIENT_BUFFER
         DWORD status = GetLastError();
@@ -19,7 +19,7 @@ void PrintEventAsXML(EVT_HANDLE hEvent) {
     // render event as XML string
     std::vector<wchar_t> pRenderedContent(bufferSize/sizeof(wchar_t));
     DWORD propertyCount = 0;
-    ok = EvtRender(NULL, hEvent, EvtRenderEventXml, (DWORD)(sizeof(wchar_t)*pRenderedContent.size()), pRenderedContent.data(), &bufferSize, &propertyCount);
+    ok = EvtRender(NULL, event, EvtRenderEventXml, (DWORD)(sizeof(wchar_t)*pRenderedContent.size()), pRenderedContent.data(), &bufferSize, &propertyCount);
     if (!ok) {
         DWORD status = GetLastError();
         wprintf(L"EvtRender failed with %d\n", status);
