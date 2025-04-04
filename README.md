@@ -5,6 +5,9 @@ Sample code for querying the Windows event logs. Based on Microsoft's [Consuming
 Disk failures:  
 ![image](https://github.com/user-attachments/assets/8011024f-be1d-4dd7-8a46-c9b9023a25ec)
 
+HW device failures:  
+![image](https://github.com/user-attachments/assets/feef2cd2-43f1-4b77-84e3-bf74db077977)
+
 Firewall blocking network traffic:  
 TODO: Add screenshot.
 
