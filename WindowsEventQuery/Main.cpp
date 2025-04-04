@@ -1,4 +1,3 @@
-#include "LegacyEventAPI.hpp"
 #include "Channel.hpp"
 #include "Event.hpp"
 
@@ -19,6 +18,4 @@ int wmain() {
     std::wstring channel = L"System";
     std::wstring query = L"Event/System[EventID=7023]";
     EventQuery(channel, query);
-
-    //return LegacyEventQuery();
 }
