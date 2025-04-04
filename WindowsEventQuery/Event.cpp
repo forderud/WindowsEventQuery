@@ -7,24 +7,26 @@
 
 
 DWORD PrintEventAsXML(EVT_HANDLE hEvent) {
-    // query for required buffer size
-    DWORD dwBufferUsed = 0;
-    DWORD dwPropertyCount = 0;
-    BOOL ok = EvtRender(NULL, hEvent, EvtRenderEventXml, 0, nullptr, &dwBufferUsed, &dwPropertyCount);
+    // determine required buffer size
+    DWORD bufferSize = 0; // in bytes
+    BOOL ok = EvtRender(NULL, hEvent, EvtRenderEventXml, 0, nullptr, &bufferSize, nullptr);
     if (!ok) {
+        // expected to fail with ERROR_INSUFFICIENT_BUFFER
         DWORD status = GetLastError();
         assert(status == ERROR_INSUFFICIENT_BUFFER);
     }
 
     // render event as XML string
-    std::vector<wchar_t> pRenderedContent(dwBufferUsed/sizeof(wchar_t));
-    ok = EvtRender(NULL, hEvent, EvtRenderEventXml, (DWORD)(sizeof(wchar_t)*pRenderedContent.size()), pRenderedContent.data(), &dwBufferUsed, &dwPropertyCount);
+    std::vector<wchar_t> pRenderedContent(bufferSize/sizeof(wchar_t));
+    DWORD propertyCount = 0;
+    ok = EvtRender(NULL, hEvent, EvtRenderEventXml, (DWORD)(sizeof(wchar_t)*pRenderedContent.size()), pRenderedContent.data(), &bufferSize, &propertyCount);
     if (!ok) {
         DWORD status = GetLastError();
         wprintf(L"EvtRender failed with %d\n", status);
         return status;
     }
 
+    // print XML to console
     wprintf(L"\n\n%s", pRenderedContent.data());
     return ERROR_SUCCESS;
 }
