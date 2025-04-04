@@ -1,6 +1,7 @@
 Sample code for querying the Windows event logs. Based on Microsoft's [Consuming Events (Windows Event Log)](https://learn.microsoft.com/en-us/windows/win32/wes/consuming-events) article.
 
 ## Examples of logged events
+Some examples of system problems automatically logged by Windows.
 
 #### Disk failures
 Disk and filesystem problems are automaticaly logged:  
@@ -24,7 +25,7 @@ Logging of dropped packets by the firewall: (logging _not_ enabled by default)
 ![image](https://github.com/user-attachments/assets/4c01cd9f-2a6b-4963-9d30-c2a2b776a5c7)
 
 #### Application whitelising (WDAC) problems
-TODO: Add screenshot.
+![image](https://github.com/user-attachments/assets/c034b43e-fb26-470a-903b-e1c37dc1fef9)
 
 
 ## Documentation
