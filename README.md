@@ -19,8 +19,9 @@ GPU watchdog recovery:
 High resource usage:  
 ![image](https://github.com/user-attachments/assets/ea8aaa33-fb50-4640-8506-5c7f01570471)
 
-#### Firewall blocking network traffic
-TODO: Add screenshot.
+#### Firewall logs
+Logging of dropped packets by the firewall: (logging _not_ enabled by default)  
+![image](https://github.com/user-attachments/assets/4c01cd9f-2a6b-4963-9d30-c2a2b776a5c7)
 
 #### Application whitelising (WDAC) problems
 TODO: Add screenshot.
