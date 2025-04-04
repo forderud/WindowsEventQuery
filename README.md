@@ -29,6 +29,10 @@ Logging of dropped packets by the firewall: (logging _not_ enabled by default)
 Applications not starting due to insufficient whitelisting:  
 ![image](https://github.com/user-attachments/assets/c034b43e-fb26-470a-903b-e1c37dc1fef9)
 
+#### Critical OS failure
+Reason for unexpected system reboots:  
+![image](https://github.com/user-attachments/assets/0164914d-c894-4347-904b-bfa60e65bda7)
+
 
 ## Documentation
 * [Event Logging](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-logging) (old APIs)
