@@ -5,13 +5,13 @@
 #pragma comment(lib, "wevtapi.lib")
 
 
-DWORD PrintEvent(EVT_HANDLE hEvent) {
+DWORD PrintEventAsXML(EVT_HANDLE hEvent) {
     DWORD status = ERROR_SUCCESS;
     DWORD dwBufferUsed = 0;
     DWORD dwPropertyCount = 0;
     std::vector<wchar_t> pRenderedContent;
 
-    // The EvtRenderEventXml flag tells EvtRender to render the event as an XML string.
+    // render event as XML string
     if (!EvtRender(NULL, hEvent, EvtRenderEventXml, (DWORD)(sizeof(wchar_t)*pRenderedContent.size()), pRenderedContent.data(), &dwBufferUsed, &dwPropertyCount)) {
         status = GetLastError();
         if (status == ERROR_INSUFFICIENT_BUFFER) {
@@ -39,7 +39,7 @@ DWORD PrintResults(EVT_HANDLE hResults) {
 
     while (true) {
         DWORD dwReturned = 0;
-        // Get a block of events from the result set.
+        // get a block of events from the result set
         if (!EvtNext(hResults, std::size(events), (EVT_HANDLE*)events, INFINITE, 0, &dwReturned)) {
             status = GetLastError();
             if (status != ERROR_NO_MORE_ITEMS)
@@ -48,9 +48,10 @@ DWORD PrintResults(EVT_HANDLE hResults) {
             break;
         }
 
-        // For each event, call the PrintEvent function which renders the event for display
         for (DWORD i = 0; i < dwReturned; i++) {
-            status = PrintEvent(events[i]);
+            // print event details to console
+            status = PrintEventAsXML(events[i]);
+
             if (status == ERROR_SUCCESS)
                 events[i].Close();
             else
