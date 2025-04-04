@@ -17,7 +17,7 @@ HW device failures are automatically logged:
 GPU watchdog recovery:  
 ![image](https://github.com/user-attachments/assets/ef34e983-696f-4397-9d4c-0d1f1ec73d2c)
 
-High resource usage:  
+High GPU resource usage:  
 ![image](https://github.com/user-attachments/assets/ea8aaa33-fb50-4640-8506-5c7f01570471)
 
 ### Firewall logs
