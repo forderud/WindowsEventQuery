@@ -33,7 +33,7 @@ void PrintEventAsXML(EVT_HANDLE event) {
 
 // Gets the specified message string from the event. If the event does not
 // contain the specified message, the function returns NULL.
-LPWSTR GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMAT_MESSAGE_FLAGS FormatId)
+std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMAT_MESSAGE_FLAGS FormatId)
 {
     LPWSTR pBuffer = NULL;
     DWORD dwBufferSize = 0;
@@ -78,7 +78,9 @@ LPWSTR GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMAT_MESS
         }
     }
 
-    return pBuffer;
+    std::wstring result(pBuffer);
+    free(pBuffer);
+    return result;
 }
 
 void PrintEventStrings(EVT_HANDLE hEvent, std::wstring publisherName) {
@@ -90,76 +92,37 @@ void PrintEventStrings(EVT_HANDLE hEvent, std::wstring publisherName) {
     }
 
     // Get the various message strings from the event.
-    wchar_t* pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageEvent);
-    if (pwsMessage)
-    {
-        wprintf(L"Event message string: %s\n\n", pwsMessage);
-        free(pwsMessage);
-        pwsMessage = NULL;
-    }
+    std::wstring pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageEvent);
+    wprintf(L"Event message string: %s\n\n", pwsMessage.c_str());
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageLevel);
-    if (pwsMessage)
-    {
-        wprintf(L"Level message string: %s\n\n", pwsMessage);
-        free(pwsMessage);
-        pwsMessage = NULL;
-    }
+    wprintf(L"Level message string: %s\n\n", pwsMessage.c_str());
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageTask);
-    if (pwsMessage)
-    {
-        wprintf(L"Task message string: %s\n\n", pwsMessage);
-        free(pwsMessage);
-        pwsMessage = NULL;
-    }
+    wprintf(L"Task message string: %s\n\n", pwsMessage.c_str());
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageOpcode);
-    if (pwsMessage)
-    {
-        wprintf(L"Opcode message string: %s\n\n", pwsMessage);
-        free(pwsMessage);
-        pwsMessage = NULL;
-    }
+    wprintf(L"Opcode message string: %s\n\n", pwsMessage.c_str());
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageKeyword);
-    if (pwsMessage)
     {
-        LPWSTR ptemp = pwsMessage;
+        wprintf(L"Keyword message string: %s", pwsMessage.c_str());
 
-        wprintf(L"Keyword message string: %s", ptemp);
-
+        const wchar_t* ptemp = pwsMessage.c_str();
         while (*(ptemp += wcslen(ptemp) + 1))
             wprintf(L", %s", ptemp);
 
         wprintf(L"\n\n");
-        free(pwsMessage);
-        pwsMessage = NULL;
     }
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageChannel);
-    if (pwsMessage)
-    {
-        wprintf(L"Channel message string: %s\n\n", pwsMessage);
-        free(pwsMessage);
-        pwsMessage = NULL;
-    }
+    wprintf(L"Channel message string: %s\n\n", pwsMessage.c_str());
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageProvider);
-    if (pwsMessage)
-    {
-        wprintf(L"Provider message string: %s\n\n", pwsMessage);
-        free(pwsMessage);
-        pwsMessage = NULL;
-    }
+    wprintf(L"Provider message string: %s\n\n", pwsMessage.c_str());
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageXml);
-    if (pwsMessage)
-    {
-        wprintf(L"XML message string: %s\n\n", pwsMessage);
-        free(pwsMessage);
-        pwsMessage = NULL;
-    }
+    wprintf(L"XML message string: %s\n\n", pwsMessage.c_str());
 }
 
 
