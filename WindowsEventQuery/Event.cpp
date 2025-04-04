@@ -6,7 +6,7 @@
 #pragma comment(lib, "wevtapi.lib")
 
 
-DWORD PrintEventAsXML(EVT_HANDLE hEvent) {
+void PrintEventAsXML(EVT_HANDLE hEvent) {
     // determine required buffer size
     DWORD bufferSize = 0; // in bytes
     BOOL ok = EvtRender(NULL, hEvent, EvtRenderEventXml, 0, nullptr, &bufferSize, nullptr);
@@ -23,12 +23,11 @@ DWORD PrintEventAsXML(EVT_HANDLE hEvent) {
     if (!ok) {
         DWORD status = GetLastError();
         wprintf(L"EvtRender failed with %d\n", status);
-        return status;
+        return;
     }
 
     // print XML to console
     wprintf(L"\n\n%s", pRenderedContent.data());
-    return ERROR_SUCCESS;
 }
 
 
@@ -45,21 +44,17 @@ DWORD PrintResults(EVT_HANDLE hResults) {
             if (status != ERROR_NO_MORE_ITEMS)
                 wprintf(L"EvtNext failed with %lu\n", status);
 
-            break;
+            return status;
         }
 
         for (DWORD i = 0; i < dwReturned; i++) {
             // print event details to console
-            status = PrintEventAsXML(events[i]);
-
-            if (status == ERROR_SUCCESS)
-                events[i].Close();
-            else
-                break;
+            PrintEventAsXML(events[i]);
+            events[i].Close();
         }
     }
 
-    return status;
+    return ERROR_SUCCESS;
 }
 
 
