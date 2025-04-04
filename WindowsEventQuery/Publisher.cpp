@@ -15,6 +15,9 @@ std::vector<std::wstring> EnumeratePublishers() {
 
     std::wstring buffer;
     while (true) {
+        // grow to current capacity to reduce the number of reallocations
+        buffer.resize(buffer.capacity());
+
         DWORD bufferUsed = 0;
         BOOL ok = EvtNextPublisherId(providerList, (DWORD)buffer.size(), (wchar_t*)buffer.data(), &bufferUsed);
         if (!ok) {
