@@ -33,16 +33,16 @@ void PrintEventAsXML(EVT_HANDLE event) {
 
 // Gets the specified message string from the event. If the event does not
 // contain the specified message, the function returns NULL.
-std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMAT_MESSAGE_FLAGS FormatId)
-{
+std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMAT_MESSAGE_FLAGS FormatId) {
     LPWSTR pBuffer = NULL;
-    DWORD dwBufferSize = 0;
-    DWORD dwBufferUsed = 0;
-    DWORD status = 0;
 
-    if (!EvtFormatMessage(hMetadata, hEvent, 0, 0, NULL, FormatId, dwBufferSize, pBuffer, &dwBufferUsed)) {
-        status = GetLastError();
+    // determine required buffer size
+    DWORD dwBufferUsed = 0; // in characters
+    if (!EvtFormatMessage(hMetadata, hEvent, 0, 0, NULL, FormatId, 0, nullptr, &dwBufferUsed)) {
+        DWORD status = GetLastError();
+
         if (status == ERROR_INSUFFICIENT_BUFFER) {
+            DWORD dwBufferSize = 0;
             // An event can contain one or more keywords. The function returns keywords
             // as a list of keyword strings. To process the list, you need to know the
             // size of the buffer, so you know when you have read the last string, or you
