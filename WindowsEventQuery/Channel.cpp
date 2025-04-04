@@ -195,50 +195,31 @@ DWORD PrintChannelProperty(int Id, PEVT_VARIANT pProperty)
 // Print the channel's configuration properties. Use the EVT_CHANNEL_CONFIG_PROPERTY_ID
 // enumeration values to loop through all the properties.
 void PrintChannelProperties(EVT_HANDLE hChannel) {
-    PEVT_VARIANT pProperty = NULL;  // Buffer that receives the property value
-    PEVT_VARIANT pTemp = NULL;
-    DWORD dwBufferSize = 0;
+    std::vector<BYTE> pProperty; // EVT_VARIANT buffer that receives the property value
     DWORD dwBufferUsed = 0;
     DWORD status = ERROR_SUCCESS;
 
-    for (int Id = 0; Id < EvtChannelConfigPropertyIdEND; Id++)
-    {
+    for (int Id = 0; Id < EvtChannelConfigPropertyIdEND; Id++) {
         // Get the specified property. If the buffer is too small, reallocate it.
-        if (!EvtGetChannelConfigProperty(hChannel, (EVT_CHANNEL_CONFIG_PROPERTY_ID)Id, 0, dwBufferSize, pProperty, &dwBufferUsed))
-        {
+        if (!EvtGetChannelConfigProperty(hChannel, (EVT_CHANNEL_CONFIG_PROPERTY_ID)Id, 0, (DWORD)pProperty.size(), (EVT_VARIANT*)pProperty.data(), &dwBufferUsed)) {
             status = GetLastError();
-            if (ERROR_INSUFFICIENT_BUFFER == status)
-            {
-                dwBufferSize = dwBufferUsed;
-                pTemp = (PEVT_VARIANT)realloc(pProperty, dwBufferSize);
-                if (pTemp)
-                {
-                    pProperty = pTemp;
-                    pTemp = NULL;
-                    EvtGetChannelConfigProperty(hChannel, (EVT_CHANNEL_CONFIG_PROPERTY_ID)Id, 0, dwBufferSize, pProperty, &dwBufferUsed);
-                }
-                else
-                {
-                    wprintf(L"realloc failed\n");
-                    status = ERROR_OUTOFMEMORY;
-                    goto cleanup;
-                }
+            if (status == ERROR_INSUFFICIENT_BUFFER) {
+                // repeat call with larger buffer
+                pProperty.resize(dwBufferUsed);
+                EvtGetChannelConfigProperty(hChannel, (EVT_CHANNEL_CONFIG_PROPERTY_ID)Id, 0, (DWORD)pProperty.size(), (EVT_VARIANT*)pProperty.data(), &dwBufferUsed);
             }
 
-            if (ERROR_SUCCESS != (status = GetLastError()))
-            {
+            status = GetLastError();
+            if (status != ERROR_SUCCESS) {
                 wprintf(L"EvtGetChannelConfigProperty failed with %d\n", GetLastError());
-                goto cleanup;
+                return;
             }
         }
 
-        if (status = PrintChannelProperty(Id, pProperty))
+        status = PrintChannelProperty(Id, (EVT_VARIANT*)pProperty.data());
+        if (status != ERROR_SUCCESS)
             break;
     }
-
-cleanup:
-    if (pProperty)
-        free(pProperty);
 }
 
 
