@@ -172,13 +172,10 @@ DWORD PrintChannelProperty(int Id, PEVT_VARIANT pProperty)
         break;
 
     case EvtChannelPublisherList:
-
-        wprintf(L"List of providers that import this channel: \n");
+        wprintf(L"List of providers that import this channel:");
         for (DWORD i = 0; i < pProperty->Count; i++)
-        {
-            wprintf(L"  %s\n", pProperty->StringArr[i]);
-        }
-
+            wprintf(L" %s,", pProperty->StringArr[i]);
+        wprintf(L"\n");
         break;
 
     case EvtChannelPublishingConfigFileMax:
