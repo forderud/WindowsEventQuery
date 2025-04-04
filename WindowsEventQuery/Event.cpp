@@ -40,11 +40,9 @@ std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMA
     DWORD dwBufferUsed = 0;
     DWORD status = 0;
 
-    if (!EvtFormatMessage(hMetadata, hEvent, 0, 0, NULL, FormatId, dwBufferSize, pBuffer, &dwBufferUsed))
-    {
+    if (!EvtFormatMessage(hMetadata, hEvent, 0, 0, NULL, FormatId, dwBufferSize, pBuffer, &dwBufferUsed)) {
         status = GetLastError();
-        if (ERROR_INSUFFICIENT_BUFFER == status)
-        {
+        if (status == ERROR_INSUFFICIENT_BUFFER) {
             // An event can contain one or more keywords. The function returns keywords
             // as a list of keyword strings. To process the list, you need to know the
             // size of the buffer, so you know when you have read the last string, or you
@@ -56,24 +54,17 @@ std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMA
                 dwBufferSize = dwBufferUsed;
 
             pBuffer = (LPWSTR)malloc(dwBufferSize * sizeof(WCHAR));
-
-            if (pBuffer)
             {
+                // repeat call with larger buffer
                 EvtFormatMessage(hMetadata, hEvent, 0, 0, NULL, FormatId, dwBufferSize, pBuffer, &dwBufferUsed);
 
                 // Add the second null terminator character.
                 if ((EvtFormatMessageKeyword == FormatId))
                     pBuffer[dwBufferUsed - 1] = L'\0';
             }
-            else
-            {
-                wprintf(L"malloc failed\n");
-            }
-        }
-        else if (ERROR_EVT_MESSAGE_NOT_FOUND == status || ERROR_EVT_MESSAGE_ID_NOT_FOUND == status)
+        } else if (ERROR_EVT_MESSAGE_NOT_FOUND == status || ERROR_EVT_MESSAGE_ID_NOT_FOUND == status) {
             ;
-        else
-        {
+        } else {
             wprintf(L"EvtFormatMessage failed with %u\n", status);
         }
     }
