@@ -38,6 +38,9 @@ Reason for unexpected system reboots:
 ![image](https://github.com/user-attachments/assets/0164914d-c894-4347-904b-bfa60e65bda7)
 
 
+### SW installation failure
+TODO: Add screenshot to show how installation failures are logged.
+
 ## Documentation
 * ~~[Event Logging](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-logging)~~ (old APIs)
 * [Windows Event Log](https://learn.microsoft.com/en-us/windows/win32/wes/windows-event-log) (new APIs)
