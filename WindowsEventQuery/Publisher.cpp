@@ -717,40 +717,32 @@ DWORD PrintProviderProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty
 // Use the EVT_PUBLISHER_METADATA_PROPERTY_ID enumeration values to enumerate all the
 // provider's metadata excluding event metadata. Enumerates the metadata for channels,
 // tasks, opcodes, levels, keywords, and the provider.
-DWORD PrintProviderProperties(EVT_HANDLE hMetadata)
-{
+DWORD PrintProviderProperties(EVT_HANDLE hMetadata) {
     PEVT_VARIANT pProperty = NULL;  // Contains the metadata property
     PEVT_VARIANT pTemp = NULL;
     DWORD dwBufferSize = 0;
     DWORD dwBufferUsed = 0;
     DWORD status = ERROR_SUCCESS;
 
-    for (int Id = 0; Id < EvtPublisherMetadataPropertyIdEND; Id++)
-    {
+    for (int Id = 0; Id < EvtPublisherMetadataPropertyIdEND; Id++) {
         // Get the metadata property. If the buffer is not big enough, reallocate the buffer.
-        if (!EvtGetPublisherMetadataProperty(hMetadata, (EVT_PUBLISHER_METADATA_PROPERTY_ID)Id, 0, dwBufferSize, pProperty, &dwBufferUsed))
-        {
+        if (!EvtGetPublisherMetadataProperty(hMetadata, (EVT_PUBLISHER_METADATA_PROPERTY_ID)Id, 0, dwBufferSize, pProperty, &dwBufferUsed)) {
             status = GetLastError();
-            if (ERROR_INSUFFICIENT_BUFFER == status)
-            {
+            if (ERROR_INSUFFICIENT_BUFFER == status) {
                 dwBufferSize = dwBufferUsed;
                 pTemp = (PEVT_VARIANT)realloc(pProperty, dwBufferSize);
-                if (pTemp)
-                {
+                if (pTemp) {
                     pProperty = pTemp;
                     pTemp = NULL;
                     EvtGetPublisherMetadataProperty(hMetadata, (EVT_PUBLISHER_METADATA_PROPERTY_ID)Id, 0, dwBufferSize, pProperty, &dwBufferUsed);
-                }
-                else
-                {
+                } else {
                     wprintf(L"realloc failed\n");
                     status = ERROR_OUTOFMEMORY;
                     goto cleanup;
                 }
             }
 
-            if (ERROR_SUCCESS != (status = GetLastError()))
-            {
+            if (ERROR_SUCCESS != (status = GetLastError())) {
                 wprintf(L"EvtGetPublisherMetadataProperty failed with %d\n", GetLastError());
                 goto cleanup;
             }
@@ -768,8 +760,7 @@ DWORD PrintProviderProperties(EVT_HANDLE hMetadata)
         // the array. Do not call EvtGetPublisherMetadataProperty with a type specific ID or it 
         // will fail. The switch statement increments to the end of the type specific IDs for 
         // each type.
-        switch (Id)
-        {
+        switch (Id) {
         case EvtPublisherMetadataChannelReferences:
             Id = EvtPublisherMetadataChannelReferenceMessageID;
             break;
@@ -793,7 +784,6 @@ DWORD PrintProviderProperties(EVT_HANDLE hMetadata)
     }
 
 cleanup:
-
     if (pProperty)
         free(pProperty);
 
@@ -803,17 +793,14 @@ cleanup:
 // Used to get the message string or name for levels, tasks, and channels.
 // Search the messages block sequentially for an item that has the same value
 // and return a pointer to the message string.
-LPWSTR GetPropertyName(EVT_HANDLE hMetadata, MESSAGES* pMessages, DWORD dwValue)
-{
+LPWSTR GetPropertyName(EVT_HANDLE hMetadata, MESSAGES* pMessages, DWORD dwValue) {
     UNREFERENCED_PARAMETER(hMetadata);
 
     LPWSTR pMessage = NULL;
     DWORD dwCount = pMessages->dwSize / sizeof(MSG_STRING);
 
-    for (DWORD i = 0; i < dwCount; i++)
-    {
-        if (dwValue == ((pMessages->pMessage) + i)->dwValue)
-        {
+    for (DWORD i = 0; i < dwCount; i++) {
+        if (dwValue == ((pMessages->pMessage) + i)->dwValue) {
             pMessage = ((pMessages->pMessage) + i)->pwcsMessage;
             break;
         }
@@ -827,8 +814,7 @@ LPWSTR GetPropertyName(EVT_HANDLE hMetadata, MESSAGES* pMessages, DWORD dwValue)
 // locally (task-specific). All global opcodes must be unique, but multiple tasks can specify the
 // same opcode value, so we need to check the low word to see if the task on the event matches
 // the task on the opcode.
-LPWSTR GetOpcodeName(EVT_HANDLE hMetadata, MESSAGES* pMessages, DWORD dwOpcodeValue, DWORD dwTaskValue)
-{
+LPWSTR GetOpcodeName(EVT_HANDLE hMetadata, MESSAGES* pMessages, DWORD dwOpcodeValue, DWORD dwTaskValue) {
     UNREFERENCED_PARAMETER(hMetadata);
 
     LPWSTR pMessage = NULL;
@@ -836,16 +822,11 @@ LPWSTR GetOpcodeName(EVT_HANDLE hMetadata, MESSAGES* pMessages, DWORD dwOpcodeVa
     DWORD dwOpcodeIndex = 0;  // Points to the global opcode (low word is zero)
     BOOL fFound = FALSE;
 
-    for (DWORD i = 0; i < dwCount; i++)
-    {
-        if (dwOpcodeValue == HIWORD(((pMessages->pMessage) + i)->dwValue))
-        {
-            if (0 == LOWORD(((pMessages->pMessage) + i)->dwValue))
-            {
+    for (DWORD i = 0; i < dwCount; i++) {
+        if (dwOpcodeValue == HIWORD(((pMessages->pMessage) + i)->dwValue)) {
+            if (0 == LOWORD(((pMessages->pMessage) + i)->dwValue)) {
                 dwOpcodeIndex = i;
-            }
-            else if (dwTaskValue == LOWORD(((pMessages->pMessage) + i)->dwValue))
-            {
+            } else if (dwTaskValue == LOWORD(((pMessages->pMessage) + i)->dwValue)) {
                 pMessage = ((pMessages->pMessage) + i)->pwcsMessage;
                 fFound = TRUE;
                 break;
@@ -853,8 +834,7 @@ LPWSTR GetOpcodeName(EVT_HANDLE hMetadata, MESSAGES* pMessages, DWORD dwOpcodeVa
         }
     }
 
-    if (FALSE == fFound)
-    {
+    if (FALSE == fFound) {
         pMessage = ((pMessages->pMessage) + dwOpcodeIndex)->pwcsMessage;
     }
 
@@ -865,8 +845,7 @@ LPWSTR GetOpcodeName(EVT_HANDLE hMetadata, MESSAGES* pMessages, DWORD dwOpcodeVa
 // contains a bit mask that has bits set for each keyword specified on the event. Search the 
 // messages block sequentially for items that have the same keyword bit set. Concatenate all the
 // message strings.
-LPWSTR GetKeywordName(EVT_HANDLE hMetadata, MESSAGES* pMessages, UINT64 ullKeywords)
-{
+LPWSTR GetKeywordName(EVT_HANDLE hMetadata, MESSAGES* pMessages, UINT64 ullKeywords) {
     UNREFERENCED_PARAMETER(hMetadata);
 
     LPWSTR pMessage = NULL;
@@ -875,34 +854,25 @@ LPWSTR GetKeywordName(EVT_HANDLE hMetadata, MESSAGES* pMessages, UINT64 ullKeywo
     size_t dwStringLen = 0;
     DWORD dwCount = pMessages->dwSize / sizeof(MSG_STRING);
 
-    for (DWORD i = 0; i < dwCount; i++)
-    {
-        if (ullKeywords & ((pMessages->pMessage) + i)->ullMask)
-        {
+    for (DWORD i = 0; i < dwCount; i++) {
+        if (ullKeywords & ((pMessages->pMessage) + i)->ullMask) {
             dwStringLen += wcslen(((pMessages->pMessage) + i)->pwcsMessage) + 1 + 1;  // + space delimiter + null-terminator
             pTemp = (LPWSTR)realloc(pMessage, dwStringLen * sizeof(WCHAR));
-            if (pTemp)
-            {
+            if (pTemp) {
                 pMessage = pTemp;
                 pTemp = NULL;
 
-                if (fFirstMessage)
-                {
+                if (fFirstMessage) {
                     *pMessage = L'\0';  // Need so first wcscat_s call works
                     fFirstMessage = FALSE;
-                }
-                else
-                {
+                } else {
                     wcscat_s(pMessage, dwStringLen, L" ");  // Space delimiter
                 }
 
                 wcscat_s(pMessage, dwStringLen, ((pMessages->pMessage) + i)->pwcsMessage);
-            }
-            else
-            {
+            } else {
                 wprintf(L"realloc failed for GetKeywordName\n");
-                if (pMessage)
-                {
+                if (pMessage) {
                     free(pMessage);
                     pMessage = NULL;
                 }
@@ -915,15 +885,13 @@ LPWSTR GetKeywordName(EVT_HANDLE hMetadata, MESSAGES* pMessages, UINT64 ullKeywo
 }
 
 // Print the event property.
-DWORD PrintEventProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty)
-{
+DWORD PrintEventProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty) {
     DWORD status = ERROR_SUCCESS;
     static DWORD dwOpcode = 0;
     LPWSTR pName = NULL;       // The event's name property
     LPWSTR pMessage = NULL;    // The event's message string
 
-    switch (Id)
-    {
+    switch (Id) {
     case EventMetadataEventID:
         wprintf(L"ID: %lu\n", pProperty->UInt32Val);
         break;
@@ -936,13 +904,10 @@ DWORD PrintEventProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty)
         // Instead of printing the value attribute, use it to find the channel's
         // message string or name and print it.
     case EventMetadataEventChannel:
-        if (pProperty->UInt32Val > 0)
-        {
+        if (pProperty->UInt32Val > 0) {
             pName = GetPropertyName(hMetadata, &g_ChannelMessages, pProperty->UInt32Val);
             wprintf(L"Channel: %s\n", pName);
-        }
-        else
-        {
+        } else {
             wprintf(L"Channel: \n");
         }
         break;
@@ -951,13 +916,10 @@ DWORD PrintEventProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty)
         // Instead of printing the value attribute, use it to find the level's
         // message string or name and print it.
     case EventMetadataEventLevel:
-        if (pProperty->UInt32Val > 0)
-        {
+        if (pProperty->UInt32Val > 0) {
             pName = GetPropertyName(hMetadata, &g_LevelMessages, pProperty->UInt32Val);
             wprintf(L"Level: %s\n", pName);
-        }
-        else
-        {
+        } else {
             wprintf(L"Level: \n");
         }
         break;
@@ -977,24 +939,18 @@ DWORD PrintEventProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty)
         // Instead of printing the value attribute, use it to find the task's
         // message string or name and print it.
     case EventMetadataEventTask:
-        if (pProperty->UInt32Val > 0)
-        {
+        if (pProperty->UInt32Val > 0) {
             pName = GetPropertyName(hMetadata, &g_TaskMessages, pProperty->UInt32Val);
             wprintf(L"Task: %s\n", pName);
-        }
-        else
-        {
+        } else {
             wprintf(L"Task: \n");
         }
 
         // Now that we know the task, get the opcode string and print it.
-        if (dwOpcode > 0)
-        {
+        if (dwOpcode > 0) {
             pName = GetOpcodeName(hMetadata, &g_OpcodeMessages, dwOpcode, pProperty->UInt32Val);
             wprintf(L"Opcode: %s\n", pName);
-        }
-        else
-        {
+        } else {
             wprintf(L"Opcode: \n");
         }
         break;
@@ -1005,31 +961,24 @@ DWORD PrintEventProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty)
     case EventMetadataEventKeyword:
         // The upper 8 bits can contain reserved bit values, so do not include them
         // when checking to see if any keywords are set.
-        if ((pProperty->UInt32Val & 0x00FFFFFFFFFFFFFF) > 0)
-        {
+        if ((pProperty->UInt32Val & 0x00FFFFFFFFFFFFFF) > 0) {
             pName = GetKeywordName(hMetadata, &g_KeywordMessages, pProperty->UInt32Val);
             wprintf(L"Keyword: %s\n", pName);
             if (pName)
                 free(pName);
-        }
-        else
-        {
+        } else {
             wprintf(L"Keyword: \n");
         }
         break;
 
         // If the message string is not specified, the value is -1.
     case EventMetadataEventMessageID:
-        if (-1 == pProperty->UInt32Val)
-        {
+        if (-1 == pProperty->UInt32Val) {
             wprintf(L"Message string: \n");
-        }
-        else
-        {
+        } else {
             pMessage = GetMessageString(hMetadata, pProperty->UInt32Val);
             wprintf(L"Message string: %s\n", (pMessage) ? pMessage : L"");
-            if (pMessage)
-            {
+            if (pMessage) {
                 free(pMessage);
             }
         }
@@ -1050,8 +999,7 @@ DWORD PrintEventProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty)
 }
 
 // Print the metadata for the event.
-DWORD PrintEventProperties(EVT_HANDLE hEvent)
-{
+DWORD PrintEventProperties(EVT_HANDLE hEvent) {
     PEVT_VARIANT pProperty = NULL;  // Contains a metadata value
     PEVT_VARIANT pTemp = NULL;
     DWORD dwBufferSize = 0;
@@ -1060,32 +1008,25 @@ DWORD PrintEventProperties(EVT_HANDLE hEvent)
 
     // Use the EVT_EVENT_METADATA_PROPERTY_ID's enumeration values to loop
     // through all the metadata for the event.
-    for (int Id = 0; Id < EvtEventMetadataPropertyIdEND; Id++)
-    {
+    for (int Id = 0; Id < EvtEventMetadataPropertyIdEND; Id++) {
         // Get the specified metadata property. If the pProperty buffer is not big enough, reallocate the buffer.
-        if (!EvtGetEventMetadataProperty(hEvent, (EVT_EVENT_METADATA_PROPERTY_ID)Id, 0, dwBufferSize, pProperty, &dwBufferUsed))
-        {
+        if (!EvtGetEventMetadataProperty(hEvent, (EVT_EVENT_METADATA_PROPERTY_ID)Id, 0, dwBufferSize, pProperty, &dwBufferUsed)) {
             status = GetLastError();
-            if (ERROR_INSUFFICIENT_BUFFER == status)
-            {
+            if (ERROR_INSUFFICIENT_BUFFER == status) {
                 dwBufferSize = dwBufferUsed;
                 pTemp = (PEVT_VARIANT)realloc(pProperty, dwBufferSize);
-                if (pTemp)
-                {
+                if (pTemp) {
                     pProperty = pTemp;
                     pTemp = NULL;
                     EvtGetEventMetadataProperty(hEvent, (EVT_EVENT_METADATA_PROPERTY_ID)Id, 0, dwBufferSize, pProperty, &dwBufferUsed);
-                }
-                else
-                {
+                } else {
                     wprintf(L"realloc failed\n");
                     status = ERROR_OUTOFMEMORY;
                     goto cleanup;
                 }
             }
 
-            if (ERROR_SUCCESS != (status = GetLastError()))
-            {
+            if (ERROR_SUCCESS != (status = GetLastError())) {
                 wprintf(L"EvtGetEventMetadataProperty failed with %d\n", GetLastError());
                 goto cleanup;
             }
@@ -1098,7 +1039,6 @@ DWORD PrintEventProperties(EVT_HANDLE hEvent)
     }
 
 cleanup:
-
     if (pProperty)
         free(pProperty);
 
@@ -1108,28 +1048,23 @@ cleanup:
 // Get an enumerator to the provider's events and enumerate them.
 // Call this function after first calling the PrintProviderProperties
 // function to get the message strings that this section uses.
-DWORD PrintProviderEvents(EVT_HANDLE hMetadata)
-{
+DWORD PrintProviderEvents(EVT_HANDLE hMetadata) {
     EVT_HANDLE hEvents = NULL;
     EVT_HANDLE hEvent = NULL;
     DWORD status = ERROR_SUCCESS;
 
     // Get a handle to the provider's events.
     hEvents = EvtOpenEventMetadataEnum(hMetadata, 0);
-    if (NULL == hEvents)
-    {
+    if (NULL == hEvents) {
         wprintf(L"EvtOpenEventMetadataEnum failed with %lu\n", GetLastError());
         goto cleanup;
     }
 
     // Enumerate the events and print each event's metadata.
-    while (true)
-    {
+    while (true) {
         hEvent = EvtNextEventMetadata(hEvents, 0);
-        if (NULL == hEvent)
-        {
-            if (ERROR_NO_MORE_ITEMS != (status = GetLastError()))
-            {
+        if (NULL == hEvent) {
+            if (ERROR_NO_MORE_ITEMS != (status = GetLastError())) {
                 wprintf(L"EvtNextEventMetadata failed with %lu\n", status);
             }
 
@@ -1143,9 +1078,7 @@ DWORD PrintProviderEvents(EVT_HANDLE hMetadata)
         hEvent = NULL;
     }
 
-
 cleanup:
-
     if (hEvents)
         EvtClose(hEvents);
 
