@@ -103,7 +103,9 @@ void PrintEventStrings(EVT_HANDLE hEvent, std::wstring publisherId) {
 
 
 // Enumerate all the events in the result set. 
-DWORD PrintResults(EVT_HANDLE hResults, std::wstring publisherId, size_t maxCount) {
+DWORD PrintResults(EVT_HANDLE hResults, size_t maxCount) {
+    std::wstring publisherId; // TODO: Determine channel or event publisher
+
     DWORD status = ERROR_SUCCESS;
     Event events[10];
 
@@ -140,9 +142,8 @@ DWORD PrintResults(EVT_HANDLE hResults, std::wstring publisherId, size_t maxCoun
 }
 
 
-void EventQuery (std::wstring channel, std::wstring query, std::wstring publisherId, size_t maxCount) {
+void EventQuery (std::wstring channel, std::wstring query, size_t maxCount) {
     Event results(EvtQuery(NULL, channel.c_str(), query.c_str(), EvtQueryChannelPath | EvtQueryReverseDirection));
-
     if (!results) {
         DWORD status = GetLastError();
 
@@ -158,5 +159,5 @@ void EventQuery (std::wstring channel, std::wstring query, std::wstring publishe
         return;
     }
 
-    PrintResults(results, publisherId, maxCount);
+    PrintResults(results, maxCount);
 }
