@@ -1,14 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="LegacyEventAPI.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Channel.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="Publisher.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LegacyEventAPI.hpp" />
     <ClInclude Include="Channel.hpp" />
     <ClInclude Include="Event.hpp" />
     <ClInclude Include="Publisher.hpp" />
