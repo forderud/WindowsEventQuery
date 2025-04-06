@@ -41,7 +41,7 @@ std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMA
         if (status == ERROR_INSUFFICIENT_BUFFER) {
             // expected failure
         } else if (status == ERROR_EVT_MESSAGE_NOT_FOUND || status == ERROR_EVT_MESSAGE_ID_NOT_FOUND) {
-            return L"";
+            return L"N/A";
         } else {
             wprintf(L"EvtFormatMessage failed with %u\n", status);
             return L"";
