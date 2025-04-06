@@ -1,4 +1,4 @@
-Sample code for querying the Windows event logs. Based on Microsoft's [Consuming Events (Windows Event Log)](https://learn.microsoft.com/en-us/windows/win32/wes/consuming-events) article.
+Sample code for **querying the Windows event logs**. Based on Microsoft's [Consuming Events (Windows Event Log)](https://learn.microsoft.com/en-us/windows/win32/wes/consuming-events) article.
 
 **WARNING**: The C++ code is work in progress. The sample code is currently only performing a hardcode XPath query in the "System" log. The log entries are also diplayed in "raw" XML, and not yet "pretty printed".
 
