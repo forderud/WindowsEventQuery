@@ -109,8 +109,13 @@ DWORD PrintResults(EVT_HANDLE hResults, std::wstring publisherId, size_t maxCoun
 
     for (size_t i = 0; i < maxCount/std::size(events) + 1; i++) {
         DWORD eventSize = std::size(events);
-        if (i == maxCount/std::size(events))
+        if (i == maxCount/std::size(events)) {
+            // special handling of last iteration
             eventSize = maxCount % std::size(events);
+
+            if (!eventSize)
+                continue;
+        }
 
         DWORD dwReturned = 0;
         // get a block of events from the result set
