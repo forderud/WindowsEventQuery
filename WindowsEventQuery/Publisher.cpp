@@ -42,3 +42,7 @@ std::vector<std::wstring> EnumeratePublishers() {
 
     return result;
 }
+
+Event GetPublisherMetadata(std::wstring publisherId) {
+    return EvtOpenPublisherMetadata(NULL, publisherId.c_str(), NULL, /*locale*/0, 0);
+}
