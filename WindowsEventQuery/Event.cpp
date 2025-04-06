@@ -89,7 +89,16 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     // using provider from XML since EvtFormatMessageProvider returns an empty string for Schannel
     wprintf(L"Provider: %s\n", providerName.c_str());
 
-    // TODO: Add date/time in "2025-04-06T16:53:45.4470000Z" format
+    // Print date/time in "2025-04-06T16:53:45.4470000Z" format
+    const wchar_t TIME_SEARCH[] = L"<TimeCreated SystemTime='";
+    idx1 = msgXml.find(TIME_SEARCH);
+    if (idx1 != std::wstring::npos) {
+        idx1 += std::size(TIME_SEARCH) - 1;
+        size_t idx2 = msgXml.find(L"'", idx1);
+        message = msgXml.substr(idx1, idx2 - idx1);
+
+        wprintf(L"Date: %s\n", message.c_str());
+    }
 
     // TODO: Add Event ID
 
