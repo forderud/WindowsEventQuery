@@ -4,7 +4,7 @@ Sample code for **querying the Windows event logs**. Based on Microsoft's [Consu
 Work-in-progress C++ project for exercising the Windows event log APIs. The project is currently only performing a hardcode XPath query in the "System" log. The log entries are also diplayed in "raw" XML, and not yet "pretty printed".
 
 
-## Command line examples
+## wevtutil tool
 [wevtutil](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wevtutil) can be used to query the Windows Event log from the command-line.
 
 Example queries:
