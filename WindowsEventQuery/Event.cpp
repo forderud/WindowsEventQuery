@@ -63,7 +63,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     std::wstring msgXml = GetMessageString(NULL, hEvent, EvtFormatMessageXml);
     //wprintf(L"XML message string: %s\n\n", msgXml.c_str());
 
-    Event hProviderMetadata;
+    Event providerMetadata;
 
     const wchar_t PROVIDER_SEARCH[] = L"<Provider Name='";
     size_t idx1 = msgXml.find(PROVIDER_SEARCH);
@@ -74,17 +74,17 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         std::wstring publisherId = msgXml.substr(idx1, idx2 - idx1);
 
         // Get the handle to the provider's metadata that contains the message strings.
-        hProviderMetadata = Event(EvtOpenPublisherMetadata(NULL, publisherId.c_str(), NULL, 0, 0));
-        if (!hProviderMetadata) {
+        providerMetadata = Event(EvtOpenPublisherMetadata(NULL, publisherId.c_str(), NULL, 0, 0));
+        if (!providerMetadata) {
             wprintf(L"EvtOpenPublisherMetadata failed with %d\n", GetLastError());
             return;
         }
     }
 
-    std::wstring pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageChannel);
+    std::wstring pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageChannel);
     wprintf(L"Channel: %s\n", pwsMessage.c_str());
 
-    pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageProvider);
+    pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageProvider);
     wprintf(L"Provider: %s\n", pwsMessage.c_str());
 
     // TODO: Add date/time in "2025-04-06T16:53:45.4470000Z" format
@@ -92,16 +92,16 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     // TODO: Add Event ID
 
     // Get the various message strings from the event.
-    pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageTask);
+    pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageTask);
     wprintf(L"Task: %s\n", pwsMessage.c_str());
 
-    pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageLevel);
+    pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageLevel);
     wprintf(L"Level: %s\n", pwsMessage.c_str());
 
-    pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageOpcode);
+    pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageOpcode);
     wprintf(L"Opcode: %s\n", pwsMessage.c_str());
 
-    pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageKeyword);
+    pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageKeyword);
     {
         wprintf(L"Keyword: %s", pwsMessage.c_str());
 
@@ -112,7 +112,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         wprintf(L"\n");
     }
 
-    pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageEvent);
+    pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageEvent);
     wprintf(L"Description: %s\n", pwsMessage.c_str());
 
     wprintf(L"\n");
