@@ -62,32 +62,24 @@ MESSAGES g_KeywordMessages;
 
 
 // Get the formatted message string.
-LPWSTR GetMessageString(EVT_HANDLE hMetadata, DWORD dwMessageId)
-{
+LPWSTR GetMessageString(EVT_HANDLE hMetadata, DWORD dwMessageId) {
     LPWSTR pBuffer = NULL;
     DWORD dwBufferSize = 0;
     DWORD dwBufferUsed = 0;
     DWORD status = 0;
 
-    if (!EvtFormatMessage(hMetadata, NULL, dwMessageId, 0, NULL, EvtFormatMessageId, dwBufferSize, pBuffer, &dwBufferUsed))
-    {
+    if (!EvtFormatMessage(hMetadata, NULL, dwMessageId, 0, NULL, EvtFormatMessageId, dwBufferSize, pBuffer, &dwBufferUsed)) {
         status = GetLastError();
-        if (ERROR_INSUFFICIENT_BUFFER == status)
-        {
+        if (ERROR_INSUFFICIENT_BUFFER == status) {
             dwBufferSize = dwBufferUsed;
             pBuffer = (LPWSTR)malloc(dwBufferSize * sizeof(WCHAR));
 
-            if (pBuffer)
-            {
+            if (pBuffer) {
                 EvtFormatMessage(hMetadata, NULL, dwMessageId, 0, NULL, EvtFormatMessageId, dwBufferSize, pBuffer, &dwBufferUsed);
-            }
-            else
-            {
+            } else {
                 wprintf(L"malloc failed\n");
             }
-        }
-        else
-        {
+        } else {
             wprintf(L"EvtFormatMessage failed with %u\n", status);
         }
     }
@@ -96,54 +88,44 @@ LPWSTR GetMessageString(EVT_HANDLE hMetadata, DWORD dwMessageId)
 }
 
 // Get the metadata property for an object in the array.
-PEVT_VARIANT GetProperty(EVT_HANDLE handle, DWORD dwIndex, EVT_PUBLISHER_METADATA_PROPERTY_ID PropertyId)
-{
+PEVT_VARIANT GetProperty(EVT_HANDLE handle, DWORD dwIndex, EVT_PUBLISHER_METADATA_PROPERTY_ID PropertyId) {
     DWORD status = ERROR_SUCCESS;
     PEVT_VARIANT pvBuffer = NULL;
     DWORD dwBufferSize = 0;
     DWORD dwBufferUsed = 0;
 
-    if (!EvtGetObjectArrayProperty(handle, PropertyId, dwIndex, 0, dwBufferSize, pvBuffer, &dwBufferUsed))
-    {
+    if (!EvtGetObjectArrayProperty(handle, PropertyId, dwIndex, 0, dwBufferSize, pvBuffer, &dwBufferUsed)) {
         status = GetLastError();
-        if (ERROR_INSUFFICIENT_BUFFER == status)
-        {
+        if (ERROR_INSUFFICIENT_BUFFER == status) {
             dwBufferSize = dwBufferUsed;
             pvBuffer = (PEVT_VARIANT)malloc(dwBufferSize);
-            if (pvBuffer)
-            {
+            if (pvBuffer) {
                 EvtGetObjectArrayProperty(handle, PropertyId, dwIndex, 0, dwBufferSize, pvBuffer, &dwBufferUsed);
-            }
-            else
-            {
+            } else {
                 wprintf(L"malloc failed\n");
                 status = ERROR_OUTOFMEMORY;
                 goto cleanup;
             }
         }
 
-        if (ERROR_SUCCESS != (status = GetLastError()))
-        {
+        if (ERROR_SUCCESS != (status = GetLastError())) {
             wprintf(L"EvtGetObjectArrayProperty failed with %d\n", status);
         }
     }
 
 cleanup:
-
     return pvBuffer;
 }
 
 // Print the metadata for a channel. Capture the message string and value for use later.
-DWORD DumpChannelProperties(EVT_HANDLE hChannels, DWORD dwIndex, MESSAGES* pMessages)
-{
+DWORD DumpChannelProperties(EVT_HANDLE hChannels, DWORD dwIndex, MESSAGES* pMessages) {
     LPWSTR pMessage = NULL;
     DWORD status = ERROR_SUCCESS;
     size_t dwStringLen = 0;
     PEVT_VARIANT pvBuffer = NULL;
 
     pvBuffer = GetProperty(hChannels, dwIndex, EvtPublisherMetadataChannelReferenceMessageID);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         // The value is -1 if the channel did not specify a message attribute.
         if (-1 != pvBuffer->UInt32Val)
         {
@@ -151,9 +133,7 @@ DWORD DumpChannelProperties(EVT_HANDLE hChannels, DWORD dwIndex, MESSAGES* pMess
         }
 
         wprintf(L"\tChannel message string: %s\n", (pMessage) ? pMessage : L"");
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
@@ -161,38 +141,29 @@ DWORD DumpChannelProperties(EVT_HANDLE hChannels, DWORD dwIndex, MESSAGES* pMess
     // This is the channel name. You can use it to call the EvtOpenChannelConfig function
     // to get the channel's configuration information.
     pvBuffer = GetProperty(hChannels, dwIndex, EvtPublisherMetadataChannelReferencePath);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         wprintf(L"\tChannel path is %s\n", pvBuffer->StringVal);
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
 
     // Capture the message string if the channel specified a message string; otherwise,
     // capture the channel's name.
-    if (pMessage)
-    {
+    if (pMessage) {
         dwStringLen = wcslen(pMessage) + 1;
         ((pMessages->pMessage) + dwIndex)->pwcsMessage = (LPWSTR)malloc(dwStringLen * sizeof(WCHAR));
         wcscpy_s(((pMessages->pMessage) + dwIndex)->pwcsMessage, dwStringLen, pMessage);
-    }
-    else
-    {
+    } else {
         dwStringLen = wcslen(pvBuffer->StringVal) + 1;
         ((pMessages->pMessage) + dwIndex)->pwcsMessage = (LPWSTR)malloc(dwStringLen * sizeof(WCHAR));
         wcscpy_s(((pMessages->pMessage) + dwIndex)->pwcsMessage, dwStringLen, pvBuffer->StringVal);
     }
 
     pvBuffer = GetProperty(hChannels, dwIndex, EvtPublisherMetadataChannelReferenceIndex);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         wprintf(L"\tChannel index is %lu\n", pvBuffer->UInt32Val);
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
@@ -200,31 +171,24 @@ DWORD DumpChannelProperties(EVT_HANDLE hChannels, DWORD dwIndex, MESSAGES* pMess
     // Capture the channel's value attribute, which is used to look up the channel's
     // message string.
     pvBuffer = GetProperty(hChannels, dwIndex, EvtPublisherMetadataChannelReferenceID);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         wprintf(L"\tChannel ID is %lu\n", pvBuffer->UInt32Val);
         ((pMessages->pMessage) + dwIndex)->dwValue = pvBuffer->UInt32Val;
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
 
     pvBuffer = GetProperty(hChannels, dwIndex, EvtPublisherMetadataChannelReferenceFlags);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         if (EvtChannelReferenceImported == (EvtChannelReferenceImported & pvBuffer->UInt32Val))
             wprintf(L"\tChannel is imported\n");
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
 
 cleanup:
-
     if (pvBuffer)
         free(pvBuffer);
 
@@ -235,16 +199,14 @@ cleanup:
 }
 
 // Print the metadata for a level. Capture the message string and value for use later.
-DWORD DumpLevelProperties(EVT_HANDLE hLevels, DWORD dwIndex, MESSAGES* pMessages)
-{
+DWORD DumpLevelProperties(EVT_HANDLE hLevels, DWORD dwIndex, MESSAGES* pMessages) {
     LPWSTR pMessage = NULL;
     DWORD status = ERROR_SUCCESS;
     size_t dwStringLen = 0;
     PEVT_VARIANT pvBuffer = NULL;
 
     pvBuffer = GetProperty(hLevels, dwIndex, EvtPublisherMetadataLevelMessageID);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         // The value is -1 if the level did not specify a message attribute.
         if (-1 != pvBuffer->UInt32Val)
         {
@@ -252,34 +214,26 @@ DWORD DumpLevelProperties(EVT_HANDLE hLevels, DWORD dwIndex, MESSAGES* pMessages
         }
 
         wprintf(L"\tLevel message string: %s\n", (pMessage) ? pMessage : L"");
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
 
     pvBuffer = GetProperty(hLevels, dwIndex, EvtPublisherMetadataLevelName);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         wprintf(L"\tLevel name is %s\n", pvBuffer->StringVal);
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
 
     // Capture the message string if the level specified a message string; otherwise,
     // capture the level's name.
-    if (pMessage)
-    {
+    if (pMessage) {
         dwStringLen = wcslen(pMessage) + 1;
         ((pMessages->pMessage) + dwIndex)->pwcsMessage = (LPWSTR)malloc(dwStringLen * sizeof(WCHAR));
         wcscpy_s(((pMessages->pMessage) + dwIndex)->pwcsMessage, dwStringLen, pMessage);
-    }
-    else
-    {
+    } else {
         dwStringLen = wcslen(pvBuffer->StringVal) + 1;
         ((pMessages->pMessage) + dwIndex)->pwcsMessage = (LPWSTR)malloc(dwStringLen * sizeof(WCHAR));
         wcscpy_s(((pMessages->pMessage) + dwIndex)->pwcsMessage, dwStringLen, pvBuffer->StringVal);
@@ -288,19 +242,15 @@ DWORD DumpLevelProperties(EVT_HANDLE hLevels, DWORD dwIndex, MESSAGES* pMessages
     // Capture the level's value attribute, which is used to look up the level's
     // message string.
     pvBuffer = GetProperty(hLevels, dwIndex, EvtPublisherMetadataLevelValue);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         wprintf(L"\tLevel value is %lu\n", pvBuffer->UInt32Val);
         ((pMessages->pMessage) + dwIndex)->dwValue = pvBuffer->UInt32Val;
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
 
 cleanup:
-
     if (pvBuffer)
         free(pvBuffer);
 
@@ -311,8 +261,7 @@ cleanup:
 }
 
 // Print the metadata for a task. Capture the message string and value for use later.
-DWORD DumpTaskProperties(EVT_HANDLE hTasks, DWORD dwIndex, MESSAGES* pMessages)
-{
+DWORD DumpTaskProperties(EVT_HANDLE hTasks, DWORD dwIndex, MESSAGES* pMessages) {
     LPWSTR pMessage = NULL;
     DWORD status = ERROR_SUCCESS;
     size_t dwStringLen = 0;
@@ -320,8 +269,7 @@ DWORD DumpTaskProperties(EVT_HANDLE hTasks, DWORD dwIndex, MESSAGES* pMessages)
     WCHAR wszEventGuid[50];
 
     pvBuffer = GetProperty(hTasks, dwIndex, EvtPublisherMetadataTaskMessageID);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         // The value is -1 if the task did not specify a message attribute.
         if (-1 != pvBuffer->UInt32Val)
         {
@@ -329,50 +277,38 @@ DWORD DumpTaskProperties(EVT_HANDLE hTasks, DWORD dwIndex, MESSAGES* pMessages)
         }
 
         wprintf(L"\tTask message string: %s\n", (pMessage) ? pMessage : L"");
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
 
     pvBuffer = GetProperty(hTasks, dwIndex, EvtPublisherMetadataTaskName);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         wprintf(L"\tTask name is %s\n", pvBuffer->StringVal);
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
 
     // Capture the message string if the task specified a message string; otherwise,
     // capture the task's name.
-    if (pMessage)
-    {
+    if (pMessage) {
         dwStringLen = wcslen(pMessage) + 1;
         ((pMessages->pMessage) + dwIndex)->pwcsMessage = (LPWSTR)malloc(dwStringLen * sizeof(WCHAR));
         wcscpy_s(((pMessages->pMessage) + dwIndex)->pwcsMessage, dwStringLen, pMessage);
-    }
-    else
-    {
+    } else {
         dwStringLen = wcslen(pvBuffer->StringVal) + 1;
         ((pMessages->pMessage) + dwIndex)->pwcsMessage = (LPWSTR)malloc(dwStringLen * sizeof(WCHAR));
         wcscpy_s(((pMessages->pMessage) + dwIndex)->pwcsMessage, dwStringLen, pvBuffer->StringVal);
     }
 
     pvBuffer = GetProperty(hTasks, dwIndex, EvtPublisherMetadataTaskEventGuid);
-    if (pvBuffer)
-    {
-        if (!IsEqualGUID(GUID_NULL, *(pvBuffer->GuidVal)))
-        {
+    if (pvBuffer) {
+        if (!IsEqualGUID(GUID_NULL, *(pvBuffer->GuidVal))) {
             StringFromGUID2(*(pvBuffer->GuidVal), wszEventGuid, sizeof(wszEventGuid) / sizeof(WCHAR));
             wprintf(L"\tTask event GUID is %s\n", wszEventGuid);
         }
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
@@ -380,19 +316,15 @@ DWORD DumpTaskProperties(EVT_HANDLE hTasks, DWORD dwIndex, MESSAGES* pMessages)
     // Capture the task's value attribute, which is used to look up the task's
     // message string.
     pvBuffer = GetProperty(hTasks, dwIndex, EvtPublisherMetadataTaskValue);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         wprintf(L"\tTask value is %lu\n", pvBuffer->UInt32Val);
         ((pMessages->pMessage) + dwIndex)->dwValue = pvBuffer->UInt32Val;
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
 
 cleanup:
-
     if (pvBuffer)
         free(pvBuffer);
 
@@ -403,51 +335,40 @@ cleanup:
 }
 
 // Print the metadata for a opcode. Capture the message string and value for use later.
-DWORD DumpOpcodeProperties(EVT_HANDLE hOpcodes, DWORD dwIndex, MESSAGES* pMessages)
-{
+DWORD DumpOpcodeProperties(EVT_HANDLE hOpcodes, DWORD dwIndex, MESSAGES* pMessages) {
     LPWSTR pMessage = NULL;
     DWORD status = ERROR_SUCCESS;
     size_t dwStringLen = 0;
     PEVT_VARIANT pvBuffer = NULL;
 
     pvBuffer = GetProperty(hOpcodes, dwIndex, EvtPublisherMetadataOpcodeMessageID);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         // The value is -1 if the opcode did not specify a message attribute.
-        if (-1 != pvBuffer->UInt32Val)
-        {
+        if (-1 != pvBuffer->UInt32Val) {
             pMessage = GetMessageString(g_hMetadata, pvBuffer->UInt32Val);
         }
 
         wprintf(L"\tOpcode message string: %s\n", (pMessage) ? pMessage : L"");
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
 
     pvBuffer = GetProperty(hOpcodes, dwIndex, EvtPublisherMetadataOpcodeName);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         wprintf(L"\tOpcode name is %s\n", pvBuffer->StringVal);
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
 
     // Capture the message string if the opcode specified a message string; otherwise,
     // capture the opcode's name.
-    if (pMessage)
-    {
+    if (pMessage) {
         dwStringLen = wcslen(pMessage) + 1;
         ((pMessages->pMessage) + dwIndex)->pwcsMessage = (LPWSTR)malloc(dwStringLen * sizeof(WCHAR));
         wcscpy_s(((pMessages->pMessage) + dwIndex)->pwcsMessage, dwStringLen, pMessage);
-    }
-    else
-    {
+    } else {
         dwStringLen = wcslen(pvBuffer->StringVal) + 1;
         ((pMessages->pMessage) + dwIndex)->pwcsMessage = (LPWSTR)malloc(dwStringLen * sizeof(WCHAR));
         wcscpy_s(((pMessages->pMessage) + dwIndex)->pwcsMessage, dwStringLen, pvBuffer->StringVal);
@@ -456,19 +377,15 @@ DWORD DumpOpcodeProperties(EVT_HANDLE hOpcodes, DWORD dwIndex, MESSAGES* pMessag
     // Capture the opcode's value attribute, which is used to look up the opcode's
     // message string.
     pvBuffer = GetProperty(hOpcodes, dwIndex, EvtPublisherMetadataOpcodeValue);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         wprintf(L"\tOpcode value is %hu (task: %hu)\n", HIWORD(pvBuffer->UInt32Val), LOWORD(pvBuffer->UInt32Val));
         ((pMessages->pMessage) + dwIndex)->dwValue = pvBuffer->UInt32Val;
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
 
 cleanup:
-
     if (pvBuffer)
         free(pvBuffer);
 
@@ -479,51 +396,40 @@ cleanup:
 }
 
 // Print the metadata for a keyword. Capture the message string and mask for use later.
-DWORD DumpKeywordProperties(EVT_HANDLE hKeywords, DWORD dwIndex, MESSAGES* pMessages)
-{
+DWORD DumpKeywordProperties(EVT_HANDLE hKeywords, DWORD dwIndex, MESSAGES* pMessages) {
     LPWSTR pMessage = NULL;
     DWORD status = ERROR_SUCCESS;
     size_t dwStringLen = 0;
     PEVT_VARIANT pvBuffer = NULL;
 
     pvBuffer = GetProperty(hKeywords, dwIndex, EvtPublisherMetadataKeywordMessageID);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         // The value is -1 if the keyword did not specify a message attribute.
-        if (-1 != pvBuffer->UInt32Val)
-        {
+        if (-1 != pvBuffer->UInt32Val) {
             pMessage = GetMessageString(g_hMetadata, pvBuffer->UInt32Val);
         }
 
         wprintf(L"\tKeyword message string: %s\n", (pMessage) ? pMessage : L"");
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
 
     pvBuffer = GetProperty(hKeywords, dwIndex, EvtPublisherMetadataKeywordName);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         wprintf(L"\tKeyword name is %s\n", pvBuffer->StringVal);
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
 
     // Capture the message string if the keyword specified a message string; otherwise,
     // capture the keyword's name.
-    if (pMessage)
-    {
+    if (pMessage) {
         dwStringLen = wcslen(pMessage) + 1;
         ((pMessages->pMessage) + dwIndex)->pwcsMessage = (LPWSTR)malloc(dwStringLen * sizeof(WCHAR));
         wcscpy_s(((pMessages->pMessage) + dwIndex)->pwcsMessage, dwStringLen, pMessage);
-    }
-    else
-    {
+    } else {
         dwStringLen = wcslen(pvBuffer->StringVal) + 1;
         ((pMessages->pMessage) + dwIndex)->pwcsMessage = (LPWSTR)malloc(dwStringLen * sizeof(WCHAR));
         wcscpy_s(((pMessages->pMessage) + dwIndex)->pwcsMessage, dwStringLen, pvBuffer->StringVal);
@@ -532,19 +438,15 @@ DWORD DumpKeywordProperties(EVT_HANDLE hKeywords, DWORD dwIndex, MESSAGES* pMess
     // Capture the keyword's mask attribute, which is used to look up the keyword's
     // message string.
     pvBuffer = GetProperty(hKeywords, dwIndex, EvtPublisherMetadataKeywordValue);
-    if (pvBuffer)
-    {
+    if (pvBuffer) {
         wprintf(L"\tKeyword value is %I64u\n", pvBuffer->UInt64Val);
         ((pMessages->pMessage) + dwIndex)->ullMask = pvBuffer->UInt32Val;
-    }
-    else
-    {
+    } else {
         status = GetLastError();
         goto cleanup;
     }
 
 cleanup:
-
     if (pvBuffer)
         free(pvBuffer);
 
@@ -556,8 +458,7 @@ cleanup:
 
 // Print the metadata properties for the provider and the types that
 // it defines or references.
-DWORD PrintProviderProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty)
-{
+DWORD PrintProviderProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty) {
     UNREFERENCED_PARAMETER(hMetadata);
 
     DWORD status = ERROR_SUCCESS;
@@ -566,8 +467,7 @@ DWORD PrintProviderProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty
     DWORD dwBlockSize = 0;
     LPWSTR pMessage = NULL;
 
-    switch (Id)
-    {
+    switch (Id) {
     case EvtPublisherMetadataPublisherGuid:
         StringFromGUID2(*(pProperty->GuidVal), wszProviderGuid, sizeof(wszProviderGuid) / sizeof(WCHAR));
         wprintf(L"Guid: %s\n", wszProviderGuid);
@@ -591,16 +491,12 @@ DWORD PrintProviderProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty
 
         // The message string ID is -1 if the provider element does not specify the message attribute.
     case EvtPublisherMetadataPublisherMessageID:
-        if (-1 == pProperty->UInt32Val)
-        {
+        if (-1 == pProperty->UInt32Val) {
             wprintf(L"Message string: \n");
-        }
-        else
-        {
+        } else {
             pMessage = GetMessageString(g_hMetadata, pProperty->UInt32Val);
             wprintf(L"Publisher message string: %s\n", (pMessage) ? pMessage : L"");
-            if (pMessage)
-            {
+            if (pMessage) {
                 free(pMessage);
             }
         }
@@ -613,34 +509,26 @@ DWORD PrintProviderProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty
         // display names for the channel referenced in an event definition.
     case EvtPublisherMetadataChannelReferences:
         wprintf(L"Channels:\n");
-        if (EvtGetObjectArraySize(pProperty->EvtHandleVal, &dwArraySize))
-        {
+        if (EvtGetObjectArraySize(pProperty->EvtHandleVal, &dwArraySize)) {
             // You always get a handle to the array but the array can be empty.
-            if (dwArraySize > 0)
-            {
+            if (dwArraySize > 0) {
                 dwBlockSize = sizeof(MSG_STRING) * dwArraySize;
                 g_ChannelMessages.pMessage = (MSG_STRING*)malloc(dwBlockSize);
-                if (g_ChannelMessages.pMessage)
-                {
+                if (g_ChannelMessages.pMessage) {
                     RtlZeroMemory(g_ChannelMessages.pMessage, dwBlockSize);
                     g_ChannelMessages.dwSize = dwBlockSize;
 
                     // For each channel, print its metadata.
-                    for (DWORD i = 0; i < dwArraySize; i++)
-                    {
+                    for (DWORD i = 0; i < dwArraySize; i++) {
                         if (status = DumpChannelProperties(pProperty->EvtHandleVal, i, &g_ChannelMessages))
                             break;
                     }
-                }
-                else
-                {
+                } else {
                     status = ERROR_OUTOFMEMORY;
                     wprintf(L"g_pChannelMessages allocation error\n");
                 }
             }
-        }
-        else
-        {
+        } else {
             status = GetLastError();
         }
 
@@ -665,34 +553,26 @@ DWORD PrintProviderProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty
         // the list.
     case EvtPublisherMetadataLevels:
         wprintf(L"Levels:\n");
-        if (EvtGetObjectArraySize(pProperty->EvtHandleVal, &dwArraySize))
-        {
+        if (EvtGetObjectArraySize(pProperty->EvtHandleVal, &dwArraySize)) {
             // You always get a handle to the array but the array can be empty.
-            if (dwArraySize > 0)
-            {
+            if (dwArraySize > 0) {
                 dwBlockSize = sizeof(MSG_STRING) * dwArraySize;
                 g_LevelMessages.pMessage = (MSG_STRING*)malloc(dwBlockSize);
-                if (g_LevelMessages.pMessage)
-                {
+                if (g_LevelMessages.pMessage) {
                     RtlZeroMemory(g_LevelMessages.pMessage, dwBlockSize);
                     g_LevelMessages.dwSize = dwBlockSize;
 
                     // For each level, print its metadata.
-                    for (DWORD i = 0; i < dwArraySize; i++)
-                    {
+                    for (DWORD i = 0; i < dwArraySize; i++) {
                         if (status = DumpLevelProperties(pProperty->EvtHandleVal, i, &g_LevelMessages))
                             break;
                     }
-                }
-                else
-                {
+                } else {
                     status = ERROR_OUTOFMEMORY;
                     wprintf(L"g_pLevelMessages allocation error\n");
                 }
             }
-        }
-        else
-        {
+        } else {
             status = GetLastError();
         }
 
@@ -713,34 +593,26 @@ DWORD PrintProviderProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty
         // display names for the task referenced in an event definition.
     case EvtPublisherMetadataTasks:
         wprintf(L"Tasks:\n");
-        if (EvtGetObjectArraySize(pProperty->EvtHandleVal, &dwArraySize))
-        {
+        if (EvtGetObjectArraySize(pProperty->EvtHandleVal, &dwArraySize)) {
             // You always get a handle to the array but the array can be empty.
-            if (dwArraySize > 0)
-            {
+            if (dwArraySize > 0) {
                 dwBlockSize = sizeof(MSG_STRING) * dwArraySize;
                 g_TaskMessages.pMessage = (MSG_STRING*)malloc(dwBlockSize);
-                if (g_TaskMessages.pMessage)
-                {
+                if (g_TaskMessages.pMessage) {
                     RtlZeroMemory(g_TaskMessages.pMessage, dwBlockSize);
                     g_TaskMessages.dwSize = dwBlockSize;
 
                     // For each task, print its metadata.
-                    for (DWORD i = 0; i < dwArraySize; i++)
-                    {
+                    for (DWORD i = 0; i < dwArraySize; i++) {
                         if (status = DumpTaskProperties(pProperty->EvtHandleVal, i, &g_TaskMessages))
                             break;
                     }
-                }
-                else
-                {
+                } else {
                     status = ERROR_OUTOFMEMORY;
                     wprintf(L"g_pTaskMessages allocation error\n");
                 }
             }
-        }
-        else
-        {
+        } else {
             status = GetLastError();
         }
 
@@ -762,34 +634,26 @@ DWORD PrintProviderProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty
         // display names for the opcode referenced in an event definition.
     case EvtPublisherMetadataOpcodes:
         wprintf(L"Opcodes:\n");
-        if (EvtGetObjectArraySize(pProperty->EvtHandleVal, &dwArraySize))
-        {
+        if (EvtGetObjectArraySize(pProperty->EvtHandleVal, &dwArraySize)) {
             // You always get a handle to the array but the array can be empty.
-            if (dwArraySize > 0)
-            {
+            if (dwArraySize > 0) {
                 dwBlockSize = sizeof(MSG_STRING) * dwArraySize;
                 g_OpcodeMessages.pMessage = (MSG_STRING*)malloc(dwBlockSize);
-                if (g_OpcodeMessages.pMessage)
-                {
+                if (g_OpcodeMessages.pMessage) {
                     RtlZeroMemory(g_OpcodeMessages.pMessage, dwBlockSize);
                     g_OpcodeMessages.dwSize = dwBlockSize;
 
                     // For each opcode, print its metadata.
-                    for (DWORD i = 0; i < dwArraySize; i++)
-                    {
+                    for (DWORD i = 0; i < dwArraySize; i++) {
                         if (status = DumpOpcodeProperties(pProperty->EvtHandleVal, i, &g_OpcodeMessages))
                             break;
                     }
-                }
-                else
-                {
+                } else {
                     status = ERROR_OUTOFMEMORY;
                     wprintf(L"g_pOpcodeMessages allocation error\n");
                 }
             }
-        }
-        else
-        {
+        } else {
             status = GetLastError();
         }
 
@@ -810,34 +674,26 @@ DWORD PrintProviderProperty(EVT_HANDLE hMetadata, int Id, PEVT_VARIANT pProperty
         // display names for the keyword referenced in an event definition.
     case EvtPublisherMetadataKeywords:
         wprintf(L"Keywords:\n");
-        if (EvtGetObjectArraySize(pProperty->EvtHandleVal, &dwArraySize))
-        {
+        if (EvtGetObjectArraySize(pProperty->EvtHandleVal, &dwArraySize)) {
             // You always get a handle to the array but the array can be empty.
-            if (dwArraySize > 0)
-            {
+            if (dwArraySize > 0) {
                 dwBlockSize = sizeof(MSG_STRING) * dwArraySize;
                 g_KeywordMessages.pMessage = (MSG_STRING*)malloc(dwBlockSize);
-                if (g_KeywordMessages.pMessage)
-                {
+                if (g_KeywordMessages.pMessage) {
                     RtlZeroMemory(g_KeywordMessages.pMessage, dwBlockSize);
                     g_KeywordMessages.dwSize = dwBlockSize;
 
                     // For each keyword, print its metadata.
-                    for (DWORD i = 0; i < dwArraySize; i++)
-                    {
+                    for (DWORD i = 0; i < dwArraySize; i++) {
                         if (status = DumpKeywordProperties(pProperty->EvtHandleVal, i, &g_KeywordMessages))
                             break;
                     }
-                }
-                else
-                {
+                } else {
                     status = ERROR_OUTOFMEMORY;
                     wprintf(L"g_pKeywordMessages allocation error\n");
                 }
             }
-        }
-        else
-        {
+        } else {
             status = GetLastError();
         }
 
