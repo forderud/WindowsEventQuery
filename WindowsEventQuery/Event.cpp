@@ -82,10 +82,10 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         }
     }
 
-    std::wstring pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageChannel);
-    wprintf(L"Channel: %s\n", pwsMessage.c_str());
+    std::wstring message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageChannel);
+    wprintf(L"Channel: %s\n", message.c_str());
 
-    //pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageProvider);
+    //message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageProvider);
     // using provider from XML since EvtFormatMessageProvider returns an empty string for Schannel
     wprintf(L"Provider: %s\n", providerName.c_str());
 
@@ -94,28 +94,28 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     // TODO: Add Event ID
 
     // Get the various message strings from the event.
-    pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageTask);
-    wprintf(L"Task: %s\n", pwsMessage.c_str());
+    message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageTask);
+    wprintf(L"Task: %s\n", message.c_str());
 
-    pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageLevel);
-    wprintf(L"Level: %s\n", pwsMessage.c_str());
+    message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageLevel);
+    wprintf(L"Level: %s\n", message.c_str());
 
-    pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageOpcode);
-    wprintf(L"Opcode: %s\n", pwsMessage.c_str());
+    message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageOpcode);
+    wprintf(L"Opcode: %s\n", message.c_str());
 
-    pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageKeyword);
+    message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageKeyword);
     {
-        wprintf(L"Keyword: %s", pwsMessage.c_str());
+        wprintf(L"Keyword: %s", message.c_str());
 
-        const wchar_t* ptemp = pwsMessage.c_str();
+        const wchar_t* ptemp = message.c_str();
         while (*(ptemp += wcslen(ptemp) + 1))
             wprintf(L", %s", ptemp);
 
         wprintf(L"\n");
     }
 
-    pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageEvent);
-    wprintf(L"Description: %s\n", pwsMessage.c_str());
+    message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageEvent);
+    wprintf(L"Description: %s\n", message.c_str());
 
     wprintf(L"\n");
 }
