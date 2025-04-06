@@ -70,6 +70,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     size_t idx1 = msgXml.find(PROVIDER_SEARCH);
     if (idx1 != std::wstring::npos) {
         // Get publisher from "/Event/System/Provider@Name" in message XML
+        // TODO: Replace with proper XML query
         idx1 += std::size(PROVIDER_SEARCH)-1;
         size_t idx2 = msgXml.find(L"'", idx1);
         providerName = msgXml.substr(idx1, idx2 - idx1);
@@ -93,6 +94,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     const wchar_t TIME_SEARCH[] = L"<TimeCreated SystemTime='";
     idx1 = msgXml.find(TIME_SEARCH);
     if (idx1 != std::wstring::npos) {
+        // TODO: Replace with proper XML query
         idx1 += std::size(TIME_SEARCH) - 1;
         size_t idx2 = msgXml.find(L"'", idx1);
         message = msgXml.substr(idx1, idx2 - idx1);
@@ -104,6 +106,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     const wchar_t EVENTID_SEARCH[] = L"<EventID>";
     idx1 = msgXml.find(EVENTID_SEARCH);
     if (idx1 != std::wstring::npos) {
+        // TODO: Replace with proper XML query
         idx1 += std::size(EVENTID_SEARCH) - 1;
         size_t idx2 = msgXml.find(L"</EventID>", idx1);
         message = msgXml.substr(idx1, idx2 - idx1);
