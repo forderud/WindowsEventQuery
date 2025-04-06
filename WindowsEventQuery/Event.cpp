@@ -100,7 +100,16 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         wprintf(L"Date: %s\n", message.c_str());
     }
 
-    // TODO: Add Event ID
+    // Print Event ID
+    const wchar_t EVENTID_SEARCH[] = L"<EventID>";
+    idx1 = msgXml.find(EVENTID_SEARCH);
+    if (idx1 != std::wstring::npos) {
+        idx1 += std::size(EVENTID_SEARCH) - 1;
+        size_t idx2 = msgXml.find(L"</EventID>", idx1);
+        message = msgXml.substr(idx1, idx2 - idx1);
+
+        wprintf(L"Event ID: %s\n", message.c_str());
+    }
 
     // Get the various message strings from the event.
     message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageTask);
