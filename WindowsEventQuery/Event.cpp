@@ -108,7 +108,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         wprintf(L"Keyword: %s", message.c_str());
 
         const wchar_t* ptemp = message.c_str();
-        while (*(ptemp += wcslen(ptemp) + 1))
+        while (*(ptemp += wcslen(ptemp) + 1)) // safe since message has double null-termination
             wprintf(L", %s", ptemp);
 
         wprintf(L"\n");
