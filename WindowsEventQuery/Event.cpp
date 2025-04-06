@@ -63,6 +63,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     std::wstring msgXml = GetMessageString(NULL, hEvent, EvtFormatMessageXml);
     //wprintf(L"XML message string: %s\n\n", msgXml.c_str());
 
+    std::wstring providerName;
     Event providerMetadata;
 
     const wchar_t PROVIDER_SEARCH[] = L"<Provider Name='";
@@ -71,10 +72,10 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         // Get publisher from "/Event/System/Provider@Name" in message XML
         idx1 += std::size(PROVIDER_SEARCH)-1;
         size_t idx2 = msgXml.find(L"'", idx1);
-        std::wstring publisherId = msgXml.substr(idx1, idx2 - idx1);
+        providerName = msgXml.substr(idx1, idx2 - idx1);
 
         // Get the handle to the provider's metadata that contains the message strings.
-        providerMetadata = Event(EvtOpenPublisherMetadata(NULL, publisherId.c_str(), NULL, 0, 0));
+        providerMetadata = Event(EvtOpenPublisherMetadata(NULL, providerName.c_str(), NULL, 0, 0));
         if (!providerMetadata) {
             wprintf(L"EvtOpenPublisherMetadata failed with %d\n", GetLastError());
             return;
@@ -84,8 +85,9 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     std::wstring pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageChannel);
     wprintf(L"Channel: %s\n", pwsMessage.c_str());
 
-    pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageProvider);
-    wprintf(L"Provider: %s\n", pwsMessage.c_str());
+    //pwsMessage = GetMessageString(providerMetadata, hEvent, EvtFormatMessageProvider);
+    // using provider from XML since EvtFormatMessageProvider returns an empty string for Schannel
+    wprintf(L"Provider: %s\n", providerName.c_str());
 
     // TODO: Add date/time in "2025-04-06T16:53:45.4470000Z" format
 
