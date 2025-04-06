@@ -3,6 +3,10 @@
 #include <cassert>
 
 
+Event GetPublisherMetadata(std::wstring publisherId) {
+    return EvtOpenPublisherMetadata(NULL, publisherId.c_str(), NULL, /*locale*/0, 0);
+}
+
 std::vector<std::wstring> EnumeratePublishers() {
     Event providerList(EvtOpenPublisherEnum(NULL, 0));
     if (!providerList) {
@@ -36,13 +40,11 @@ std::vector<std::wstring> EnumeratePublishers() {
             }
         }
 
+        GetPublisherMetadata(buffer);
+
         buffer.resize(bufferUsed - 1); // remove null-termination
         result.push_back(buffer);
     }
 
     return result;
-}
-
-Event GetPublisherMetadata(std::wstring publisherId) {
-    return EvtOpenPublisherMetadata(NULL, publisherId.c_str(), NULL, /*locale*/0, 0);
 }
