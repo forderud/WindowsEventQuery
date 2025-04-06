@@ -17,13 +17,13 @@ std::vector<std::wstring> EnumeratePublishers() {
 
     std::vector<std::wstring> result;
 
-    std::wstring buffer;
+    std::wstring publisherId;
     while (true) {
         // grow to current capacity to reduce the number of reallocations
-        buffer.resize(buffer.capacity());
+        publisherId.resize(publisherId.capacity());
 
         DWORD bufferUsed = 0;
-        BOOL ok = EvtNextPublisherId(providerList, (DWORD)buffer.size(), (wchar_t*)buffer.data(), &bufferUsed);
+        BOOL ok = EvtNextPublisherId(providerList, (DWORD)publisherId.size(), (wchar_t*)publisherId.data(), &bufferUsed);
         if (!ok) {
             DWORD status = GetLastError();
 
@@ -32,18 +32,18 @@ std::vector<std::wstring> EnumeratePublishers() {
                 break;
             } else if (status == ERROR_INSUFFICIENT_BUFFER) {
                 // repeat call with larger buffer
-                buffer.resize(bufferUsed);
-                ok = EvtNextPublisherId(providerList, (DWORD)buffer.size(), (wchar_t*)buffer.data(), &bufferUsed);
+                publisherId.resize(bufferUsed);
+                ok = EvtNextPublisherId(providerList, (DWORD)publisherId.size(), (wchar_t*)publisherId.data(), &bufferUsed);
             } else {
                 wprintf(L"EvtNextPublisherId failed with %lu.\n", status);
                 abort();
             }
         }
 
-        GetPublisherMetadata(buffer);
+        GetPublisherMetadata(publisherId);
 
-        buffer.resize(bufferUsed - 1); // remove null-termination
-        result.push_back(buffer);
+        publisherId.resize(bufferUsed - 1); // remove null-termination
+        result.push_back(publisherId);
     }
 
     return result;
