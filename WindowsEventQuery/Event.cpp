@@ -59,7 +59,9 @@ std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMA
     return pBuffer;
 }
 
-void PrintEventStrings(EVT_HANDLE hEvent, std::wstring publisherId) {
+void PrintEventStrings(EVT_HANDLE hEvent) {
+    std::wstring publisherId; // TODO: Determine event publisher
+
     // Get the handle to the provider's metadata that contains the message strings.
     Event hProviderMetadata(EvtOpenPublisherMetadata(NULL, publisherId.c_str(), NULL, 0, 0));
     if (!hProviderMetadata) {
@@ -104,8 +106,6 @@ void PrintEventStrings(EVT_HANDLE hEvent, std::wstring publisherId) {
 
 // Enumerate all the events in the result set. 
 DWORD PrintResults(EVT_HANDLE hResults, size_t maxCount) {
-    std::wstring publisherId; // TODO: Determine channel or event publisher
-
     DWORD status = ERROR_SUCCESS;
     Event events[10];
 
@@ -132,7 +132,7 @@ DWORD PrintResults(EVT_HANDLE hResults, size_t maxCount) {
         for (DWORD i = 0; i < dwReturned; i++) {
             // print event details to console
             //PrintEventAsXML(events[i]);
-            PrintEventStrings(events[i], publisherId);
+            PrintEventStrings(events[i]);
 
             events[i].Close();
         }
