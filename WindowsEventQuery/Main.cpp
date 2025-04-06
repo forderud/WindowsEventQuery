@@ -25,7 +25,7 @@ int wmain() {
 #if 1
     // perform event query
     std::wstring channel = L"System";
-    std::wstring query = L"*/System[EventID=7023]";
+    std::wstring query = L"*/System[(Level>=1) and (Level<=2)]";
     std::wstring publisherName = L"";
     EventQuery(channel, query, publisherName, 20);
 #endif
