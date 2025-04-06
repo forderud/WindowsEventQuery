@@ -30,7 +30,7 @@ public:
         }
     }
 
-    operator EVT_HANDLE& () {
+    operator EVT_HANDLE () const {
         return m_event;
     }
 
