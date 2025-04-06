@@ -7,22 +7,51 @@
 // an opcode or task that the provider defines or uses. If the
 // type does not specify a message string, the message member
 // contains the value of the type's name attribute.
-typedef struct _msgstring {
+struct MSG_STRING {
+    MSG_STRING() {
+        dwValue = 0;
+    }
+
+    ~MSG_STRING() {
+    }
+
     union {
         DWORD dwValue;  // Value attribute for opcode, task, and level
         UINT64 ullMask; // Mask attribute for keyword
     };
-    LPWSTR pwcsMessage; // Message string or name attribute
-} MSG_STRING, * PMSG_STRING;
+    LPWSTR pwcsMessage = nullptr; // Message string or name attribute
+};
 
 // Header for the block of value/message string pairs. The dwSize member
 // is the size, in bytes, of the block of MSG_STRING structures to which 
 // the pMessage member points.
-typedef struct _messages {
-    DWORD dwSize;
-    PMSG_STRING pMessage;
-} MESSAGES, * PMESSAGES;
+struct MESSAGES {
+    MESSAGES() {
+    }
+    ~MESSAGES() {
+        Clear();
+    }
 
+    // Free the memory for each message string in the messages block
+    // and then free the messages block.
+    void Clear() {
+        if (pMessage) {
+            DWORD dwCount = dwSize/sizeof(MSG_STRING);
+            for (DWORD i = 0; i < dwCount; i++) {
+                free(((pMessage) + i)->pwcsMessage);
+                ((pMessage) + i)->pwcsMessage = NULL;
+            }
+
+            free(pMessage);
+            pMessage = nullptr;
+        }
+
+        dwSize = 0;
+    }
+
+    DWORD dwSize = 0;
+    MSG_STRING* pMessage = nullptr;
+};
 
 
 Event GetPublisherMetadata(std::wstring publisherId) {
