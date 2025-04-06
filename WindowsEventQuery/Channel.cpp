@@ -18,7 +18,7 @@ public:
 
     bool Next() {
         DWORD bufferUsed = 0;
-        if (!EvtNextChannelPath(m_event, (DWORD)m_buffer.size(), (wchar_t*)m_buffer.data(), &bufferUsed)) {
+        if (!EvtNextChannelPath(m_event, (DWORD)m_channelPath.size(), (wchar_t*)m_channelPath.data(), &bufferUsed)) {
             DWORD status = GetLastError();
 
             if (status == ERROR_NO_MORE_ITEMS) {
@@ -26,8 +26,8 @@ public:
                 return false;
             } else if (status == ERROR_INSUFFICIENT_BUFFER) {
                 // repeat call with larger buffer
-                m_buffer.resize(bufferUsed);
-                return EvtNextChannelPath(m_event, (DWORD)m_buffer.size(), (wchar_t*)m_buffer.data(), &bufferUsed);
+                m_channelPath.resize(bufferUsed);
+                return EvtNextChannelPath(m_event, (DWORD)m_channelPath.size(), (wchar_t*)m_channelPath.data(), &bufferUsed);
             } else {
                 wprintf(L"EvtNextChannelPath failed with %lu.\n", status);
                 abort();
@@ -39,12 +39,12 @@ public:
 
     std::wstring ChannelPath() const {
         // m_buffer might be too large so return the raw pointer to auto-shrink the string length
-        return m_buffer.c_str();
+        return m_channelPath.c_str();
     }
 
 private:
     Event        m_event;
-    std::wstring m_buffer;
+    std::wstring m_channelPath;
 };
 
 
