@@ -38,7 +38,7 @@ public:
         return &m_event;
     }
 
-protected:
+private:
     EVT_HANDLE m_event = 0;
 };
 static_assert(sizeof(Event) == sizeof(EVT_HANDLE), "Event size mismatch");
