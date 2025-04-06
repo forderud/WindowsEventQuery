@@ -17,7 +17,7 @@ int wmain() {
 
 #if 0
     wprintf(L"List of publishers:\n");
-    std::vector<std::wstring> publishers = EnumeratePublishers();
+    std::vector<std::wstring> publishers = EnumeratePublishers(true);
     for (const std::wstring& publisher : publishers)
         wprintf(L"  %s\n", publisher.c_str());
 #endif

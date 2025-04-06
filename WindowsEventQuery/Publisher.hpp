@@ -6,4 +6,4 @@
 #include <vector>
 
 
-std::vector<std::wstring> EnumeratePublishers();
+std::vector<std::wstring> EnumeratePublishers(bool printMetadata);

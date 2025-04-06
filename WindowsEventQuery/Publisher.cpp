@@ -1091,7 +1091,7 @@ void  PrintPublisherMetadata(std::wstring publisherId) {
     status = PrintProviderEvents(g_hMetadata);
 }
 
-std::vector<std::wstring> EnumeratePublishers() {
+std::vector<std::wstring> EnumeratePublishers(bool printMetadata) {
     Event providerList(EvtOpenPublisherEnum(NULL, 0));
     if (!providerList) {
         DWORD status = GetLastError();
@@ -1124,7 +1124,8 @@ std::vector<std::wstring> EnumeratePublishers() {
             }
         }
 
-        PrintPublisherMetadata(publisherId);
+        if (printMetadata)
+            PrintPublisherMetadata(publisherId);
 
         publisherId.resize(bufferUsed - 1); // remove null-termination
         result.push_back(publisherId);
