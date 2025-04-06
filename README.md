@@ -14,6 +14,7 @@ Example queries:
 
 Event severity level values: Critical (`System/Level=1`), Error (`System/Level=2`), Warning (`System/Level=3`), Information (`System/Level=4`).
 
+NOTICE: `System/Level=0` information events have been observed in the "Application" log.
 
 ## Examples of logged events
 Some examples of system problems automatically logged by Windows. All of these events can also be accessed through the Windows Event Log APIs.
