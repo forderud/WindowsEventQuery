@@ -34,6 +34,10 @@ public:
         return m_event;
     }
 
+    EVT_HANDLE* GetAddress() {
+        return &m_event;
+    }
+
 protected:
     EVT_HANDLE m_event = 0;
 };

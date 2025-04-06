@@ -110,7 +110,7 @@ DWORD PrintResults(EVT_HANDLE hResults, std::wstring publisherId) {
     while (true) {
         DWORD dwReturned = 0;
         // get a block of events from the result set
-        if (!EvtNext(hResults, std::size(events), (EVT_HANDLE*)events, INFINITE, 0, &dwReturned)) {
+        if (!EvtNext(hResults, std::size(events), events[0].GetAddress(), INFINITE, 0, &dwReturned)) {
             status = GetLastError();
             if (status != ERROR_NO_MORE_ITEMS)
                 wprintf(L"EvtNext failed with %lu\n", status);
