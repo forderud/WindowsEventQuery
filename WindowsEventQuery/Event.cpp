@@ -103,14 +103,18 @@ void PrintEventStrings(EVT_HANDLE hEvent, std::wstring publisherId) {
 
 
 // Enumerate all the events in the result set. 
-DWORD PrintResults(EVT_HANDLE hResults, std::wstring publisherId) {
+DWORD PrintResults(EVT_HANDLE hResults, std::wstring publisherId, size_t maxCount) {
     DWORD status = ERROR_SUCCESS;
     Event events[10];
 
-    while (true) {
+    for (size_t i = 0; i < maxCount/std::size(events) + 1; i++) {
+        DWORD eventSize = std::size(events);
+        if (i == maxCount/std::size(events))
+            eventSize = maxCount % std::size(events);
+
         DWORD dwReturned = 0;
         // get a block of events from the result set
-        if (!EvtNext(hResults, std::size(events), events[0].GetAddress(), INFINITE, 0, &dwReturned)) {
+        if (!EvtNext(hResults, eventSize, events[0].GetAddress(), INFINITE, 0, &dwReturned)) {
             status = GetLastError();
             if (status != ERROR_NO_MORE_ITEMS)
                 wprintf(L"EvtNext failed with %lu\n", status);
@@ -131,7 +135,7 @@ DWORD PrintResults(EVT_HANDLE hResults, std::wstring publisherId) {
 }
 
 
-void EventQuery (std::wstring channel, std::wstring query, std::wstring publisherId) {
+void EventQuery (std::wstring channel, std::wstring query, std::wstring publisherId, size_t maxCount) {
     Event results(EvtQuery(NULL, channel.c_str(), query.c_str(), EvtQueryChannelPath | EvtQueryReverseDirection));
 
     if (!results) {
@@ -149,5 +153,5 @@ void EventQuery (std::wstring channel, std::wstring query, std::wstring publishe
         return;
     }
 
-    PrintResults(results, publisherId);
+    PrintResults(results, publisherId, maxCount);
 }
