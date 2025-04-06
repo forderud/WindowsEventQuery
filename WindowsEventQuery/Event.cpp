@@ -81,15 +81,22 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         }
     }
 
+    std::wstring pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageChannel);
+    wprintf(L"Channel: %s\n", pwsMessage.c_str());
+
+    pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageProvider);
+    wprintf(L"Provider: %s\n", pwsMessage.c_str());
+
+    // TODO: Add date/time in "2025-04-06T16:53:45.4470000Z" format
+
+    // TODO: Add Event ID
+
     // Get the various message strings from the event.
-    std::wstring pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageEvent);
-    wprintf(L"Message: %s\n", pwsMessage.c_str());
+    pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageTask);
+    wprintf(L"Task: %s\n", pwsMessage.c_str());
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageLevel);
     wprintf(L"Level: %s\n", pwsMessage.c_str());
-
-    pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageTask);
-    wprintf(L"Task: %s\n", pwsMessage.c_str());
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageOpcode);
     wprintf(L"Opcode: %s\n", pwsMessage.c_str());
@@ -105,11 +112,8 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         wprintf(L"\n");
     }
 
-    pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageChannel);
-    wprintf(L"Channel: %s\n", pwsMessage.c_str());
-
-    pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageProvider);
-    wprintf(L"Provider: %s\n", pwsMessage.c_str());
+    pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageEvent);
+    wprintf(L"Description: %s\n", pwsMessage.c_str());
 
     wprintf(L"\n");
 }
