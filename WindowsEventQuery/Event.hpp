@@ -13,6 +13,12 @@ public:
     Event(EVT_HANDLE event) : m_event(event) {
     }
 
+    Event& operator = (Event&& other) {
+        m_event = other.m_event;
+        other.m_event = 0; // prevent double delete
+        return *this;
+    }
+
     ~Event() {
         Close();
     }
