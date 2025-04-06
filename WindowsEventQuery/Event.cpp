@@ -65,13 +65,13 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
 
     Event hProviderMetadata;
 
-    size_t idx1 = msgXml.find(L"<Provider Name='");
+    const wchar_t PROVIDER_SEARCH[] = L"<Provider Name='";
+    size_t idx1 = msgXml.find(PROVIDER_SEARCH);
     if (idx1 != std::wstring::npos) {
-        // Get publisher from "/Event/System/Provider@Name" in msgXml
-        std::wstring publisherId;
-        idx1 += 16;
+        // Get publisher from "/Event/System/Provider@Name" in message XML
+        idx1 += std::size(PROVIDER_SEARCH)-1;
         size_t idx2 = msgXml.find(L"'", idx1);
-        publisherId = msgXml.substr(idx1, idx2 - idx1);
+        std::wstring publisherId = msgXml.substr(idx1, idx2 - idx1);
 
         // Get the handle to the provider's metadata that contains the message strings.
         hProviderMetadata = Event(EvtOpenPublisherMetadata(NULL, publisherId.c_str(), NULL, 0, 0));
