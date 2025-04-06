@@ -61,15 +61,24 @@ std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMA
 
 void PrintEventStrings(EVT_HANDLE hEvent) {
     std::wstring msgXml = GetMessageString(NULL, hEvent, EvtFormatMessageXml);
-    wprintf(L"XML message string: %s\n\n", msgXml.c_str());
+    //wprintf(L"XML message string: %s\n\n", msgXml.c_str());
 
-    std::wstring publisherId; // TODO: Determine event publisher from "/Event/System/Provider@Name" in msgXml
+    Event hProviderMetadata;
 
-    // Get the handle to the provider's metadata that contains the message strings.
-    Event hProviderMetadata(EvtOpenPublisherMetadata(NULL, publisherId.c_str(), NULL, 0, 0));
-    if (!hProviderMetadata) {
-        wprintf(L"EvtOpenPublisherMetadata failed with %d\n", GetLastError());
-        return;
+    size_t idx1 = msgXml.find(L"<Provider Name='");
+    if (idx1 != std::wstring::npos) {
+        // Get publisher from "/Event/System/Provider@Name" in msgXml
+        std::wstring publisherId;
+        idx1 += 16;
+        size_t idx2 = msgXml.find(L"'", idx1);
+        publisherId = msgXml.substr(idx1, idx2 - idx1);
+
+        // Get the handle to the provider's metadata that contains the message strings.
+        hProviderMetadata = Event(EvtOpenPublisherMetadata(NULL, publisherId.c_str(), NULL, 0, 0));
+        if (!hProviderMetadata) {
+            wprintf(L"EvtOpenPublisherMetadata failed with %d\n", GetLastError());
+            return;
+        }
     }
 
     // Get the various message strings from the event.
