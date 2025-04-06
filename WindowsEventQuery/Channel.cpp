@@ -7,9 +7,9 @@
 
 
 /** RAII wrapper to avoid goto. */
-class EvtChannelEnum : public Event {
+class EvtChannelEnum  {
 public:
-    EvtChannelEnum() : Event(EvtOpenChannelEnum(NULL, 0)) {
+    EvtChannelEnum() : m_event(EvtOpenChannelEnum(NULL, 0)) {
         assert(m_event);
     }
 
@@ -43,6 +43,7 @@ public:
     }
 
 private:
+    Event        m_event;
     std::wstring m_buffer;
 };
 
