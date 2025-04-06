@@ -106,10 +106,12 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     }
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageChannel);
-    wprintf(L"Channel: %s\n\n", pwsMessage.c_str());
+    wprintf(L"Channel: %s\n", pwsMessage.c_str());
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageProvider);
-    wprintf(L"Provider: %s\n\n", pwsMessage.c_str());
+    wprintf(L"Provider: %s\n", pwsMessage.c_str());
+
+    wprintf(L"\n");
 }
 
 
