@@ -22,9 +22,11 @@ int wmain() {
         wprintf(L"  %s\n", publisher.c_str());
 #endif
 
+#if 1
     // perform event query
     std::wstring channel = L"System";
     std::wstring query = L"Event/System[EventID=7023]";
     std::wstring publisherName = L"";
     EventQuery(channel, query, publisherName);
+#endif
 }
