@@ -54,8 +54,12 @@ struct MESSAGES {
 };
 
 
-Event GetPublisherMetadata(std::wstring publisherId) {
-    return EvtOpenPublisherMetadata(NULL, publisherId.c_str(), NULL, /*locale*/0, 0);
+void  PrintPublisherMetadata(std::wstring publisherId) {
+    Event metadata(EvtOpenPublisherMetadata(NULL, publisherId.c_str(), NULL, /*locale*/0, 0));
+    if (!metadata) {
+        wprintf(L"EvtOpenPublisherMetadata failed with %d\n", GetLastError());
+        return;
+    }
 }
 
 std::vector<std::wstring> EnumeratePublishers() {
@@ -91,7 +95,7 @@ std::vector<std::wstring> EnumeratePublishers() {
             }
         }
 
-        GetPublisherMetadata(publisherId);
+        PrintPublisherMetadata(publisherId);
 
         publisherId.resize(bufferUsed - 1); // remove null-termination
         result.push_back(publisherId);
