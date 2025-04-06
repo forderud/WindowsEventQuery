@@ -49,17 +49,13 @@ private:
 
 
 std::vector<std::wstring> EnumerateChannels() {
-    // Get a handle to an enumerator that contains all the names of the 
-    // channels registered on the computer.
+    // handle to enumerator with all channels registered on the computer
     EvtChannelEnum channels;
 
+    // iterate through the list of channel names.
     std::vector<std::wstring> result;
-
-    // Enumerate through the list of channel names.
-    // To get the configuration information for a channel, call the EvtOpenChannelConfig function.
-    while (channels.Next()) {
+    while (channels.Next())
         result.push_back(channels.ChannelPath());
-    }
 
     return result;
 }
