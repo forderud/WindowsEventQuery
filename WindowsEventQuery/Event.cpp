@@ -83,33 +83,33 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
 
     // Get the various message strings from the event.
     std::wstring pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageEvent);
-    wprintf(L"Event message string: %s\n\n", pwsMessage.c_str());
+    wprintf(L"Message: %s\n", pwsMessage.c_str());
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageLevel);
-    wprintf(L"Level message string: %s\n\n", pwsMessage.c_str());
+    wprintf(L"Level: %s\n", pwsMessage.c_str());
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageTask);
-    wprintf(L"Task message string: %s\n\n", pwsMessage.c_str());
+    wprintf(L"Task: %s\n", pwsMessage.c_str());
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageOpcode);
-    wprintf(L"Opcode message string: %s\n\n", pwsMessage.c_str());
+    wprintf(L"Opcode: %s\n", pwsMessage.c_str());
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageKeyword);
     {
-        wprintf(L"Keyword message string: %s", pwsMessage.c_str());
+        wprintf(L"Keyword: %s", pwsMessage.c_str());
 
         const wchar_t* ptemp = pwsMessage.c_str();
         while (*(ptemp += wcslen(ptemp) + 1))
             wprintf(L", %s", ptemp);
 
-        wprintf(L"\n\n");
+        wprintf(L"\n");
     }
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageChannel);
-    wprintf(L"Channel message string: %s\n\n", pwsMessage.c_str());
+    wprintf(L"Channel: %s\n\n", pwsMessage.c_str());
 
     pwsMessage = GetMessageString(hProviderMetadata, hEvent, EvtFormatMessageProvider);
-    wprintf(L"Provider message string: %s\n\n", pwsMessage.c_str());
+    wprintf(L"Provider: %s\n\n", pwsMessage.c_str());
 }
 
 
