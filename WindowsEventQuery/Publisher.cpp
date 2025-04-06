@@ -1049,12 +1049,10 @@ cleanup:
 // Call this function after first calling the PrintProviderProperties
 // function to get the message strings that this section uses.
 DWORD PrintProviderEvents(EVT_HANDLE hMetadata) {
-    EVT_HANDLE hEvents = NULL;
-    EVT_HANDLE hEvent = NULL;
     DWORD status = ERROR_SUCCESS;
 
     // Get a handle to the provider's events.
-    hEvents = EvtOpenEventMetadataEnum(hMetadata, 0);
+    Event hEvents(EvtOpenEventMetadataEnum(hMetadata, 0));
     if (NULL == hEvents) {
         wprintf(L"EvtOpenEventMetadataEnum failed with %lu\n", GetLastError());
         goto cleanup;
@@ -1062,7 +1060,7 @@ DWORD PrintProviderEvents(EVT_HANDLE hMetadata) {
 
     // Enumerate the events and print each event's metadata.
     while (true) {
-        hEvent = EvtNextEventMetadata(hEvents, 0);
+        Event hEvent(EvtNextEventMetadata(hEvents, 0));
         if (NULL == hEvent) {
             if (ERROR_NO_MORE_ITEMS != (status = GetLastError())) {
                 wprintf(L"EvtNextEventMetadata failed with %lu\n", status);
@@ -1073,18 +1071,9 @@ DWORD PrintProviderEvents(EVT_HANDLE hMetadata) {
 
         if (status = PrintEventProperties(hEvent))
             break;
-
-        EvtClose(hEvent);
-        hEvent = NULL;
     }
 
 cleanup:
-    if (hEvents)
-        EvtClose(hEvents);
-
-    if (hEvent)
-        EvtClose(hEvent);
-
     return status;
 }
 
