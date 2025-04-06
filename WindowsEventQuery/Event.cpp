@@ -63,7 +63,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     std::wstring msgXml = GetMessageString(NULL, hEvent, EvtFormatMessageXml);
     wprintf(L"XML message string: %s\n\n", msgXml.c_str());
 
-    std::wstring publisherId; // TODO: Determine event publisher
+    std::wstring publisherId; // TODO: Determine event publisher from "/Event/System/Provider@Name" in msgXml
 
     // Get the handle to the provider's metadata that contains the message strings.
     Event hProviderMetadata(EvtOpenPublisherMetadata(NULL, publisherId.c_str(), NULL, 0, 0));
