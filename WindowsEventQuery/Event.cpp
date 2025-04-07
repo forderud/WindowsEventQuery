@@ -90,28 +90,32 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     // using provider from XML since EvtFormatMessageProvider returns an empty string for Schannel
     wprintf(L"Provider: %s\n", providerName.c_str());
 
-    // Print date/time in "2025-04-06T16:53:45.4470000Z" format
-    const wchar_t TIME_SEARCH[] = L"<TimeCreated SystemTime='";
-    idx1 = msgXml.find(TIME_SEARCH);
-    if (idx1 != std::wstring::npos) {
+    {
+        // Print date/time in "2025-04-06T16:53:45.4470000Z" format
         // TODO: Replace with proper XML query
+        const wchar_t TIME_SEARCH[] = L"<TimeCreated SystemTime='";
+        idx1 = msgXml.find(TIME_SEARCH);
+        assert(idx1 != std::wstring::npos);
+
         idx1 += std::size(TIME_SEARCH) - 1;
         size_t idx2 = msgXml.find(L"'", idx1);
-        message = msgXml.substr(idx1, idx2 - idx1);
 
+        message = msgXml.substr(idx1, idx2 - idx1);
         wprintf(L"Date: %s\n", message.c_str());
     }
 
-    // Print Event ID
-    const wchar_t EVENTID_SEARCH[] = L"</EventID>";
-    size_t idx2 = msgXml.find(EVENTID_SEARCH);
-    if (idx2 != std::wstring::npos) {
+    {
+        // Print Event ID
         // TODO: Replace with proper XML query
         // match both "<EventID Qualifiers='49152'>7023</EventID>" and "<EventID>7023</EventID>"
+        const wchar_t EVENTID_SEARCH[] = L"</EventID>";
+        size_t idx2 = msgXml.find(EVENTID_SEARCH);
+        assert(idx2 != std::wstring::npos);
+
         idx1 = msgXml.rfind(L">", idx2);
         idx1 += 1;
-        message = msgXml.substr(idx1, idx2 - idx1);
 
+        message = msgXml.substr(idx1, idx2 - idx1);
         wprintf(L"Event ID: %s\n", message.c_str());
     }
 
