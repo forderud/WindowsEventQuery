@@ -2,11 +2,12 @@
 #include "Event.hpp"
 #include <vector>
 #include <cassert>
+#include <variant>
 
 #pragma comment(lib, "wevtapi.lib")
 
 
-std::wstring RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
+std::variant<std::wstring, uint32_t> RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
     const wchar_t* ppValues[] = { query };
 
     // Identify the components of the event that you want to render. In this case,
@@ -43,9 +44,13 @@ std::wstring RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
         }
     }
 
-    // Print the selected values.
-    assert(pRenderedValues[0].Type == EvtVarTypeString);
-    return pRenderedValues[0].StringVal;
+    std::variant<std::wstring, uint32_t> result;
+    if (pRenderedValues[0].Type == EvtVarTypeString)
+        result = pRenderedValues[0].StringVal;
+    else if (pRenderedValues[0].Type == EvtVarTypeUInt32)
+        result = pRenderedValues[0].UInt32Val;
+
+    return result;
 }
 
 void PrintEventAsXML(EVT_HANDLE event) {
@@ -105,7 +110,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     std::wstring msgXml = GetMessageString(NULL, hEvent, EvtFormatMessageXml);
     //wprintf(L"XML message string: %s\n\n", msgXml.c_str());
 
-    std::wstring providerName = RenderEventValue(hEvent, L"Event/System/Provider/@Name");
+    std::wstring providerName = std::get<std::wstring>(RenderEventValue(hEvent, L"Event/System/Provider/@Name"));
 
     Event providerMetadata;
     if (providerName.size() > 0) {
@@ -118,7 +123,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     }
 
     {
-        std::wstring message = RenderEventValue(hEvent, L"Event/System/Channel");
+        std::wstring message = std::get<std::wstring>(RenderEventValue(hEvent, L"Event/System/Channel"));
         wprintf(L"Channel: %s\n", message.c_str());
     }
 
