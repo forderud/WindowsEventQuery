@@ -51,6 +51,8 @@ std::variant<std::wstring, uint16_t, ULONGLONG> RenderEventValue(EVT_HANDLE hEve
         result = pRenderedValues[0].UInt16Val;
     else if (pRenderedValues[0].Type == EvtVarTypeFileTime)
         result = pRenderedValues[0].FileTimeVal;
+    else
+        abort();
     return result;
 }
 
