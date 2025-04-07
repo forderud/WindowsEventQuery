@@ -66,10 +66,10 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     std::wstring providerName;
     Event providerMetadata;
 
-    const wchar_t PROVIDER_SEARCH[] = L"<Provider Name='";
+    const wchar_t PROVIDER_SEARCH[] = L"<Provider Name='"; // "Name" is an OPTIONAL attribute
     size_t idx1 = msgXml.find(PROVIDER_SEARCH);
     if (idx1 != std::wstring::npos) {
-        // Get publisher from "/Event/System/Provider@Name" in message XML
+        // Get provider from "/Event/System/Provider@Name" in message XML
         // TODO: Replace with API call or proper XML query
         idx1 += std::size(PROVIDER_SEARCH)-1;
         size_t idx2 = msgXml.find(L"'", idx1);
@@ -93,7 +93,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     {
         // Print date/time in "2025-04-06T16:53:45.4470000Z" format
         // TODO: Replace with API call or proper XML query
-        const wchar_t TIME_SEARCH[] = L"<TimeCreated SystemTime='";
+        const wchar_t TIME_SEARCH[] = L"<TimeCreated SystemTime='"; // "SystemTime" is a REQUIRED attribute
         idx1 = msgXml.find(TIME_SEARCH);
         assert(idx1 != std::wstring::npos);
 
@@ -107,7 +107,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     {
         // Print Event ID
         // TODO: Replace with API call or proper XML query
-        // match both "<EventID Qualifiers='49152'>7023</EventID>" and "<EventID>7023</EventID>"
+        // match both "<EventID Qualifiers='49152'>7023</EventID>" and "<EventID>7023</EventID>", since "Qualifiers" is an OPTIONAL attribute
         const wchar_t EVENTID_SEARCH[] = L"</EventID>";
         size_t idx2 = msgXml.find(EVENTID_SEARCH);
         assert(idx2 != std::wstring::npos);
