@@ -6,6 +6,56 @@
 #pragma comment(lib, "wevtapi.lib")
 
 
+std::wstring RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
+    DWORD status = ERROR_SUCCESS;
+    EVT_HANDLE hContext = NULL;
+    DWORD dwBufferSize = 0;
+    DWORD dwBufferUsed = 0;
+    DWORD dwPropertyCount = 0;
+    PEVT_VARIANT pRenderedValues = NULL;
+    const wchar_t* ppValues[] = { query };
+
+    // Identify the components of the event that you want to render. In this case,
+    // render the provider's name and channel from the system section of the event.
+    // To get user data from the event, you can specify an expression such as
+    // L"Event/EventData/Data[@Name=\"<data name goes here>\"]".
+    hContext = EvtCreateRenderContext(std::size(ppValues), (LPCWSTR*)ppValues, EvtRenderContextValues);
+    if (!hContext) {
+        status = GetLastError();
+        wprintf(L"EvtCreateRenderContext failed with %lu\n", status);
+        abort();
+    }
+
+    // The function returns an array of variant values for each element or attribute that
+    // you want to retrieve from the event. The values are returned in the same order as 
+    // you requested them.
+    if (!EvtRender(hContext, hEvent, EvtRenderEventValues, dwBufferSize, pRenderedValues, &dwBufferUsed, &dwPropertyCount)) {
+        status = GetLastError();
+        if (status == ERROR_INSUFFICIENT_BUFFER) {
+            dwBufferSize = dwBufferUsed;
+            pRenderedValues = (PEVT_VARIANT)malloc(dwBufferSize);
+            EvtRender(hContext, hEvent, EvtRenderEventValues, dwBufferSize, pRenderedValues, &dwBufferUsed, &dwPropertyCount);
+        }
+
+        status = GetLastError();
+        if (status != ERROR_SUCCESS) {
+            wprintf(L"EvtRender failed with %d\n", GetLastError());
+            abort();
+        }
+    }
+
+    // Print the selected values.
+    std::wstring result = pRenderedValues[0].StringVal;
+
+    if (hContext)
+        EvtClose(hContext);
+
+    if (pRenderedValues)
+        free(pRenderedValues);
+
+    return result;
+}
+
 void PrintEventAsXML(EVT_HANDLE event) {
     // determine required buffer size
     DWORD bufferSize = 0; // in bytes
@@ -63,18 +113,10 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     std::wstring msgXml = GetMessageString(NULL, hEvent, EvtFormatMessageXml);
     //wprintf(L"XML message string: %s\n\n", msgXml.c_str());
 
-    std::wstring providerName;
+    std::wstring providerName = RenderEventValue(hEvent, L"Event/System/Provider/@Name");
+
     Event providerMetadata;
-
-    const wchar_t PROVIDER_SEARCH[] = L"<Provider Name='"; // "Name" is an OPTIONAL attribute
-    size_t idx1 = msgXml.find(PROVIDER_SEARCH);
-    if (idx1 != std::wstring::npos) {
-        // Get provider from "/Event/System/Provider@Name" in message XML
-        // TODO: Replace with API call or proper XML query
-        idx1 += std::size(PROVIDER_SEARCH)-1;
-        size_t idx2 = msgXml.find(L"'", idx1);
-        providerName = msgXml.substr(idx1, idx2 - idx1);
-
+    if (providerName.size() > 0) {
         // Get the handle to the provider's metadata that contains the message strings.
         providerMetadata = Event(EvtOpenPublisherMetadata(NULL, providerName.c_str(), NULL, 0, 0));
         if (!providerMetadata) {
@@ -90,7 +132,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         size_t idx2 = msgXml.find(CHANNEL_SEARCH);
         assert(idx2 != std::wstring::npos);
 
-        idx1 = msgXml.rfind(L">", idx2);
+        size_t idx1 = msgXml.rfind(L">", idx2);
         idx1 += 1;
 
         std::wstring message = msgXml.substr(idx1, idx2 - idx1);
@@ -105,7 +147,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         // Print date/time in "2025-04-06T16:53:45.4470000Z" format
         // TODO: Replace with API call or proper XML query
         const wchar_t TIME_SEARCH[] = L"<TimeCreated SystemTime='"; // "SystemTime" is a REQUIRED attribute
-        idx1 = msgXml.find(TIME_SEARCH);
+        size_t idx1 = msgXml.find(TIME_SEARCH);
         assert(idx1 != std::wstring::npos);
 
         idx1 += std::size(TIME_SEARCH) - 1;
@@ -123,7 +165,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         size_t idx2 = msgXml.find(EVENTID_SEARCH);
         assert(idx2 != std::wstring::npos);
 
-        idx1 = msgXml.rfind(L">", idx2);
+        size_t idx1 = msgXml.rfind(L">", idx2);
         idx1 += 1;
 
         std::wstring message = msgXml.substr(idx1, idx2 - idx1);
