@@ -7,8 +7,6 @@
 
 
 std::wstring RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
-    DWORD status = ERROR_SUCCESS;
-    EVT_HANDLE hContext = NULL;
     DWORD dwBufferSize = 0;
     DWORD dwBufferUsed = 0;
     DWORD dwPropertyCount = 0;
@@ -19,9 +17,9 @@ std::wstring RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
     // render the provider's name and channel from the system section of the event.
     // To get user data from the event, you can specify an expression such as
     // L"Event/EventData/Data[@Name=\"<data name goes here>\"]".
-    hContext = EvtCreateRenderContext(std::size(ppValues), (LPCWSTR*)ppValues, EvtRenderContextValues);
+    Event hContext(EvtCreateRenderContext(std::size(ppValues), (LPCWSTR*)ppValues, EvtRenderContextValues));
     if (!hContext) {
-        status = GetLastError();
+        DWORD status = GetLastError();
         wprintf(L"EvtCreateRenderContext failed with %lu\n", status);
         abort();
     }
@@ -30,7 +28,7 @@ std::wstring RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
     // you want to retrieve from the event. The values are returned in the same order as 
     // you requested them.
     if (!EvtRender(hContext, hEvent, EvtRenderEventValues, dwBufferSize, pRenderedValues, &dwBufferUsed, &dwPropertyCount)) {
-        status = GetLastError();
+        DWORD status = GetLastError();
         if (status == ERROR_INSUFFICIENT_BUFFER) {
             dwBufferSize = dwBufferUsed;
             pRenderedValues = (PEVT_VARIANT)malloc(dwBufferSize);
@@ -46,9 +44,6 @@ std::wstring RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
 
     // Print the selected values.
     std::wstring result = pRenderedValues[0].StringVal;
-
-    if (hContext)
-        EvtClose(hContext);
 
     if (pRenderedValues)
         free(pRenderedValues);
