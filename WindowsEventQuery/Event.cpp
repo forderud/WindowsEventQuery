@@ -119,15 +119,15 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     wprintf(L"XML message string: %s\n\n", msgXml.c_str());
 #endif
 
-    std::wstring channel = std::get<std::wstring>(RenderEventValue(hEvent, L"Event/System/Channel"));
+    auto channel = std::get<std::wstring>(RenderEventValue(hEvent, L"Event/System/Channel"));
     wprintf(L"Channel: %s\n", channel.c_str());
 
-    std::wstring providerName = std::get<std::wstring>(RenderEventValue(hEvent, L"Event/System/Provider/@Name"));
+    auto providerName = std::get<std::wstring>(RenderEventValue(hEvent, L"Event/System/Provider/@Name"));
     wprintf(L"Provider: %s\n", providerName.c_str());
 
     {
         // Print date/time in "2025-04-06T16:53:45.4470000Z" format
-        FILETIME ft = std::get<FILETIME>(RenderEventValue(hEvent, L"Event/System/TimeCreated/@SystemTime"));
+        auto ft = std::get<FILETIME>(RenderEventValue(hEvent, L"Event/System/TimeCreated/@SystemTime"));
 
         SYSTEMTIME st{};
         FileTimeToSystemTime(&ft, &st); // UTC time
@@ -135,7 +135,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         wprintf(L"Date: %02d-%02d-%02dT%02d:%02d:%02d.%02dZ\n", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
     }
 
-    uint16_t eventId = std::get<uint16_t>(RenderEventValue(hEvent, L"Event/System/EventID"));
+    auto eventId = std::get<uint16_t>(RenderEventValue(hEvent, L"Event/System/EventID"));
     wprintf(L"Event ID: %u\n", eventId);
 
     Event providerMetadata;
