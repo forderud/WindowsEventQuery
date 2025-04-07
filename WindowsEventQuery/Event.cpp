@@ -7,7 +7,7 @@
 #pragma comment(lib, "wevtapi.lib")
 
 
-std::variant<std::wstring, uint16_t> RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
+std::variant<std::wstring, uint16_t, ULONGLONG> RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
     const wchar_t* ppValues[] = { query };
 
     // Identify the components of the event that you want to render. In this case,
@@ -44,12 +44,13 @@ std::variant<std::wstring, uint16_t> RenderEventValue(EVT_HANDLE hEvent, const w
         }
     }
 
-    std::variant<std::wstring, uint16_t> result;
+    std::variant<std::wstring, uint16_t, ULONGLONG> result;
     if (pRenderedValues[0].Type == EvtVarTypeString)
         result = pRenderedValues[0].StringVal;
     else if (pRenderedValues[0].Type == EvtVarTypeUInt16)
         result = pRenderedValues[0].UInt16Val;
-
+    else if (pRenderedValues[0].Type == EvtVarTypeFileTime)
+        result = pRenderedValues[0].FileTimeVal;
     return result;
 }
 
@@ -133,6 +134,8 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
 
     {
         // Print date/time in "2025-04-06T16:53:45.4470000Z" format
+        ULONGLONG fileTime = std::get<ULONGLONG>(RenderEventValue(hEvent, L"Event/System/TimeCreated/@SystemTime"));
+
         // TODO: Replace with API call or proper XML query
         const wchar_t TIME_SEARCH[] = L"<TimeCreated SystemTime='"; // "SystemTime" is a REQUIRED attribute
         size_t idx1 = msgXml.find(TIME_SEARCH);
