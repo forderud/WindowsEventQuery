@@ -145,8 +145,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         SYSTEMTIME st{};
         FileTimeToSystemTime(&ft, &st);
 
-        ULONGLONG nanoseconds = (fileTime % 10000000) * 100; // Display nanoseconds instead of milliseconds for higher resolution
-        wprintf(L"Date: %02d/%02d/%02d %02d:%02d:%02d.%I64u\n", st.wMonth, st.wDay, st.wYear, st.wHour, st.wMinute, st.wSecond, nanoseconds);
+        wprintf(L"Date: %02d/%02d/%02d %02d:%02d:%02d.%02d\n", st.wMonth, st.wDay, st.wYear, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
     }
 
     {
