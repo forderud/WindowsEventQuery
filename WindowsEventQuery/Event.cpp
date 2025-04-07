@@ -7,7 +7,7 @@
 #pragma comment(lib, "wevtapi.lib")
 
 
-std::variant<std::wstring, uint32_t> RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
+std::variant<std::wstring, uint16_t> RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
     const wchar_t* ppValues[] = { query };
 
     // Identify the components of the event that you want to render. In this case,
@@ -44,11 +44,11 @@ std::variant<std::wstring, uint32_t> RenderEventValue(EVT_HANDLE hEvent, const w
         }
     }
 
-    std::variant<std::wstring, uint32_t> result;
+    std::variant<std::wstring, uint16_t> result;
     if (pRenderedValues[0].Type == EvtVarTypeString)
         result = pRenderedValues[0].StringVal;
-    else if (pRenderedValues[0].Type == EvtVarTypeUInt32)
-        result = pRenderedValues[0].UInt32Val;
+    else if (pRenderedValues[0].Type == EvtVarTypeUInt16)
+        result = pRenderedValues[0].UInt16Val;
 
     return result;
 }
@@ -147,17 +147,8 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
 
     {
         // Print Event ID
-        // TODO: Replace with API call or proper XML query
-        // match both "<EventID Qualifiers='49152'>7023</EventID>" and "<EventID>7023</EventID>", since "Qualifiers" is an OPTIONAL attribute
-        const wchar_t EVENTID_SEARCH[] = L"</EventID>";
-        size_t idx2 = msgXml.find(EVENTID_SEARCH);
-        assert(idx2 != std::wstring::npos);
-
-        size_t idx1 = msgXml.rfind(L">", idx2);
-        idx1 += 1;
-
-        std::wstring message = msgXml.substr(idx1, idx2 - idx1);
-        wprintf(L"Event ID: %s\n", message.c_str());
+        uint16_t eventId = std::get<uint16_t>(RenderEventValue(hEvent, L"Event/System/EventID"));
+        wprintf(L"Event ID: %u\n", eventId);
     }
 
     // Get the various message strings from the event.
