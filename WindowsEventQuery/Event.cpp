@@ -8,13 +8,13 @@
 
 
 std::variant<std::wstring, uint16_t, FILETIME> RenderEventValue(EVT_HANDLE event, const wchar_t* query) {
-    const wchar_t* ppValues[] = { query };
+    const wchar_t* queries[] = { query };
 
     // Identify the components of the event that you want to render. In this case,
     // render the provider's name and channel from the system section of the event.
     // To get user data from the event, you can specify an expression such as
     // L"Event/EventData/Data[@Name=\"<data name goes here>\"]".
-    Event hContext(EvtCreateRenderContext(std::size(ppValues), (LPCWSTR*)ppValues, EvtRenderContextValues));
+    Event hContext(EvtCreateRenderContext(std::size(queries), (LPCWSTR*)queries, EvtRenderContextValues));
     if (!hContext) {
         DWORD status = GetLastError();
         wprintf(L"EvtCreateRenderContext failed with %lu\n", status);
