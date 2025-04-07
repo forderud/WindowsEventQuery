@@ -138,16 +138,15 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         // Print date/time in "2025-04-06T16:53:45.4470000Z" format
         ULONGLONG fileTime = std::get<ULONGLONG>(RenderEventValue(hEvent, L"Event/System/TimeCreated/@SystemTime"));
 
-        // TODO: Replace with API call or proper XML query
-        const wchar_t TIME_SEARCH[] = L"<TimeCreated SystemTime='"; // "SystemTime" is a REQUIRED attribute
-        size_t idx1 = msgXml.find(TIME_SEARCH);
-        assert(idx1 != std::wstring::npos);
+        FILETIME ft{};
+        ft.dwHighDateTime = (DWORD)((fileTime >> 32) & 0xFFFFFFFF);
+        ft.dwLowDateTime = (DWORD)(fileTime & 0xFFFFFFFF);
 
-        idx1 += std::size(TIME_SEARCH) - 1;
-        size_t idx2 = msgXml.find(L"'", idx1);
+        SYSTEMTIME st{};
+        FileTimeToSystemTime(&ft, &st);
 
-        std::wstring message = msgXml.substr(idx1, idx2 - idx1);
-        wprintf(L"Date: %s\n", message.c_str());
+        ULONGLONG nanoseconds = (fileTime % 10000000) * 100; // Display nanoseconds instead of milliseconds for higher resolution
+        wprintf(L"Date: %02d/%02d/%02d %02d:%02d:%02d.%I64u\n", st.wMonth, st.wDay, st.wYear, st.wHour, st.wMinute, st.wSecond, nanoseconds);
     }
 
     {
