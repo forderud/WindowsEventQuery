@@ -142,44 +142,6 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
 }
 
 
-// Enumerate all the events in the result set. 
-DWORD PrintResults(EVT_HANDLE hResults, size_t maxCount) {
-    DWORD status = ERROR_SUCCESS;
-    Event events[10];
-
-    for (size_t i = 0; i < maxCount/std::size(events) + 1; i++) {
-        DWORD eventSize = std::size(events);
-        if (i == maxCount/std::size(events)) {
-            // special handling of last iteration
-            eventSize = maxCount % std::size(events);
-
-            if (!eventSize)
-                continue;
-        }
-
-        DWORD dwReturned = 0;
-        // get a block of events from the result set
-        if (!EvtNext(hResults, eventSize, events[0].GetAddress(), INFINITE, 0, &dwReturned)) {
-            status = GetLastError();
-            if (status != ERROR_NO_MORE_ITEMS)
-                wprintf(L"EvtNext failed with %lu\n", status);
-
-            return status;
-        }
-
-        for (DWORD i = 0; i < dwReturned; i++) {
-            // print event details to console
-            //PrintEventAsXML(events[i]);
-            PrintEventStrings(events[i]);
-
-            events[i].Close();
-        }
-    }
-
-    return ERROR_SUCCESS;
-}
-
-
 void EventQuery (std::wstring channel, std::wstring query, size_t maxCount) {
     Event results(EvtQuery(NULL, channel.c_str(), query.c_str(), EvtQueryChannelPath | EvtQueryReverseDirection));
     if (!results) {
@@ -197,5 +159,36 @@ void EventQuery (std::wstring channel, std::wstring query, size_t maxCount) {
         return;
     }
 
-    PrintResults(results, maxCount);
+
+    // get multiple events per API call
+    Event events[10];
+
+    // iterate over events in the result set
+    for (size_t i = 0; i < maxCount/std::size(events) + 1; i++) {
+        DWORD eventSize = std::size(events);
+        if (i == maxCount/std::size(events)) {
+            // special handling of last iteration
+            eventSize = maxCount % std::size(events);
+
+            if (!eventSize)
+                continue;
+        }
+
+        DWORD dwReturned = 0;
+        // get a block of events from the result set
+        if (!EvtNext(results, eventSize, events[0].GetAddress(), INFINITE, 0, &dwReturned)) {
+            DWORD status = GetLastError();
+            if (status != ERROR_NO_MORE_ITEMS)
+                wprintf(L"EvtNext failed with %lu\n", status);
+
+            return;
+        }
+
+        for (DWORD i = 0; i < dwReturned; i++) {
+            // print event details to console
+            PrintEventStrings(events[i]);
+
+            events[i].Close();
+        }
+    }
 }
