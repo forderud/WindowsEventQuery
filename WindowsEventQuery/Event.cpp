@@ -60,31 +60,6 @@ std::variant<std::wstring, uint16_t, FILETIME> RenderEventValue(EVT_HANDLE hEven
     return result;
 }
 
-void PrintEventAsXML(EVT_HANDLE event) {
-    // determine required buffer size
-    DWORD bufferSize = 0; // in bytes
-    BOOL ok = EvtRender(NULL, event, EvtRenderEventXml, 0, nullptr, &bufferSize, nullptr);
-    if (!ok) {
-        // expected to fail with ERROR_INSUFFICIENT_BUFFER
-        DWORD status = GetLastError();
-        assert(status == ERROR_INSUFFICIENT_BUFFER);
-    }
-
-    // render event as XML string
-    std::vector<wchar_t> pRenderedContent(bufferSize/sizeof(wchar_t));
-    DWORD propertyCount = 0;
-    ok = EvtRender(NULL, event, EvtRenderEventXml, (DWORD)(sizeof(wchar_t)*pRenderedContent.size()), pRenderedContent.data(), &bufferSize, &propertyCount);
-    if (!ok) {
-        DWORD status = GetLastError();
-        wprintf(L"EvtRender failed with %d\n", status);
-        return;
-    }
-
-    // print XML to console
-    wprintf(L"\n\n%s", pRenderedContent.data());
-}
-
-
 /** Gets the specified message string from the event.Returns empty string if the event does not contain the specified message. */
 std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMAT_MESSAGE_FLAGS FormatId) {
     // determine required buffer size
