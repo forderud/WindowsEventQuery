@@ -24,7 +24,7 @@ int wmain(int argc, wchar_t* argv[]) {
         }
     } else if (mode == L"publishers") {
         wprintf(L"List of publishers:\n");
-        std::vector<std::wstring> publishers = EnumeratePublishers(false);
+        std::vector<std::wstring> publishers = EnumeratePublishers();
         for (const std::wstring& publisher : publishers)
             wprintf(L"  %s\n", publisher.c_str());
 
