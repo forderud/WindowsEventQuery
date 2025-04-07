@@ -19,24 +19,23 @@ std::variant<std::wstring, uint16_t, FILETIME> RenderEventValue(EVT_HANDLE event
 
     DWORD dwBufferUsed = 0;
     DWORD dwPropertyCount = 0;
-    std::vector<BYTE> buffer;
-    EVT_VARIANT* values = nullptr;
 
     // The function returns an array of variant values for each element or attribute that
     // you want to retrieve from the event. The values are returned in the same order as requested.
     if (!EvtRender(hContext, event, EvtRenderEventValues, 0, nullptr, &dwBufferUsed, &dwPropertyCount)) {
         DWORD status = GetLastError();
-        if (status == ERROR_INSUFFICIENT_BUFFER) {
-            buffer.resize(dwBufferUsed);
-            values = (EVT_VARIANT*)buffer.data();
-            EvtRender(hContext, event, EvtRenderEventValues, (DWORD)buffer.size(), values, &dwBufferUsed, &dwPropertyCount);
-        }
-
-        status = GetLastError();
-        if (status != ERROR_SUCCESS) {
-            wprintf(L"EvtRender failed with %d\n", GetLastError());
+        if (status != ERROR_INSUFFICIENT_BUFFER) {
+            wprintf(L"EvtRender failed with %d\n", status);
             abort();
         }
+    }
+
+    std::vector<BYTE> buffer(dwBufferUsed);
+    EVT_VARIANT* values = (EVT_VARIANT*)buffer.data();
+    if (!EvtRender(hContext, event, EvtRenderEventValues, (DWORD)buffer.size(), values, &dwBufferUsed, &dwPropertyCount)) {
+        DWORD status = GetLastError();
+        wprintf(L"EvtRender failed with %d\n", status);
+        abort();
     }
 
     std::variant<std::wstring, uint16_t, FILETIME> result;
