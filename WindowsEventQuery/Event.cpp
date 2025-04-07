@@ -20,19 +20,18 @@ std::wstring RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
         abort();
     }
 
-    DWORD dwBufferSize = 0;
     DWORD dwBufferUsed = 0;
     DWORD dwPropertyCount = 0;
-    PEVT_VARIANT pRenderedValues = NULL;
+    EVT_VARIANT* pRenderedValues = nullptr;
 
     // The function returns an array of variant values for each element or attribute that
     // you want to retrieve from the event. The values are returned in the same order as 
     // you requested them.
-    if (!EvtRender(hContext, hEvent, EvtRenderEventValues, dwBufferSize, pRenderedValues, &dwBufferUsed, &dwPropertyCount)) {
+    if (!EvtRender(hContext, hEvent, EvtRenderEventValues, 0, nullptr, &dwBufferUsed, &dwPropertyCount)) {
         DWORD status = GetLastError();
         if (status == ERROR_INSUFFICIENT_BUFFER) {
-            dwBufferSize = dwBufferUsed;
-            pRenderedValues = (PEVT_VARIANT)malloc(dwBufferSize);
+            DWORD dwBufferSize = dwBufferUsed;
+            pRenderedValues = (EVT_VARIANT*)malloc(dwBufferSize);
             EvtRender(hContext, hEvent, EvtRenderEventValues, dwBufferSize, pRenderedValues, &dwBufferUsed, &dwPropertyCount);
         }
 
