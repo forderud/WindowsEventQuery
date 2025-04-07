@@ -7,10 +7,6 @@
 
 
 std::wstring RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
-    DWORD dwBufferSize = 0;
-    DWORD dwBufferUsed = 0;
-    DWORD dwPropertyCount = 0;
-    PEVT_VARIANT pRenderedValues = NULL;
     const wchar_t* ppValues[] = { query };
 
     // Identify the components of the event that you want to render. In this case,
@@ -23,6 +19,11 @@ std::wstring RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
         wprintf(L"EvtCreateRenderContext failed with %lu\n", status);
         abort();
     }
+
+    DWORD dwBufferSize = 0;
+    DWORD dwBufferUsed = 0;
+    DWORD dwPropertyCount = 0;
+    PEVT_VARIANT pRenderedValues = NULL;
 
     // The function returns an array of variant values for each element or attribute that
     // you want to retrieve from the event. The values are returned in the same order as 
