@@ -83,8 +83,10 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         }
     }
 
-    std::wstring message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageChannel);
-    wprintf(L"Channel: %s\n", message.c_str());
+    {
+        std::wstring message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageChannel);
+        wprintf(L"Channel: %s\n", message.c_str());
+    }
 
     //message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageProvider);
     // using provider from XML since EvtFormatMessageProvider returns an empty string for Schannel
@@ -100,7 +102,7 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         idx1 += std::size(TIME_SEARCH) - 1;
         size_t idx2 = msgXml.find(L"'", idx1);
 
-        message = msgXml.substr(idx1, idx2 - idx1);
+        std::wstring message = msgXml.substr(idx1, idx2 - idx1);
         wprintf(L"Date: %s\n", message.c_str());
     }
 
@@ -115,12 +117,12 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         idx1 = msgXml.rfind(L">", idx2);
         idx1 += 1;
 
-        message = msgXml.substr(idx1, idx2 - idx1);
+        std::wstring message = msgXml.substr(idx1, idx2 - idx1);
         wprintf(L"Event ID: %s\n", message.c_str());
     }
 
     // Get the various message strings from the event.
-    message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageTask);
+    std::wstring message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageTask);
     wprintf(L"Task: %s\n", message.c_str());
 
     message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageLevel);
