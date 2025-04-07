@@ -114,28 +114,15 @@ std::wstring GetMessageString(EVT_HANDLE hMetadata, EVT_HANDLE hEvent, EVT_FORMA
 }
 
 void PrintEventStrings(EVT_HANDLE hEvent) {
+#if 0
     std::wstring msgXml = GetMessageString(NULL, hEvent, EvtFormatMessageXml);
-    //wprintf(L"XML message string: %s\n\n", msgXml.c_str());
+    wprintf(L"XML message string: %s\n\n", msgXml.c_str());
+#endif
+
+    std::wstring channel = std::get<std::wstring>(RenderEventValue(hEvent, L"Event/System/Channel"));
+    wprintf(L"Channel: %s\n", channel.c_str());
 
     std::wstring providerName = std::get<std::wstring>(RenderEventValue(hEvent, L"Event/System/Provider/@Name"));
-
-    Event providerMetadata;
-    if (providerName.size() > 0) {
-        // Get the handle to the provider's metadata that contains the message strings.
-        providerMetadata = Event(EvtOpenPublisherMetadata(NULL, providerName.c_str(), NULL, 0, 0));
-        if (!providerMetadata) {
-            wprintf(L"EvtOpenPublisherMetadata failed with %d\n", GetLastError());
-            return;
-        }
-    }
-
-    {
-        std::wstring message = std::get<std::wstring>(RenderEventValue(hEvent, L"Event/System/Channel"));
-        wprintf(L"Channel: %s\n", message.c_str());
-    }
-
-    //message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageProvider);
-    // using provider from XML since EvtFormatMessageProvider returns an empty string for Schannel
     wprintf(L"Provider: %s\n", providerName.c_str());
 
     {
@@ -148,10 +135,17 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         wprintf(L"Date: %02d-%02d-%02d T %02d:%02d:%02d.%02d\n", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
     }
 
-    {
-        // Print Event ID
-        uint16_t eventId = std::get<uint16_t>(RenderEventValue(hEvent, L"Event/System/EventID"));
-        wprintf(L"Event ID: %u\n", eventId);
+    uint16_t eventId = std::get<uint16_t>(RenderEventValue(hEvent, L"Event/System/EventID"));
+    wprintf(L"Event ID: %u\n", eventId);
+
+    Event providerMetadata;
+    if (providerName.size() > 0) {
+        // Get the handle to the provider's metadata that contains the message strings.
+        providerMetadata = Event(EvtOpenPublisherMetadata(NULL, providerName.c_str(), NULL, 0, 0));
+        if (!providerMetadata) {
+            wprintf(L"EvtOpenPublisherMetadata failed with %d\n", GetLastError());
+            return;
+        }
     }
 
     // Get the various message strings from the event.
