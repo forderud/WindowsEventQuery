@@ -7,7 +7,7 @@
 #pragma comment(lib, "wevtapi.lib")
 
 
-std::variant<std::wstring, uint16_t, ULONGLONG> RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
+std::variant<std::wstring, uint16_t, FILETIME> RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
     const wchar_t* ppValues[] = { query };
 
     // Identify the components of the event that you want to render. In this case,
@@ -44,15 +44,19 @@ std::variant<std::wstring, uint16_t, ULONGLONG> RenderEventValue(EVT_HANDLE hEve
         }
     }
 
-    std::variant<std::wstring, uint16_t, ULONGLONG> result;
-    if (pRenderedValues[0].Type == EvtVarTypeString)
+    std::variant<std::wstring, uint16_t, FILETIME> result;
+    if (pRenderedValues[0].Type == EvtVarTypeString) {
         result = pRenderedValues[0].StringVal;
-    else if (pRenderedValues[0].Type == EvtVarTypeUInt16)
+    } else if (pRenderedValues[0].Type == EvtVarTypeUInt16) {
         result = pRenderedValues[0].UInt16Val;
-    else if (pRenderedValues[0].Type == EvtVarTypeFileTime)
-        result = pRenderedValues[0].FileTimeVal;
-    else
+    } else if (pRenderedValues[0].Type == EvtVarTypeFileTime) {
+        FILETIME ft{};
+        ft.dwHighDateTime = (DWORD)((pRenderedValues[0].FileTimeVal >> 32) & 0xFFFFFFFF);
+        ft.dwLowDateTime = (DWORD)(pRenderedValues[0].FileTimeVal & 0xFFFFFFFF);
+        result = ft;
+    } else {
         abort();
+    }
     return result;
 }
 
@@ -136,16 +140,12 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
 
     {
         // Print date/time in "2025-04-06T16:53:45.4470000Z" format
-        ULONGLONG fileTime = std::get<ULONGLONG>(RenderEventValue(hEvent, L"Event/System/TimeCreated/@SystemTime"));
-
-        FILETIME ft{};
-        ft.dwHighDateTime = (DWORD)((fileTime >> 32) & 0xFFFFFFFF);
-        ft.dwLowDateTime = (DWORD)(fileTime & 0xFFFFFFFF);
+        FILETIME ft = std::get<FILETIME>(RenderEventValue(hEvent, L"Event/System/TimeCreated/@SystemTime"));
 
         SYSTEMTIME st{};
         FileTimeToSystemTime(&ft, &st);
 
-        wprintf(L"Date: %02d/%02d/%02d %02d:%02d:%02d.%02d\n", st.wMonth, st.wDay, st.wYear, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+        wprintf(L"Date: %02d-%02d-%02d T %02d:%02d:%02d.%02d\n", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
     }
 
     {
