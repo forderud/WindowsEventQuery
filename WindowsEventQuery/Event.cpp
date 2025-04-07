@@ -17,12 +17,10 @@ std::variant<std::wstring, uint16_t, FILETIME> RenderEventValue(EVT_HANDLE event
         abort();
     }
 
-    DWORD dwBufferUsed = 0;
-    DWORD dwPropertyCount = 0;
-
-    // The function returns an array of variant values for each element or attribute that
-    // you want to retrieve from the event. The values are returned in the same order as requested.
-    if (!EvtRender(hContext, event, EvtRenderEventValues, 0, nullptr, &dwBufferUsed, &dwPropertyCount)) {
+    DWORD bufferUsed = 0;
+    DWORD propertyCount = 0;
+    // determine required buffer size
+    if (!EvtRender(hContext, event, EvtRenderEventValues, 0, nullptr, &bufferUsed, &propertyCount)) {
         DWORD status = GetLastError();
         if (status != ERROR_INSUFFICIENT_BUFFER) {
             wprintf(L"EvtRender failed with %d\n", status);
@@ -30,9 +28,11 @@ std::variant<std::wstring, uint16_t, FILETIME> RenderEventValue(EVT_HANDLE event
         }
     }
 
-    std::vector<BYTE> buffer(dwBufferUsed);
+    std::vector<BYTE> buffer(bufferUsed);
     EVT_VARIANT* values = (EVT_VARIANT*)buffer.data();
-    if (!EvtRender(hContext, event, EvtRenderEventValues, (DWORD)buffer.size(), values, &dwBufferUsed, &dwPropertyCount)) {
+    // The function returns an array of variant values for each element or attribute that
+    // you want to retrieve from the event. The values are returned in the same order as requested.
+    if (!EvtRender(hContext, event, EvtRenderEventValues, (DWORD)buffer.size(), values, &bufferUsed, &propertyCount)) {
         DWORD status = GetLastError();
         wprintf(L"EvtRender failed with %d\n", status);
         abort();
@@ -44,6 +44,7 @@ std::variant<std::wstring, uint16_t, FILETIME> RenderEventValue(EVT_HANDLE event
     } else if (values[0].Type == EvtVarTypeUInt16) {
         result = values[0].UInt16Val;
     } else if (values[0].Type == EvtVarTypeFileTime) {
+        // ULONGLONG to FILETIME cast
         FILETIME ft{};
         ft.dwHighDateTime = (DWORD)((values[0].FileTimeVal >> 32) & 0xFFFFFFFF);
         ft.dwLowDateTime = (DWORD)(values[0].FileTimeVal & 0xFFFFFFFF);
