@@ -43,6 +43,7 @@ std::wstring RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
     }
 
     // Print the selected values.
+    assert(pRenderedValues[0].Type == EvtVarTypeString);
     std::wstring result = pRenderedValues[0].StringVal;
 
     if (pRenderedValues)
