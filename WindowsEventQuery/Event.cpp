@@ -22,6 +22,7 @@ std::wstring RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
 
     DWORD dwBufferUsed = 0;
     DWORD dwPropertyCount = 0;
+    std::vector<BYTE> buffer;
     EVT_VARIANT* pRenderedValues = nullptr;
 
     // The function returns an array of variant values for each element or attribute that
@@ -30,9 +31,9 @@ std::wstring RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
     if (!EvtRender(hContext, hEvent, EvtRenderEventValues, 0, nullptr, &dwBufferUsed, &dwPropertyCount)) {
         DWORD status = GetLastError();
         if (status == ERROR_INSUFFICIENT_BUFFER) {
-            DWORD dwBufferSize = dwBufferUsed;
-            pRenderedValues = (EVT_VARIANT*)malloc(dwBufferSize);
-            EvtRender(hContext, hEvent, EvtRenderEventValues, dwBufferSize, pRenderedValues, &dwBufferUsed, &dwPropertyCount);
+            buffer.resize(dwBufferUsed);
+            pRenderedValues = (EVT_VARIANT*)buffer.data();
+            EvtRender(hContext, hEvent, EvtRenderEventValues, (DWORD)buffer.size(), pRenderedValues, &dwBufferUsed, &dwPropertyCount);
         }
 
         status = GetLastError();
@@ -44,12 +45,7 @@ std::wstring RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
 
     // Print the selected values.
     assert(pRenderedValues[0].Type == EvtVarTypeString);
-    std::wstring result = pRenderedValues[0].StringVal;
-
-    if (pRenderedValues)
-        free(pRenderedValues);
-
-    return result;
+    return pRenderedValues[0].StringVal;
 }
 
 void PrintEventAsXML(EVT_HANDLE event) {
