@@ -84,7 +84,16 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     }
 
     {
-        std::wstring message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageChannel);
+        //std::wstring message = GetMessageString(providerMetadata, hEvent, EvtFormatMessageChannel);
+        // use channel from XML since EvtFormatMessageChannel returns ERROR_EVT_MESSAGE_ID_NOT_FOUND for "Service Control Manager" & "Microsoft-Windows-DistributedCOM" events
+        const wchar_t CHANNEL_SEARCH[] = L"</Channel>";
+        size_t idx2 = msgXml.find(CHANNEL_SEARCH);
+        assert(idx2 != std::wstring::npos);
+
+        idx1 = msgXml.rfind(L">", idx2);
+        idx1 += 1;
+
+        std::wstring message = msgXml.substr(idx1, idx2 - idx1);
         wprintf(L"Channel: %s\n", message.c_str());
     }
 
