@@ -7,7 +7,7 @@
 #pragma comment(lib, "wevtapi.lib")
 
 
-std::variant<std::wstring, uint16_t, FILETIME> RenderEventValue(EVT_HANDLE hEvent, const wchar_t* query) {
+std::variant<std::wstring, uint16_t, FILETIME> RenderEventValue(EVT_HANDLE event, const wchar_t* query) {
     const wchar_t* ppValues[] = { query };
 
     // Identify the components of the event that you want to render. In this case,
@@ -29,12 +29,12 @@ std::variant<std::wstring, uint16_t, FILETIME> RenderEventValue(EVT_HANDLE hEven
     // The function returns an array of variant values for each element or attribute that
     // you want to retrieve from the event. The values are returned in the same order as 
     // you requested them.
-    if (!EvtRender(hContext, hEvent, EvtRenderEventValues, 0, nullptr, &dwBufferUsed, &dwPropertyCount)) {
+    if (!EvtRender(hContext, event, EvtRenderEventValues, 0, nullptr, &dwBufferUsed, &dwPropertyCount)) {
         DWORD status = GetLastError();
         if (status == ERROR_INSUFFICIENT_BUFFER) {
             buffer.resize(dwBufferUsed);
             values = (EVT_VARIANT*)buffer.data();
-            EvtRender(hContext, hEvent, EvtRenderEventValues, (DWORD)buffer.size(), values, &dwBufferUsed, &dwPropertyCount);
+            EvtRender(hContext, event, EvtRenderEventValues, (DWORD)buffer.size(), values, &dwBufferUsed, &dwPropertyCount);
         }
 
         status = GetLastError();
