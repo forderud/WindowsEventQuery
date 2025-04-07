@@ -10,10 +10,6 @@
 std::variant<std::wstring, uint16_t, FILETIME> RenderEventValue(EVT_HANDLE event, const wchar_t* query) {
     const wchar_t* queries[] = { query };
 
-    // Identify the components of the event that you want to render. In this case,
-    // render the provider's name and channel from the system section of the event.
-    // To get user data from the event, you can specify an expression such as
-    // L"Event/EventData/Data[@Name=\"<data name goes here>\"]".
     Event hContext(EvtCreateRenderContext(std::size(queries), (LPCWSTR*)queries, EvtRenderContextValues));
     if (!hContext) {
         DWORD status = GetLastError();
@@ -27,8 +23,7 @@ std::variant<std::wstring, uint16_t, FILETIME> RenderEventValue(EVT_HANDLE event
     EVT_VARIANT* values = nullptr;
 
     // The function returns an array of variant values for each element or attribute that
-    // you want to retrieve from the event. The values are returned in the same order as 
-    // you requested them.
+    // you want to retrieve from the event. The values are returned in the same order as requested.
     if (!EvtRender(hContext, event, EvtRenderEventValues, 0, nullptr, &dwBufferUsed, &dwPropertyCount)) {
         DWORD status = GetLastError();
         if (status == ERROR_INSUFFICIENT_BUFFER) {
