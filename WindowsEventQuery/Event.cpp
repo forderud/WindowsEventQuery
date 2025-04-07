@@ -130,9 +130,9 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
         FILETIME ft = std::get<FILETIME>(RenderEventValue(hEvent, L"Event/System/TimeCreated/@SystemTime"));
 
         SYSTEMTIME st{};
-        FileTimeToSystemTime(&ft, &st);
+        FileTimeToSystemTime(&ft, &st); // UTC time
 
-        wprintf(L"Date: %02d-%02d-%02d T %02d:%02d:%02d.%02d\n", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+        wprintf(L"Date: %02d-%02d-%02dT%02d:%02d:%02d.%02dZ\n", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
     }
 
     uint16_t eventId = std::get<uint16_t>(RenderEventValue(hEvent, L"Event/System/EventID"));
