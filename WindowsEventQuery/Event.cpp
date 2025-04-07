@@ -103,12 +103,13 @@ void PrintEventStrings(EVT_HANDLE hEvent) {
     }
 
     // Print Event ID
-    const wchar_t EVENTID_SEARCH[] = L"<EventID>";
-    idx1 = msgXml.find(EVENTID_SEARCH);
-    if (idx1 != std::wstring::npos) {
+    const wchar_t EVENTID_SEARCH[] = L"</EventID>";
+    size_t idx2 = msgXml.find(EVENTID_SEARCH);
+    if (idx2 != std::wstring::npos) {
         // TODO: Replace with proper XML query
-        idx1 += std::size(EVENTID_SEARCH) - 1;
-        size_t idx2 = msgXml.find(L"</EventID>", idx1);
+        // match both "<EventID Qualifiers='49152'>7023</EventID>" and "<EventID>7023</EventID>"
+        idx1 = msgXml.rfind(L">", idx2);
+        idx1 += 1;
         message = msgXml.substr(idx1, idx2 - idx1);
 
         wprintf(L"Event ID: %s\n", message.c_str());
