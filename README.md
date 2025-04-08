@@ -61,7 +61,7 @@ Installation failure:
 ![image](https://github.com/user-attachments/assets/5f780f94-44a5-4e63-b27b-bff437054709)  
 
 Installation success:  
-![image](https://github.com/user-attachments/assets/0099b391-ef6a-4e4e-9cad-ffa782219b49)  
+![image](https://github.com/user-attachments/assets/275f6497-32fa-44e4-a4b8-dafa4816c468)  
 
 Need to restart afterwards:  
 ![image](https://github.com/user-attachments/assets/22abd189-fd58-427a-91a3-108cbe670ff7)  
