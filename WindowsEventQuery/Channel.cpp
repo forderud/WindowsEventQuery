@@ -205,9 +205,9 @@ void PrintChannelProperties(std::wstring channelPath) {
                 // repeat call with larger buffer
                 property.resize(dwBufferUsed);
                 EvtGetChannelConfigProperty(channel, (EVT_CHANNEL_CONFIG_PROPERTY_ID)Id, 0, (DWORD)property.size(), (EVT_VARIANT*)property.data(), &dwBufferUsed);
+                status = GetLastError();
             }
 
-            status = GetLastError();
             if (status != ERROR_SUCCESS) {
                 wprintf(L"EvtGetChannelConfigProperty failed with %d\n", GetLastError());
                 return;
