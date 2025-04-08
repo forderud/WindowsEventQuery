@@ -19,8 +19,11 @@ int wmain(int argc, wchar_t* argv[]) {
         std::vector<std::wstring> channels = EnumerateChannels();
         for (const std::wstring& channel : channels) {
             wprintf(L"  %s\n", channel.c_str());
-            //PrintChannelProperties(channel);
-            //wprintf(L"\n");
+#if 0
+            wprintf(L"\n");
+            PrintChannelProperties(channel);
+            wprintf(L"\n");
+#endif
         }
     } else if (mode == L"publishers") {
         wprintf(L"List of publishers:\n");
