@@ -193,18 +193,18 @@ void PrintChannelProperties(std::wstring channelPath) {
         return;
     }
 
-    std::vector<BYTE> pProperty; // EVT_VARIANT buffer that receives the property value
+    std::vector<BYTE> property; // EVT_VARIANT buffer that receives the property value
     DWORD dwBufferUsed = 0;
     DWORD status = ERROR_SUCCESS;
 
     for (int Id = 0; Id < EvtChannelConfigPropertyIdEND; Id++) {
         // Get the specified property. If the buffer is too small, reallocate it.
-        if (!EvtGetChannelConfigProperty(channel, (EVT_CHANNEL_CONFIG_PROPERTY_ID)Id, 0, (DWORD)pProperty.size(), (EVT_VARIANT*)pProperty.data(), &dwBufferUsed)) {
+        if (!EvtGetChannelConfigProperty(channel, (EVT_CHANNEL_CONFIG_PROPERTY_ID)Id, 0, (DWORD)property.size(), (EVT_VARIANT*)property.data(), &dwBufferUsed)) {
             status = GetLastError();
             if (status == ERROR_INSUFFICIENT_BUFFER) {
                 // repeat call with larger buffer
-                pProperty.resize(dwBufferUsed);
-                EvtGetChannelConfigProperty(channel, (EVT_CHANNEL_CONFIG_PROPERTY_ID)Id, 0, (DWORD)pProperty.size(), (EVT_VARIANT*)pProperty.data(), &dwBufferUsed);
+                property.resize(dwBufferUsed);
+                EvtGetChannelConfigProperty(channel, (EVT_CHANNEL_CONFIG_PROPERTY_ID)Id, 0, (DWORD)property.size(), (EVT_VARIANT*)property.data(), &dwBufferUsed);
             }
 
             status = GetLastError();
@@ -214,7 +214,7 @@ void PrintChannelProperties(std::wstring channelPath) {
             }
         }
 
-        status = PrintChannelProperty(Id, (EVT_VARIANT*)pProperty.data());
+        status = PrintChannelProperty(Id, (EVT_VARIANT*)property.data());
         if (status != ERROR_SUCCESS)
             break;
     }
