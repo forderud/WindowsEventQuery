@@ -56,7 +56,7 @@ Reason for unexpected system reboots:
 ![image](https://github.com/user-attachments/assets/0164914d-c894-4347-904b-bfa60e65bda7)
 
 
-### SW installation failure
+### SW installation results
 Installation failure:  
 ![image](https://github.com/user-attachments/assets/5f780f94-44a5-4e63-b27b-bff437054709)  
 
