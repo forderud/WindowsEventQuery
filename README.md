@@ -66,7 +66,7 @@ Installation success:
 Need to restart afterwards:  
 ![image](https://github.com/user-attachments/assets/f20751a9-7e54-47c6-9978-6f70d2db4010)  
 
-Documentation: [Windows Installer Event Logging](https://learn.microsoft.com/en-us/windows/win32/msi/event-logging)
+Event ID code doc: [Windows Installer Event Logging](https://learn.microsoft.com/en-us/windows/win32/msi/event-logging)
 
 ## Documentation
 * ~~[Event Logging](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-logging)~~ (old APIs)
