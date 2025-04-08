@@ -64,7 +64,7 @@ Installation success:
 ![image](https://github.com/user-attachments/assets/275f6497-32fa-44e4-a4b8-dafa4816c468)  
 
 Need to restart afterwards:  
-![image](https://github.com/user-attachments/assets/22abd189-fd58-427a-91a3-108cbe670ff7)  
+![image](https://github.com/user-attachments/assets/f20751a9-7e54-47c6-9978-6f70d2db4010)  
 
 Documentation: [Windows Installer Event Logging](https://learn.microsoft.com/en-us/windows/win32/msi/event-logging)
 
