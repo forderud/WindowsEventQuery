@@ -189,7 +189,8 @@ DWORD PrintChannelProperty(int Id, EVT_VARIANT* pProperty)
 void PrintChannelProperties(std::wstring channelPath) {
     Event channel(EvtOpenChannelConfig(NULL, channelPath.c_str(), 0));
     if (!channel) {// Fails with 15007 (ERROR_EVT_CHANNEL_NOT_FOUND) if the channel is not found
-        wprintf(L"EvtOpenChannelConfig failed with %lu.\n", GetLastError());
+        DWORD status = GetLastError();
+        wprintf(L"EvtOpenChannelConfig failed with %lu.\n", status);
         return;
     }
 
