@@ -66,14 +66,13 @@ const wchar_t* pwcsClockTypes[] = { L"System", L"QPC" };
 
 
 // Print the property value.
-DWORD PrintChannelProperty(int Id, PEVT_VARIANT pProperty)
+DWORD PrintChannelProperty(int Id, EVT_VARIANT* pProperty)
 {
     DWORD status = ERROR_SUCCESS;
     WCHAR wszSessionGuid[50];
     LPWSTR lpws = NULL;
 
-    switch (Id)
-    {
+    switch (Id) {
     case EvtChannelConfigEnabled:
         wprintf(L"Enabled: %s\n", (TRUE == pProperty->BooleanVal) ? L"TRUE" : L"FALSE");
         break;
@@ -134,10 +133,9 @@ DWORD PrintChannelProperty(int Id, PEVT_VARIANT pProperty)
         break;
 
     case EvtChannelPublishingConfigControlGuid:
-        if (EvtVarTypeNull == pProperty->Type)
+        if (EvtVarTypeNull == pProperty->Type) {
             wprintf(L"ControlGuid: \n");
-        else
-        {
+        } else {
             StringFromGUID2(*(pProperty->GuidVal), wszSessionGuid, sizeof(wszSessionGuid) / sizeof(WCHAR));
             wprintf(L"ControlGuid: %s\n", wszSessionGuid);
         }
