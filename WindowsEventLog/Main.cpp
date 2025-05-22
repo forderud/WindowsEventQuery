@@ -46,12 +46,14 @@ int main() {
     // open log
     EventLog log (L"Application"); // or L"System"
 
+    // TODO: Introduce message text file with log file types
+    // DOC: https://learn.microsoft.com/en-us/windows/win32/eventlog/reporting-an-event
     WORD type     = EVENTLOG_SUCCESS;
     WORD category = 0; // source-specific category
     DWORD eventId = 0; // entry in the message file associated with the event source
     const wchar_t* messages[] = { L"Hello event log!" };
 
-    wprintf(L"Adding a '%s' log entry to the log..\n", messages[0]);
+    wprintf(L"Writing a '%s' log entry...\n", messages[0]);
     log.WriteLog(type, category, eventId, std::size(messages), messages);
     printf("[done]\n");
 }
