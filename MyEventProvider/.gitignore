@@ -1,2 +1,6 @@
 /x64
 /*.vcxproj.user
+/*.bin
+/MyEventProvider.aps
+/MyEventProvider.h
+/MyEventProvider.rc
