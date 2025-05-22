@@ -48,7 +48,6 @@ int main() {
     // open log
     EventLog log(L"MyEventProvider"); // or L"Application" or L"System"
 
-    // TODO: Introduce message text file with log file types
     // DOC: https://learn.microsoft.com/en-us/windows/win32/eventlog/reporting-an-event
     WORD type     = EVENTLOG_WARNING_TYPE; // or EVENTLOG_INFORMATION_TYPE or EVENTLOG_SUCCESS or other EVENTLOG_xxx types
     WORD category = NETWORK_CATEGORY; // source-specific category

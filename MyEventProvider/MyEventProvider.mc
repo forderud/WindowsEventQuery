@@ -1,8 +1,7 @@
-; // MyEventProvider.mc 
+; // MyEventProvider
+; // Based on https://learn.microsoft.com/en-us/windows/win32/eventlog/reporting-an-event
 
 ; // This is the header section.
-
-
 SeverityNames=(Success=0x0:STATUS_SEVERITY_SUCCESS
                Informational=0x1:STATUS_SEVERITY_INFORMATIONAL
                Warning=0x2:STATUS_SEVERITY_WARNING
@@ -20,7 +19,6 @@ LanguageNames=(English=0x409:MSG00409)
 
 
 ; // The following are the categories of events.
-
 MessageIdTypedef=WORD
 
 MessageId=0x1
@@ -43,7 +41,6 @@ UI Events
 
 
 ; // The following are the message definitions.
-
 MessageIdTypedef=DWORD
 
 MessageId=0x100
@@ -53,7 +50,6 @@ SymbolicName=MSG_INVALID_COMMAND
 Language=English
 The command is not valid.
 .
-
 
 MessageId=0x101
 Severity=Error
@@ -82,8 +78,6 @@ Language=English
 
 
 ; // The following are the parameter strings */
-
-
 MessageId=0x1000
 Severity=Success
 Facility=System
