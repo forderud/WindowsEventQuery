@@ -13,3 +13,15 @@ BOOL APIENTRY DllMain( HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpRese
     }
     return TRUE;
 }
+
+
+// Adds entries to the system registry
+STDAPI DllRegisterServer() {
+    return NOERROR;
+}
+
+
+// Removes entries from the system registry
+STDAPI DllUnregisterServer() {
+    return NOERROR;
+}
