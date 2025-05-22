@@ -32,6 +32,15 @@ public:
         }
     }
 
+    void WriteUserData(WORD type, WORD category, DWORD eventId, DWORD dataSize, void* data) {
+        BOOL ok = ReportEventW(m_log, type, category, eventId, NULL, 0, dataSize, NULL, data);
+        if (!ok) {
+            _com_error err(GetLastError());
+            wprintf(L"ERROR: ReportEventW failed (%s)\n", err.ErrorMessage());
+            abort();
+        }
+    }
+
 private:
     HANDLE m_log = 0;
 };
@@ -49,6 +58,16 @@ int wmain() {
     EventLog log(L"MyEventProvider"); // or L"Application" or L"System"
 
     // DOC: https://learn.microsoft.com/en-us/windows/win32/eventlog/reporting-an-event
+    {
+        WORD type = EVENTLOG_ERROR_TYPE; // or EVENTLOG_INFORMATION_TYPE or EVENTLOG_SUCCESS or other EVENTLOG_xxx types
+        WORD category = UI_CATEGORY; // source-specific category
+        DWORD eventId = MSG_INVALID_COMMAND; // entry in the message file associated with the event source
+        const wchar_t data[] = L"The command that was not valid";
+
+        wprintf(L"Writing log entry...\n");
+        log.WriteUserData(type, category, eventId, sizeof(data), (void*)data);
+        printf("[done]\n");
+    }
     {
         WORD type = EVENTLOG_ERROR_TYPE; // or EVENTLOG_INFORMATION_TYPE or EVENTLOG_SUCCESS or other EVENTLOG_xxx types
         WORD category = DATABASE_CATEGORY; // source-specific category
