@@ -60,8 +60,8 @@ STDAPI DllRegisterServer() {
         res = reg.SetStringValue(L"ParameterMessageFile", dllPath.c_str());
         assert(res == ERROR_SUCCESS);
 
-
-        res = reg.SetDWORDValue(L"TypesSupported", 7);
+        DWORD flags = EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_INFORMATION_TYPE; // can also include EVENTLOG_AUDIT_SUCCESS & EVENTLOG_AUDIT_FAILURE
+        res = reg.SetDWORDValue(L"TypesSupported", flags);
         assert(res == ERROR_SUCCESS);
     }
 
