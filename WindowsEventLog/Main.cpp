@@ -37,7 +37,7 @@ private:
 };
 
 
-int main() {
+int wmain() {
 #if 0
     if (!IsUserAnAdmin()) {
         wprintf(L"ERROR: Admin privileges missing.\n");
@@ -79,4 +79,6 @@ int main() {
         log.WriteLog(type, category, eventId, std::size(messages), messages);
         printf("[done]\n");
     }
+
+    return 0;
 }
