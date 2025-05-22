@@ -49,7 +49,7 @@ STDAPI DllRegisterServer() {
 
     {
         // number of event categories supported
-        res = reg.SetDWORDValue(L"CategoryCount", CATEGORY_COUNT);
+        res = reg.SetDWORDValue(L"CategoryCount", PROVIDER_CATEGORY_COUNT);
         assert(res == ERROR_SUCCESS);
 
         std::wstring dllPath = GetModuleFolderPath();
