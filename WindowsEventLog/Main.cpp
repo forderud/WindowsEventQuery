@@ -44,7 +44,7 @@ int main() {
 #endif
 
     // open log
-    EventLog log (L"Application"); // or L"System"
+    EventLog log(L"Application"); // or L"System"
 
     // TODO: Introduce message text file with log file types
     // DOC: https://learn.microsoft.com/en-us/windows/win32/eventlog/reporting-an-event
