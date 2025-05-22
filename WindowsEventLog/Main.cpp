@@ -23,7 +23,7 @@ public:
         m_log = 0;
     }
 
-    void WriteLog(WORD type, WORD category, DWORD eventId, WORD messageCount, const wchar_t* messages[]) {
+    void WriteInsertStrings(WORD type, WORD category, DWORD eventId, WORD messageCount, const wchar_t* messages[]) {
         BOOL ok = ReportEventW(m_log, type, category, eventId, NULL, messageCount, /*raw data bytes*/0, messages, /*raw data*/NULL);
         if (!ok) {
             _com_error err(GetLastError());
@@ -56,7 +56,7 @@ int wmain() {
         const wchar_t* messages[] = { L"somefile.txt" };
 
         wprintf(L"Writing log entry...\n");
-        log.WriteLog(type, category, eventId, std::size(messages), messages);
+        log.WriteInsertStrings(type, category, eventId, std::size(messages), messages);
         printf("[done]\n");
     }
     {
@@ -66,7 +66,7 @@ int wmain() {
         const wchar_t* messages[] = { L"25", L"zero" };
 
         wprintf(L"Writing log entry...\n");
-        log.WriteLog(type, category, eventId, std::size(messages), messages);
+        log.WriteInsertStrings(type, category, eventId, std::size(messages), messages);
         printf("[done]\n");
     }
     {
@@ -76,7 +76,7 @@ int wmain() {
         const wchar_t* messages[] = { L"8", L"2" };
 
         wprintf(L"Writing log entry...\n");
-        log.WriteLog(type, category, eventId, std::size(messages), messages);
+        log.WriteInsertStrings(type, category, eventId, std::size(messages), messages);
         printf("[done]\n");
     }
 
