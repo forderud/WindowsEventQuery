@@ -50,6 +50,16 @@ int main() {
 
     // DOC: https://learn.microsoft.com/en-us/windows/win32/eventlog/reporting-an-event
     {
+        WORD type = EVENTLOG_ERROR_TYPE; // or EVENTLOG_INFORMATION_TYPE or EVENTLOG_SUCCESS or other EVENTLOG_xxx types
+        WORD category = DATABASE_CATEGORY; // source-specific category
+        DWORD eventId = MSG_BAD_FILE_CONTENTS; // entry in the message file associated with the event source
+        const wchar_t* messages[] = { L"somefile.txt" };
+
+        wprintf(L"Writing log entry...\n");
+        log.WriteLog(type, category, eventId, std::size(messages), messages);
+        printf("[done]\n");
+    }
+    {
         WORD type = EVENTLOG_WARNING_TYPE; // or EVENTLOG_INFORMATION_TYPE or EVENTLOG_SUCCESS or other EVENTLOG_xxx types
         WORD category = NETWORK_CATEGORY; // source-specific category
         DWORD eventId = MSG_RETRIES; // entry in the message file associated with the event source
