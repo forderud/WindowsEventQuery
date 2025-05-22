@@ -61,45 +61,51 @@ int wmain() {
 
     // DOC: https://learn.microsoft.com/en-us/windows/win32/eventlog/reporting-an-event
     {
-        WORD type = EVENTLOG_ERROR_TYPE; // or EVENTLOG_INFORMATION_TYPE or EVENTLOG_SUCCESS or other EVENTLOG_xxx types
+        WORD type = EVENTLOG_ERROR_TYPE; //  or other EVENTLOG_xxx type
         WORD category = UI_CATEGORY; // source-specific category
         DWORD eventId = MSG_INVALID_COMMAND; // entry in the message file associated with the event source
         const BYTE data[] = "Extra command details";
 
         wprintf(L"Writing log entry...\n");
         log.WriteUserData(type, category, eventId, sizeof(data), data);
-        printf("[done]\n");
     }
     {
-        WORD type = EVENTLOG_ERROR_TYPE; // or EVENTLOG_INFORMATION_TYPE or EVENTLOG_SUCCESS or other EVENTLOG_xxx types
+        WORD type = EVENTLOG_ERROR_TYPE; //  or other EVENTLOG_xxx type
         WORD category = DATABASE_CATEGORY; // source-specific category
         DWORD eventId = MSG_BAD_FILE_CONTENTS; // entry in the message file associated with the event source
         const wchar_t* messages[] = { L"somefile.txt" };
 
         wprintf(L"Writing log entry...\n");
         log.WriteInsertStrings(type, category, eventId, std::size(messages), messages);
-        printf("[done]\n");
     }
     {
-        WORD type = EVENTLOG_WARNING_TYPE; // or EVENTLOG_INFORMATION_TYPE or EVENTLOG_SUCCESS or other EVENTLOG_xxx types
+        WORD type = EVENTLOG_WARNING_TYPE; // or other EVENTLOG_xxx type
         WORD category = NETWORK_CATEGORY; // source-specific category
         DWORD eventId = MSG_RETRIES; // entry in the message file associated with the event source
         const wchar_t* messages[] = { L"25", L"zero" };
 
         wprintf(L"Writing log entry...\n");
         log.WriteInsertStrings(type, category, eventId, std::size(messages), messages);
-        printf("[done]\n");
     }
     {
-        WORD type = EVENTLOG_INFORMATION_TYPE; // or EVENTLOG_INFORMATION_TYPE or EVENTLOG_SUCCESS or other EVENTLOG_xxx types
+        WORD type = EVENTLOG_INFORMATION_TYPE; //  or other EVENTLOG_xxx type
         WORD category = UI_CATEGORY; // source-specific category
         DWORD eventId = MSG_COMPUTE_CONVERSION; // entry in the message file associated with the event source
         const wchar_t* messages[] = { L"8", L"2" };
 
         wprintf(L"Writing log entry...\n");
         log.WriteInsertStrings(type, category, eventId, std::size(messages), messages);
-        printf("[done]\n");
     }
 
+    {
+        WORD type = EVENTLOG_SUCCESS; // or other EVENTLOG_xxx type
+        WORD category = UI_CATEGORY; // source-specific category
+        DWORD eventId = QUARTS_UNITS; // entry in the message file associated with the event source
+
+        wprintf(L"Writing log entry...\n");
+        log.WriteInsertStrings(type, category, eventId, 0, nullptr);
+    }
+
+    printf("[done]\n");
     return 0;
 }
