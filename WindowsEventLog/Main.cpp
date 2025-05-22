@@ -24,7 +24,10 @@ int main() {
 
     const wchar_t* message = L"Hello event log!";
     wprintf(L"Adding a '%s' log entry to the %s log..\n", message, LOG_NAME);
-    BOOL ok = ReportEventW(h, EVENTLOG_SUCCESS, 0, 0, NULL, 1, 0, &message, NULL);
+    WORD type = EVENTLOG_SUCCESS;
+    WORD category = 0;
+    DWORD eventId = 0;
+    BOOL ok = ReportEventW(h, type, category, eventId, NULL, 1, 0, &message, NULL);
     if (!ok) {
         _com_error err(GetLastError());
         wprintf(L"ERROR: ReportEventW failed (%s)\n", err.ErrorMessage());
