@@ -6,4 +6,7 @@
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="MyEventProvider.mc" />
+  </ItemGroup>
 </Project>
