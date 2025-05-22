@@ -46,17 +46,22 @@ STDAPI DllRegisterServer() {
         return E_UNEXPECTED;
 
     {
+        // number of event categories supported
+        // TODO: Avoid hardcoding this value
         res = reg.SetDWORDValue(L"CategoryCount", 3);
         assert(res == ERROR_SUCCESS);
 
         std::wstring dllPath = GetModuleFolderPath();
 
+        // category message file with language-dependent category strings
         res = reg.SetStringValue(L"CategoryMessageFile", dllPath.c_str());
         assert(res == ERROR_SUCCESS);
 
+        // event message file(s) with language-dependent event strings
         res = reg.SetStringValue(L"EventMessageFile", dllPath.c_str());
         assert(res == ERROR_SUCCESS);
 
+        // parameter message file with language-independent strings to be inserted into event description strings
         res = reg.SetStringValue(L"ParameterMessageFile", dllPath.c_str());
         assert(res == ERROR_SUCCESS);
 
