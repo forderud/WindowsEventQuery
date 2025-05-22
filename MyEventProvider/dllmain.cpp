@@ -33,7 +33,7 @@ BOOL APIENTRY DllMain( HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpRese
 }
 
 
-// Adds entries to the system registry
+/** Adds entries to the system registry. */
 STDAPI DllRegisterServer() {
     CRegKey parent;
     LSTATUS res = parent.Open(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application", KEY_READ | KEY_WRITE);
@@ -75,7 +75,7 @@ STDAPI DllRegisterServer() {
 }
 
 
-// Removes entries from the system registry
+/** Removes entries from the system registry. */
 STDAPI DllUnregisterServer() {
     CRegKey parent;
     LSTATUS res = parent.Open(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application", KEY_READ | KEY_WRITE);
