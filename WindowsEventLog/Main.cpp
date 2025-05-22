@@ -53,7 +53,7 @@ int main() {
     DWORD eventId = 0; // entry in the message file associated with the event source
     const wchar_t* messages[] = { L"Hello event log!" };
 
-    wprintf(L"Writing a '%s' log entry...\n", messages[0]);
+    wprintf(L"Writing log entry...\n");
     log.WriteLog(type, category, eventId, std::size(messages), messages);
     printf("[done]\n");
 }
