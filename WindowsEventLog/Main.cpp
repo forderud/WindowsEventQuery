@@ -4,7 +4,7 @@
 #include <cassert>
 #include <iostream>
 
-#include "MyEventProvider.h" // custom event provider
+#include "../MyEventProvider/MyEventProvider.h" // custom event provider
 
 
 class EventLog {
