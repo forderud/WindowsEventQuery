@@ -9,5 +9,6 @@
   <ItemGroup>
     <None Include="MyEventProvider.mc" />
     <None Include="module.def" />
+    <None Include="README.md" />
   </ItemGroup>
 </Project>
