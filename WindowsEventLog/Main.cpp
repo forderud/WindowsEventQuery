@@ -4,6 +4,8 @@
 #include <cassert>
 #include <iostream>
 
+#include "MyEventProvider.h" // custom event provider
+
 
 class EventLog {
 public:
@@ -44,14 +46,14 @@ int main() {
 #endif
 
     // open log
-    EventLog log(L"Application"); // or L"System"
+    EventLog log(L"MyEventProvider"); // or L"Application" or L"System"
 
     // TODO: Introduce message text file with log file types
     // DOC: https://learn.microsoft.com/en-us/windows/win32/eventlog/reporting-an-event
-    WORD type     = EVENTLOG_INFORMATION_TYPE; // EVENTLOG_SUCCESS or other EVENTLOG_xxx types
-    WORD category = 0; // source-specific category
-    DWORD eventId = 0; // entry in the message file associated with the event source
-    const wchar_t* messages[] = { L"Hello event log!" };
+    WORD type     = EVENTLOG_WARNING_TYPE; // or EVENTLOG_INFORMATION_TYPE or EVENTLOG_SUCCESS or other EVENTLOG_xxx types
+    WORD category = NETWORK_CATEGORY; // source-specific category
+    DWORD eventId = MSG_RETRIES; // entry in the message file associated with the event source
+    const wchar_t* messages[] = { L"25", L"zero"};
 
     wprintf(L"Writing log entry...\n");
     log.WriteLog(type, category, eventId, std::size(messages), messages);
