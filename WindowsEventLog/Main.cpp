@@ -21,8 +21,8 @@ public:
         m_log = 0;
     }
 
-    void WriteLog(WORD type, WORD category, DWORD eventId, WORD stringCount, const wchar_t* messages[]) {
-        BOOL ok = ReportEventW(m_log, type, category, eventId, NULL, stringCount, /*raw data bytes*/0, messages, /*raw data*/NULL);
+    void WriteLog(WORD type, WORD category, DWORD eventId, WORD messageCount, const wchar_t* messages[]) {
+        BOOL ok = ReportEventW(m_log, type, category, eventId, NULL, messageCount, /*raw data bytes*/0, messages, /*raw data*/NULL);
         if (!ok) {
             _com_error err(GetLastError());
             wprintf(L"ERROR: ReportEventW failed (%s)\n", err.ErrorMessage());
@@ -46,10 +46,10 @@ int main() {
     // open log
     EventLog log (L"Application"); // or L"System"
 
-    const wchar_t* messages[] = {L"Hello event log!"};
     WORD type     = EVENTLOG_SUCCESS;
     WORD category = 0; // source-specific category
     DWORD eventId = 0; // entry in the message file associated with the event source
+    const wchar_t* messages[] = { L"Hello event log!" };
 
     wprintf(L"Adding a '%s' log entry to the log..\n", messages[0]);
     log.WriteLog(type, category, eventId, std::size(messages), messages);
