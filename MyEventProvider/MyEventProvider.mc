@@ -19,6 +19,8 @@ LanguageNames=(English=0x409:MSG00409)
 
 
 ; // The following are the categories of events.
+; #define CATEGORY_COUNT 3
+
 MessageIdTypedef=WORD
 
 MessageId=0x1

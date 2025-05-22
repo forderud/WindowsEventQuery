@@ -4,6 +4,8 @@
 #include <cassert>
 #include <string>
 
+#include "../MyEventProvider/MyEventProvider.h" // custom event provider
+
 
 /** Return the full path for the current EXE or DLL. */
 inline std::wstring GetModuleFolderPath() {
@@ -47,8 +49,7 @@ STDAPI DllRegisterServer() {
 
     {
         // number of event categories supported
-        // TODO: Avoid hardcoding this value
-        res = reg.SetDWORDValue(L"CategoryCount", 3);
+        res = reg.SetDWORDValue(L"CategoryCount", CATEGORY_COUNT);
         assert(res == ERROR_SUCCESS);
 
         std::wstring dllPath = GetModuleFolderPath();
