@@ -87,7 +87,7 @@
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resource.rc" />
+    <ResourceCompile Include="MyEventProvider.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def" />
