@@ -22,10 +22,14 @@ STDAPI DllRegisterServer() {
     CRegKey parent;
     LSTATUS res = parent.Open(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application", KEY_READ | KEY_WRITE);
     assert(res == ERROR_SUCCESS);
+    if (res != ERROR_SUCCESS)
+        return E_UNEXPECTED;
 
     CRegKey reg;
     res = reg.Create(parent, L"MyEventProvider");
     assert(res == ERROR_SUCCESS);
+    if (res != ERROR_SUCCESS)
+        return E_UNEXPECTED;
 
     {
         res = reg.SetDWORDValue(L"CategoryCount", 3);
@@ -54,9 +58,13 @@ STDAPI DllUnregisterServer() {
     CRegKey parent;
     LSTATUS res = parent.Open(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application", KEY_READ | KEY_WRITE);
     assert(res == ERROR_SUCCESS);
+    if (res != ERROR_SUCCESS)
+        return E_UNEXPECTED;
 
     res = parent.DeleteSubKey(L"MyEventProvider");
     assert(res == ERROR_SUCCESS);
+    if (res != ERROR_SUCCESS)
+        return E_UNEXPECTED;
 
     return NOERROR;
 }
