@@ -33,7 +33,8 @@ BOOL APIENTRY DllMain( HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpRese
 }
 
 
-/** Adds entries to the system registry. */
+/** Adds entries to the system registry.
+    DOC: https://learn.microsoft.com/en-us/windows/win32/eventlog/event-sources */
 STDAPI DllRegisterServer() {
     CRegKey parent;
     LSTATUS res = parent.Open(HKEY_LOCAL_MACHINE, L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application", KEY_READ | KEY_WRITE);
