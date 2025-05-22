@@ -48,7 +48,7 @@ int main() {
 
     // TODO: Introduce message text file with log file types
     // DOC: https://learn.microsoft.com/en-us/windows/win32/eventlog/reporting-an-event
-    WORD type     = EVENTLOG_SUCCESS;
+    WORD type     = EVENTLOG_INFORMATION_TYPE; // EVENTLOG_SUCCESS or other EVENTLOG_xxx types
     WORD category = 0; // source-specific category
     DWORD eventId = 0; // entry in the message file associated with the event source
     const wchar_t* messages[] = { L"Hello event log!" };
