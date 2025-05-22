@@ -27,7 +27,7 @@ int main() {
     WORD type = EVENTLOG_SUCCESS;
     WORD category = 0;
     DWORD eventId = 0; // entry in the message file associated with the event source
-    BOOL ok = ReportEventW(h, type, category, eventId, NULL, std::size(messages), 0, messages, NULL);
+    BOOL ok = ReportEventW(h, type, category, eventId, NULL, std::size(messages), /*raw data bytes*/0, messages, /*raw data*/NULL);
     if (!ok) {
         _com_error err(GetLastError());
         wprintf(L"ERROR: ReportEventW failed (%s)\n", err.ErrorMessage());
