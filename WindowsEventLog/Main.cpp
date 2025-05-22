@@ -32,8 +32,8 @@ public:
         }
     }
 
-    void WriteUserData(WORD type, WORD category, DWORD eventId, DWORD dataSize, void* data) {
-        BOOL ok = ReportEventW(m_log, type, category, eventId, NULL, 0, dataSize, NULL, data);
+    void WriteUserData(WORD type, WORD category, DWORD eventId, DWORD dataSize, const BYTE* data) {
+        BOOL ok = ReportEventW(m_log, type, category, eventId, NULL, 0, dataSize, NULL, (void*)data);
         if (!ok) {
             _com_error err(GetLastError());
             wprintf(L"ERROR: ReportEventW failed (%s)\n", err.ErrorMessage());
@@ -62,10 +62,10 @@ int wmain() {
         WORD type = EVENTLOG_ERROR_TYPE; // or EVENTLOG_INFORMATION_TYPE or EVENTLOG_SUCCESS or other EVENTLOG_xxx types
         WORD category = UI_CATEGORY; // source-specific category
         DWORD eventId = MSG_INVALID_COMMAND; // entry in the message file associated with the event source
-        const wchar_t data[] = L"The command that was not valid";
+        const BYTE data[] = "Extra command details";
 
         wprintf(L"Writing log entry...\n");
-        log.WriteUserData(type, category, eventId, sizeof(data), (void*)data);
+        log.WriteUserData(type, category, eventId, sizeof(data), data);
         printf("[done]\n");
     }
     {
