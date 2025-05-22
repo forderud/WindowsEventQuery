@@ -2,7 +2,21 @@
 #include <windows.h>
 #include <atlbase.h>
 #include <cassert>
+#include <string>
 
+
+/** Return the full path for the current EXE or DLL. */
+inline std::wstring GetModuleFolderPath() {
+    HMODULE module = nullptr;
+    // Get handle to exe/dll that this static lib is linked against
+    auto* module_ptr = (wchar_t const*)GetModuleFolderPath; // pointer to current function
+    GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, module_ptr, &module);
+
+    // retrieve full exe/dll path (incl. filename)
+    wchar_t file_path[256] = {};
+    GetModuleFileNameW(module, file_path, static_cast<DWORD>(std::size(file_path)));
+    return file_path;
+}
 
 /** DLL entry point. */
 BOOL APIENTRY DllMain( HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved){
@@ -35,13 +49,15 @@ STDAPI DllRegisterServer() {
         res = reg.SetDWORDValue(L"CategoryCount", 3);
         assert(res == ERROR_SUCCESS);
 
-        res = reg.SetStringValue(L"CategoryMessageFile", L"C:\\Dev\\WindowsEventQuery\\x64\\Debug\\MyEventProvider.dll");
+        std::wstring dllPath = GetModuleFolderPath();
+
+        res = reg.SetStringValue(L"CategoryMessageFile", dllPath.c_str());
         assert(res == ERROR_SUCCESS);
 
-        res = reg.SetStringValue(L"EventMessageFile", L"C:\\Dev\\WindowsEventQuery\\x64\\Debug\\MyEventProvider.dll");
+        res = reg.SetStringValue(L"EventMessageFile", dllPath.c_str());
         assert(res == ERROR_SUCCESS);
 
-        res = reg.SetStringValue(L"ParameterMessageFile", L"C:\\Dev\\WindowsEventQuery\\x64\\Debug\\MyEventProvider.dll");
+        res = reg.SetStringValue(L"ParameterMessageFile", dllPath.c_str());
         assert(res == ERROR_SUCCESS);
 
 
