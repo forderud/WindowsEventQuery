@@ -22,12 +22,12 @@ int main() {
         abort();
     }
 
-    const wchar_t* message = L"Hello event log!";
-    wprintf(L"Adding a '%s' log entry to the %s log..\n", message, LOG_NAME);
+    const wchar_t* messages[] = {L"Hello event log!"};
+    wprintf(L"Adding a '%s' log entry to the %s log..\n", messages[0], LOG_NAME);
     WORD type = EVENTLOG_SUCCESS;
     WORD category = 0;
-    DWORD eventId = 0;
-    BOOL ok = ReportEventW(h, type, category, eventId, NULL, 1, 0, &message, NULL);
+    DWORD eventId = 0; // entry in the message file associated with the event source
+    BOOL ok = ReportEventW(h, type, category, eventId, NULL, std::size(messages), 0, messages, NULL);
     if (!ok) {
         _com_error err(GetLastError());
         wprintf(L"ERROR: ReportEventW failed (%s)\n", err.ErrorMessage());
