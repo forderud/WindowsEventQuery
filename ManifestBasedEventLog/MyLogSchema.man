@@ -7,8 +7,8 @@
 
     <instrumentation>
         <events>
-            <provider name="Microsoft-Windows-ETWProvider"
-                guid="{D8909C24-5BE9-4502-98CA-AB7BDC24899D}"
+            <provider name="MyManifestProvider"
+                guid="{1B9E037D-C2C1-4543-B732-D4BFDF082AF9}"
                 symbol="PROVIDER_GUID"
                 resourceFileName="C:\Dev\WindowsEventQuery\x64\Debug\ManifestBasedEventLog.exe"
                 messageFileName="C:\Dev\WindowsEventQuery\x64\Debug\ManifestBasedEventLog.exe"
