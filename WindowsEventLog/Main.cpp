@@ -38,8 +38,8 @@ public:
     }
 
     /** Write log entry with extra user-defined binary data. */
-    void ReportUserData(WORD type, WORD category, DWORD eventId, DWORD rawDataSize, const BYTE* rawData) {
-        BOOL ok = ReportEventW(m_log, type, category, eventId, NULL, /*strCount*/0, rawDataSize, /*strings*/NULL, (void*)rawData);
+    void ReportUserData(WORD type, WORD category, DWORD eventId, DWORD rawdataSize, const BYTE* rawdata) {
+        BOOL ok = ReportEventW(m_log, type, category, eventId, NULL, /*strCount*/0, rawdataSize, /*strings*/NULL, (void*)rawdata);
         if (!ok) {
             _com_error err(GetLastError());
             wprintf(L"ERROR: ReportEventW failed (%s)\n", err.ErrorMessage());
