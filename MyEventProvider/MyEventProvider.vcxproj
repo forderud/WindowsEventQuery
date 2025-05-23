@@ -57,7 +57,7 @@
       <ModuleDefinitionFile>module.def</ModuleDefinitionFile>
     </Link>
     <PreBuildEvent>
-      <Command>mc.exe -U MyEventProvider.mc
+      <Command>mc.exe MyEventProvider.mc
 </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -79,7 +79,7 @@
       <ModuleDefinitionFile>module.def</ModuleDefinitionFile>
     </Link>
     <PreBuildEvent>
-      <Command>mc.exe -U MyEventProvider.mc
+      <Command>mc.exe MyEventProvider.mc
 </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
