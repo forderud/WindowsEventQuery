@@ -7,11 +7,12 @@
 
     <instrumentation>
         <events>
-            <provider name="MyManifestProvider"
-                guid="{1B9E037D-C2C1-4543-B732-D4BFDF082AF9}"
-                symbol="PROVIDER_GUID"
-                resourceFileName="C:\Dev\WindowsEventQuery\x64\Debug\ManifestBasedEventLog.exe"
-                messageFileName="C:\Dev\WindowsEventQuery\x64\Debug\ManifestBasedEventLog.exe"
+
+            <provider name="Microsoft-Windows-ETWProvider"
+                guid="{D8909C24-5BE9-4502-98CA-AB7BDC24899D}"
+                symbol="ProviderGuid"
+                resourceFileName="c:\code\etw\v2provider\debug\v2provider.exe"
+                messageFileName="c:\code\etw\v2provider\debug\v2provider.exe"
                 message="$(string.Provider.Name)"
                 >
 
@@ -41,6 +42,7 @@
                 </maps>
 
                 <templates>
+
                     <template tid="TransferTemplate">
                         <data name="Image" inType="win:Pointer"/>
                         <data name="Scores" inType="win:UInt16" count="3"/>
@@ -73,28 +75,30 @@
                             </EventData>
                         </UserData>
                     </template>
+
                 </templates>
 
                 <events>
                     <event value="1"
                         level="win:Informational"
                         template="TransferTemplate"
-                        channel="Application"
                         symbol="TransferEvent"
                         message ="$(string.Event.WhenToTransfer)"
                         keywords="Read Local" />
                 </events>
-                <channels>
-                    <importChannel name="Application" chid="Application"/>
-                </channels>
+
+
             </provider>
+
         </events>
+
     </instrumentation>
 
     <localization>
         <resources culture="en-US">
             <stringTable>
-                <string id="Provider.Name" value="MyManifestProvider"/>
+
+                <string id="Provider.Name" value="Microsoft-Windows-ETWProvider"/>
 
                 <string id="Map.Download" value="Download"/>
                 <string id="Map.Upload" value="Upload"/>
@@ -109,7 +113,9 @@
                 <string id="Map.Saturday" value="Saturday"/>
 
                 <string id="Event.WhenToTransfer" value="The %10 transfer will occur %9."/>
+
             </stringTable>
         </resources>
     </localization>
+
 </instrumentationManifest>

@@ -65,7 +65,7 @@ private:
 
 
 int wmain(void) {
-    EventHandle provider(&PROVIDER_GUID);
+    EventHandle provider(&ProviderGuid);
 
     // Data to load into event descriptors
     USHORT Scores[3] = { 45, 63, 21 };
@@ -74,7 +74,7 @@ int wmain(void) {
     DWORD Day = MONDAY | TUESDAY;
     LPCWSTR Path = L"c:\\path\\folder\\file.ext";
     BYTE Cert[11] = { 0x2, 0x4, 0x8, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x0, 0x1 };
-    PBYTE Guid = (PBYTE)&PROVIDER_GUID;
+    PBYTE Guid = (PBYTE)&ProviderGuid;
     USHORT ArraySize = MAX_NAMEDVALUES;
     BOOL IsLocal = TRUE;
     NAMEDVALUE NamedValues[MAX_NAMEDVALUES] = {
