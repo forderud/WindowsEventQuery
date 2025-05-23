@@ -6,4 +6,7 @@
   <ItemGroup>
     <Xml Include="MyLogSchema.man" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
 </Project>
