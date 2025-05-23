@@ -1,7 +1,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <evntprov.h>
-#include "provider.h"  // Generated from manifest
+#include "MyLogSchema.h"  // Generated from manifest
 
 #define SUNDAY     0X1
 #define MONDAY     0X2
@@ -40,7 +40,7 @@ void wmain(void)
     DWORD Day = MONDAY | TUESDAY;
     LPWSTR Path = L"c:\\path\\folder\\file.ext";
     BYTE Cert[11] = { 0x2, 0x4, 0x8, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x0, 0x1 };
-    PBYTE Guid = (PBYTE)&ProviderGuid;
+    PBYTE Guid = (PBYTE)&PROVIDER_GUID;
     USHORT ArraySize = MAX_NAMEDVALUES;
     BOOL IsLocal = TRUE;
     NAMEDVALUE NamedValues[MAX_NAMEDVALUES] = {
@@ -52,7 +52,7 @@ void wmain(void)
     };
 
     status = EventRegister(
-        &ProviderGuid,      // GUID that identifies the provider
+        &PROVIDER_GUID,     // GUID that identifies the provider
         NULL,               // Callback not used
         NULL,               // Context noot used
         &RegistrationHandle // Used when calling EventWrite and EventUnregister
