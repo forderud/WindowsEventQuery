@@ -7,9 +7,9 @@
 
 
 /** C++ RAII wrapper of the legacy "Event Logging" API for generating log events. */
-class EventLog {
+class EventLogger {
 public:
-    EventLog(const wchar_t* provider) {
+    EventLogger(const wchar_t* provider) {
         m_log = RegisterEventSourceW(NULL, provider);
         if (!m_log) {
             _com_error err(GetLastError());
@@ -18,7 +18,7 @@ public:
         }
     }
 
-    ~EventLog() {
+    ~EventLogger() {
         DeregisterEventSource(m_log);
         m_log = 0;
     }
@@ -50,7 +50,7 @@ private:
 
 int wmain() {
     // open event provider
-    EventLog log(L"MyEventProvider"); // or L"Application" or L"System"
+    EventLogger log(L"MyEventProvider"); // or L"Application" or L"System"
 
     // generate log entries defined by the provider
     {
