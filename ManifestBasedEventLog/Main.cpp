@@ -65,6 +65,8 @@ private:
 
 
 int wmain(void) {
+    EventHandle provider(&PROVIDER_GUID);
+
     // Data to load into event descriptors
     USHORT Scores[3] = { 45, 63, 21 };
     ULONG pImage = (ULONG)&Scores;
@@ -82,8 +84,6 @@ int wmain(void) {
         {L"Robert", 4},
         {L"", 5}
     };
-
-    EventHandle provider(&PROVIDER_GUID);
 
     // Load the array of data descriptors for the TransferEvent event. 
     // Add the data to the array in the order of the <data> elements
