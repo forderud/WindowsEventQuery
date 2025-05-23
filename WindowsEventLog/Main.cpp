@@ -18,6 +18,10 @@ public:
         }
     }
 
+    EventLogger(EventLogger&& obj) {
+        std::swap(m_log, obj.m_log);
+    }
+
     ~EventLogger() {
         DeregisterEventSource(m_log);
         m_log = 0;
