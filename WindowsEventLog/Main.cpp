@@ -1,5 +1,4 @@
 #include <Windows.h>
-#include <Shlobj.h> // for IsUserAnAdmin
 #include <comdef.h>
 #include <cassert>
 #include <iostream>
@@ -7,6 +6,7 @@
 #include "../MyEventProvider/MyEventProvider.h" // custom event provider
 
 
+/** C++ RAII wrapper of the legacy "Event Logging" API for generating log events. */
 class EventLog {
 public:
     EventLog(const wchar_t* source) {
@@ -49,17 +49,10 @@ private:
 
 
 int wmain() {
-#if 0
-    if (!IsUserAnAdmin()) {
-        wprintf(L"ERROR: Admin privileges missing.\n");
-        return -1;
-    }
-#endif
-
-    // open log
+    // open event provider
     EventLog log(L"MyEventProvider"); // or L"Application" or L"System"
 
-    // DOC: https://learn.microsoft.com/en-us/windows/win32/eventlog/reporting-an-event
+    // generate log entries defined by the provider
     {
         WORD type = EVENTLOG_ERROR_TYPE; //  or other EVENTLOG_xxx type
         WORD category = UI_CATEGORY; // source-specific category
