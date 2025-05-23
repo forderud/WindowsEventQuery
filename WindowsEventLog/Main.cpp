@@ -24,7 +24,7 @@ public:
     }
 
     /** Write log entry with insertion strings. */
-    void WriteInsertStrings(WORD type, WORD category, DWORD eventId, WORD stringCount, const wchar_t* strings[]) {
+    void ReportInsertStrings(WORD type, WORD category, DWORD eventId, WORD stringCount, const wchar_t* strings[]) {
         BOOL ok = ReportEventW(m_log, type, category, eventId, NULL, stringCount, /*raw data bytes*/0, strings, /*raw data*/NULL);
         if (!ok) {
             _com_error err(GetLastError());
@@ -34,7 +34,7 @@ public:
     }
 
     /** Write log entry with extra user-defined binary data. */
-    void WriteUserData(WORD type, WORD category, DWORD eventId, DWORD rawDataSize, const BYTE* rawData) {
+    void ReportUserData(WORD type, WORD category, DWORD eventId, DWORD rawDataSize, const BYTE* rawData) {
         BOOL ok = ReportEventW(m_log, type, category, eventId, NULL, /*strCount*/0, rawDataSize, /*strings*/NULL, (void*)rawData);
         if (!ok) {
             _com_error err(GetLastError());
@@ -60,7 +60,7 @@ int wmain() {
         const BYTE data[] = "Extra command details";
 
         wprintf(L"Writing log entry...\n");
-        log.WriteUserData(type, category, eventId, sizeof(data), data);
+        log.ReportUserData(type, category, eventId, sizeof(data), data);
     }
     {
         WORD type = EVENTLOG_ERROR_TYPE; //  or other EVENTLOG_xxx type
@@ -69,7 +69,7 @@ int wmain() {
         const wchar_t* messages[] = { L"somefile.txt" };
 
         wprintf(L"Writing log entry...\n");
-        log.WriteInsertStrings(type, category, eventId, std::size(messages), messages);
+        log.ReportInsertStrings(type, category, eventId, std::size(messages), messages);
     }
     {
         WORD type = EVENTLOG_WARNING_TYPE; // or other EVENTLOG_xxx type
@@ -78,7 +78,7 @@ int wmain() {
         const wchar_t* messages[] = { L"25", L"zero" };
 
         wprintf(L"Writing log entry...\n");
-        log.WriteInsertStrings(type, category, eventId, std::size(messages), messages);
+        log.ReportInsertStrings(type, category, eventId, std::size(messages), messages);
     }
     {
         WORD type = EVENTLOG_INFORMATION_TYPE; //  or other EVENTLOG_xxx type
@@ -87,7 +87,7 @@ int wmain() {
         const wchar_t* messages[] = { L"8", L"2" };
 
         wprintf(L"Writing log entry...\n");
-        log.WriteInsertStrings(type, category, eventId, std::size(messages), messages);
+        log.ReportInsertStrings(type, category, eventId, std::size(messages), messages);
     }
 
     printf("[done]\n");
