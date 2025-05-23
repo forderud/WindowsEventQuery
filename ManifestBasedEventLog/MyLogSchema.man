@@ -11,8 +11,8 @@
             <provider name="Microsoft-Windows-ETWProvider"
                 guid="{D8909C24-5BE9-4502-98CA-AB7BDC24899D}"
                 symbol="ProviderGuid"
-                resourceFileName="c:\code\etw\v2provider\debug\v2provider.exe"
-                messageFileName="c:\code\etw\v2provider\debug\v2provider.exe"
+                resourceFileName="C:\Dev\WindowsEventQuery\x64\Debug\ManifestBasedEventLog.exe"
+                messageFileName="C:\Dev\WindowsEventQuery\x64\Debug\ManifestBasedEventLog.exe"
                 message="$(string.Provider.Name)"
                 >
 
