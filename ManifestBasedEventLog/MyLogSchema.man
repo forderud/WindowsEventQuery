@@ -90,7 +90,7 @@
     <localization>
         <resources culture="en-US">
             <stringTable>
-                <string id="Provider.Name" value="Microsoft-Windows-ETWProvider"/>
+                <string id="Provider.Name" value="MyManifestProvider"/>
 
                 <string id="Map.Download" value="Download"/>
                 <string id="Map.Upload" value="Upload"/>
