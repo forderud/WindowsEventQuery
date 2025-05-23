@@ -20,10 +20,10 @@ enum TRANSFER_TYPE {
 #define MAX_NAMEDVALUES          5  // Maximum array size
 #define MAX_PAYLOAD_DESCRIPTORS  9 + (2 * MAX_NAMEDVALUES)
 
-typedef struct _namedvalue {
+struct NAMEDVALUE {
     LPCWSTR name;
     USHORT  value;
-} NAMEDVALUE, * PNAMEDVALUE;
+};
 
 int wmain(void) {
     DWORD i = 0;
