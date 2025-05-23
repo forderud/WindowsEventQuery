@@ -12,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsEventLog", "WindowsE
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyEventProvider", "MyEventProvider\MyEventProvider.vcxproj", "{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ManifestBasedEventLog", "ManifestBasedEventLog\ManifestBasedEventLog.vcxproj", "{5B1822E6-5C54-4CDA-A562-EFEBE4D1DCED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -30,6 +32,10 @@ Global
 		{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}.Debug|x64.Build.0 = Debug|x64
 		{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}.Release|x64.ActiveCfg = Release|x64
 		{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}.Release|x64.Build.0 = Release|x64
+		{5B1822E6-5C54-4CDA-A562-EFEBE4D1DCED}.Debug|x64.ActiveCfg = Debug|x64
+		{5B1822E6-5C54-4CDA-A562-EFEBE4D1DCED}.Debug|x64.Build.0 = Debug|x64
+		{5B1822E6-5C54-4CDA-A562-EFEBE4D1DCED}.Release|x64.ActiveCfg = Release|x64
+		{5B1822E6-5C54-4CDA-A562-EFEBE4D1DCED}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
