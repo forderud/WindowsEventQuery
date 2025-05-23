@@ -3,4 +3,7 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="MyLogSchema.xml" />
+  </ItemGroup>
 </Project>
