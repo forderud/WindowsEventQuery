@@ -69,7 +69,7 @@ int wmain(void) {
 
     // Data to load into event descriptors
     USHORT Scores[3] = { 45, 63, 21 };
-    void* pImage = Scores;
+    void* pImage = &Scores;
     DWORD TransferType = Upload;
     DWORD Day = MONDAY | TUESDAY;
     LPCWSTR Path = L"c:\\path\\folder\\file.ext";
