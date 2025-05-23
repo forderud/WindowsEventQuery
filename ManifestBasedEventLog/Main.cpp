@@ -25,15 +25,10 @@ typedef struct _namedvalue {
     USHORT  value;
 } NAMEDVALUE, * PNAMEDVALUE;
 
-int wmain(void)
-{
-    DWORD status = ERROR_SUCCESS;
-    REGHANDLE RegistrationHandle = NULL;
-    EVENT_DATA_DESCRIPTOR Descriptors[MAX_PAYLOAD_DESCRIPTORS];
+int wmain(void) {
     DWORD i = 0;
 
     // Data to load into event descriptors
-
     USHORT Scores[3] = { 45, 63, 21 };
     ULONG pImage = (ULONG)&Scores;
     DWORD TransferType = Upload;
@@ -51,15 +46,14 @@ int wmain(void)
         {L"", 5}
     };
 
-    status = EventRegister(
+    REGHANDLE RegistrationHandle = NULL;
+    DWORD status = EventRegister(
         &PROVIDER_GUID,     // GUID that identifies the provider
         NULL,               // Callback not used
         NULL,               // Context noot used
         &RegistrationHandle // Used when calling EventWrite and EventUnregister
     );
-
-    if (ERROR_SUCCESS != status)
-    {
+    if (ERROR_SUCCESS != status) {
         wprintf(L"EventRegister failed with %lu\n", status);
         goto cleanup;
     }
@@ -67,7 +61,7 @@ int wmain(void)
     // Load the array of data descriptors for the TransferEvent event. 
     // Add the data to the array in the order of the <data> elements
     // defined in the event's template. 
-
+    EVENT_DATA_DESCRIPTOR Descriptors[MAX_PAYLOAD_DESCRIPTORS];
     EventDataDescCreate(&Descriptors[i++], &pImage, sizeof(ULONG));
     EventDataDescCreate(&Descriptors[i++], Scores, sizeof(Scores));
     EventDataDescCreate(&Descriptors[i++], Guid, sizeof(GUID));
@@ -86,9 +80,7 @@ int wmain(void)
     //
     // Because the array of structures in this example contains both strings 
     // and numbers, you must write each member of the structure separately.
-
-    for (int j = 0; j < MAX_NAMEDVALUES; j++)
-    {
+    for (int j = 0; j < MAX_NAMEDVALUES; j++) {
         EventDataDescCreate(&Descriptors[i++], NamedValues[j].name, (ULONG)(wcslen(NamedValues[j].name) + 1) * sizeof(WCHAR));
         EventDataDescCreate(&Descriptors[i++], &(NamedValues[j].value), sizeof(USHORT));
     }
@@ -104,20 +96,16 @@ int wmain(void)
     // before performing the extra work. The EventEnabled function tells you if a
     // session has enabled your provider, so you know if you need to perform the 
     // extra work or not.
-
     status = EventWrite(
         RegistrationHandle,              // From EventRegister
         &TransferEvent,                  // EVENT_DESCRIPTOR generated from the manifest
         (ULONG)MAX_PAYLOAD_DESCRIPTORS,  // Size of the array of EVENT_DATA_DESCRIPTORs
         &Descriptors[0]                  // Array of descriptors that contain the event data
     );
-
-    if (status != ERROR_SUCCESS)
-    {
+    if (status != ERROR_SUCCESS) {
         wprintf(L"EventWrite failed with 0x%x", status);
     }
 
 cleanup:
-
     EventUnregister(RegistrationHandle);
 }
