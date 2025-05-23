@@ -65,8 +65,6 @@ private:
 
 
 int wmain(void) {
-    DWORD i = 0;
-
     // Data to load into event descriptors
     USHORT Scores[3] = { 45, 63, 21 };
     ULONG pImage = (ULONG)&Scores;
@@ -91,6 +89,7 @@ int wmain(void) {
     // Add the data to the array in the order of the <data> elements
     // defined in the event's template. 
     EVENT_DATA_DESCRIPTOR Descriptors[MAX_PAYLOAD_DESCRIPTORS];
+    DWORD i = 0;
     EventDataDescCreate(&Descriptors[i++], &pImage, sizeof(ULONG));
     EventDataDescCreate(&Descriptors[i++], Scores, sizeof(Scores));
     EventDataDescCreate(&Descriptors[i++], Guid, sizeof(GUID));
