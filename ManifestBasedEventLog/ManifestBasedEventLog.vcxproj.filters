@@ -9,4 +9,7 @@
   <ItemGroup>
     <None Include="README.md" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MyLogSchema.rc" />
+  </ItemGroup>
 </Project>
