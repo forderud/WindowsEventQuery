@@ -70,6 +70,7 @@ There have been %1 retries with %2 success! Disconnect from
 the server and try again later.
 .
 
+; // will render as "<str1> <QUARTS_UNITS> = <str2> <GALLONS_UNITS>" 
 MessageId=0x103
 Severity=Informational
 Facility=System
