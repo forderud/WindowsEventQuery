@@ -9,8 +9,8 @@
 /** C++ RAII wrapper of the legacy "Event Logging" API for generating log events. */
 class EventLog {
 public:
-    EventLog(const wchar_t* source) {
-        m_log = RegisterEventSourceW(NULL, source);
+    EventLog(const wchar_t* provider) {
+        m_log = RegisterEventSourceW(NULL, provider);
         if (!m_log) {
             _com_error err(GetLastError());
             wprintf(L"ERROR: RegisterEventSourceW failed (%s)\n", err.ErrorMessage());
