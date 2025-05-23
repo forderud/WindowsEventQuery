@@ -14,7 +14,7 @@ public:
         if (!m_log) {
             _com_error err(GetLastError());
             wprintf(L"ERROR: RegisterEventSourceW failed (%s)\n", err.ErrorMessage());
-            abort();
+            throw std::runtime_error("RegisterEventSourceW failed");
         }
     }
 
@@ -33,7 +33,7 @@ public:
         if (!ok) {
             _com_error err(GetLastError());
             wprintf(L"ERROR: ReportEventW failed (%s)\n", err.ErrorMessage());
-            abort();
+            throw std::runtime_error("ReportEventW failed");
         }
     }
 
@@ -43,7 +43,7 @@ public:
         if (!ok) {
             _com_error err(GetLastError());
             wprintf(L"ERROR: ReportEventW failed (%s)\n", err.ErrorMessage());
-            abort();
+            throw std::runtime_error("ReportEventW failed");
         }
     }
 
