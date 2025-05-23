@@ -69,7 +69,7 @@ int wmain(void) {
 
     // Data to load into event descriptors
     USHORT Scores[3] = { 45, 63, 21 };
-    ULONG pImage = (ULONG)&Scores;
+    void* pImage = Scores;
     DWORD TransferType = Upload;
     DWORD Day = MONDAY | TUESDAY;
     LPCWSTR Path = L"c:\\path\\folder\\file.ext";
@@ -90,7 +90,7 @@ int wmain(void) {
     // defined in the event's template. 
     EVENT_DATA_DESCRIPTOR Descriptors[MAX_PAYLOAD_DESCRIPTORS];
     DWORD i = 0;
-    EventDataDescCreate(&Descriptors[i++], &pImage, sizeof(ULONG));
+    EventDataDescCreate(&Descriptors[i++], &pImage, sizeof(pImage));
     EventDataDescCreate(&Descriptors[i++], Scores, sizeof(Scores));
     EventDataDescCreate(&Descriptors[i++], Guid, sizeof(GUID));
     EventDataDescCreate(&Descriptors[i++], Cert, sizeof(Cert));
