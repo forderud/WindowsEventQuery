@@ -1,4 +1,4 @@
-Custom Windows event provider. Used to enable custom log entry types.
+Custom Windows event provider. Used to enable custom log entry types throgh the legacy [Event Logging](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-logging) API.
 
 
 How to install:
