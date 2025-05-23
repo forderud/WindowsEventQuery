@@ -4,6 +4,6 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="MyLogSchema.xml" />
+    <Xml Include="MyLogSchema.man" />
   </ItemGroup>
 </Project>
