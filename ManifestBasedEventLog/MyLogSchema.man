@@ -8,8 +8,8 @@
     <instrumentation>
         <events>
             <provider name="Microsoft-Windows-ETWProvider"
-                guid="{D8909C24-5BE9-4502-98CA-AB7BDC24899D}"
-                symbol="ProviderGuid"
+                guid="{750DBC0C-86CE-4B51-A7FF-9827600EA77A}"
+                symbol="PROVIDER_GUID"
                 resourceFileName="c:\code\etw\v2provider\debug\v2provider.exe"
                 messageFileName="c:\code\etw\v2provider\debug\v2provider.exe"
                 message="$(string.Provider.Name)"
