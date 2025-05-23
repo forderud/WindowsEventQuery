@@ -9,6 +9,8 @@ int wmain(int argc, wchar_t* argv[]) {
         wprintf(L"  XPath query: WindowsEventQuery.exe qe <channel> <query>\n");
         wprintf(L"  List all channels: WindowsEventQuery.exe channels\n");
         wprintf(L"  List all publishers: WindowsEventQuery.exe publishers\n");
+        wprintf(L"Examples:\n");
+        wprintf(L"  List all MyEventProvider events: WindowsEventQuery.exe Application */System/Provider[@Name='MyEventProvider']\n");
         return 1;
     }
 
