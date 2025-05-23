@@ -79,8 +79,8 @@ Language=English
 .
 
 
-; // The following are the parameter strings */
-MessageId=0x1000
+; // The following are the parameter strings
+MessageId=0x1000 ; // same as 4096
 Severity=Success
 Facility=System
 SymbolicName=QUARTS_UNITS
@@ -88,7 +88,7 @@ Language=English
 quarts%0
 .
 
-MessageId=0x1001
+MessageId=0x1001 ; // same as 4097
 Severity=Success
 Facility=System
 SymbolicName=GALLONS_UNITS

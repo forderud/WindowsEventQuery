@@ -97,15 +97,6 @@ int wmain() {
         log.WriteInsertStrings(type, category, eventId, std::size(messages), messages);
     }
 
-    {
-        WORD type = EVENTLOG_SUCCESS; // or other EVENTLOG_xxx type
-        WORD category = UI_CATEGORY; // source-specific category
-        DWORD eventId = QUARTS_UNITS; // entry in the message file associated with the event source
-
-        wprintf(L"Writing log entry...\n");
-        log.WriteInsertStrings(type, category, eventId, 0, nullptr);
-    }
-
     printf("[done]\n");
     return 0;
 }
