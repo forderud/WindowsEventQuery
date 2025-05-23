@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <evntprov.h>
+#include <stdexcept>
 #include "MyLogSchema.h"  // Generated from manifest
 
 #define SUNDAY     0X1
@@ -25,6 +26,44 @@ struct NAMEDVALUE {
     USHORT  value;
 };
 
+/** ETW event provider registration wrapper class. */
+class EventHandle {
+public:
+    EventHandle(const GUID* providerGuid) {
+        DWORD status = EventRegister(
+            providerGuid, // GUID that identifies the provider
+            NULL,         // Callback not used
+            NULL,         // Context noot used
+            &m_provider   // Used when calling EventWrite and EventUnregister
+        );
+        if (ERROR_SUCCESS != status) {
+            wprintf(L"EventRegister failed with %lu\n", status);
+            throw std::runtime_error("EventRegister failed");
+        }
+    }
+
+    EventHandle(EventHandle&& obj) {
+        std::swap(m_provider, obj.m_provider);
+    }
+
+    ~EventHandle() {
+        EventUnregister(m_provider);
+        m_provider = 0;
+    }
+
+    void Write(const EVENT_DESCRIPTOR* EventDescriptor, ULONG UserDataCount, EVENT_DATA_DESCRIPTOR* UserData) {
+        DWORD status = EventWrite(m_provider, EventDescriptor, UserDataCount, UserData);
+        if (status != ERROR_SUCCESS) {
+            wprintf(L"EventWrite failed with 0x%x", status);
+            throw std::runtime_error("EventWrite failed");
+        }
+    }
+
+private:
+    REGHANDLE m_provider = 0;
+};
+
+
 int wmain(void) {
     DWORD i = 0;
 
@@ -46,17 +85,7 @@ int wmain(void) {
         {L"", 5}
     };
 
-    REGHANDLE RegistrationHandle = NULL;
-    DWORD status = EventRegister(
-        &PROVIDER_GUID,     // GUID that identifies the provider
-        NULL,               // Callback not used
-        NULL,               // Context noot used
-        &RegistrationHandle // Used when calling EventWrite and EventUnregister
-    );
-    if (ERROR_SUCCESS != status) {
-        wprintf(L"EventRegister failed with %lu\n", status);
-        goto cleanup;
-    }
+    EventHandle provider(&PROVIDER_GUID);
 
     // Load the array of data descriptors for the TransferEvent event. 
     // Add the data to the array in the order of the <data> elements
@@ -96,16 +125,9 @@ int wmain(void) {
     // before performing the extra work. The EventEnabled function tells you if a
     // session has enabled your provider, so you know if you need to perform the 
     // extra work or not.
-    status = EventWrite(
-        RegistrationHandle,              // From EventRegister
+    provider.Write(
         &TransferEvent,                  // EVENT_DESCRIPTOR generated from the manifest
         (ULONG)MAX_PAYLOAD_DESCRIPTORS,  // Size of the array of EVENT_DATA_DESCRIPTORs
         &Descriptors[0]                  // Array of descriptors that contain the event data
     );
-    if (status != ERROR_SUCCESS) {
-        wprintf(L"EventWrite failed with 0x%x", status);
-    }
-
-cleanup:
-    EventUnregister(RegistrationHandle);
 }
