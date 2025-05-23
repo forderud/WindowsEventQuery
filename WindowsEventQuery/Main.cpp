@@ -39,7 +39,7 @@ int wmain(int argc, wchar_t* argv[]) {
 
         // perform event query
         std::wstring channel = argv[2]; // L"System";
-        std::wstring query = argv[3]; // L"*/System[(Level>=1) and (Level<=2)]";
+        std::wstring query = argv[3]; // L"*/System[(Level>=1) and (Level<=2)]" or L"*/System/Provider[@Name='MyEventProvider']"
         EventQuery(channel, query, 10);
     } else {
         wprintf(L"ERROR: Incorrect arguments.\n");
