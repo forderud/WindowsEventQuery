@@ -19,8 +19,6 @@ enum TRANSFER_TYPE {
     UploadReply
 };
 
-#define MAX_NAMEDVALUES          5  // Maximum array size
-
 struct NAMEDVALUE {
     LPCWSTR name;
     USHORT  value;
@@ -96,8 +94,15 @@ int wmain(void) {
     LPCWSTR Path = L"c:\\path\\folder\\file.ext";
     parameters.push_back(EventDataArg(Path, (ULONG)(wcslen(Path) + 1) * sizeof(WCHAR)));
 
-    USHORT ArraySize = MAX_NAMEDVALUES;
-    parameters.push_back(EventDataArg(&ArraySize, sizeof(USHORT)));
+    std::vector<NAMEDVALUE> values;
+    values.push_back({ L"Bill", 1 });
+    values.push_back({ L"Bob", 2 });
+    values.push_back({ L"William", 3 });
+    values.push_back({ L"Robert", 4 });
+    values.push_back({ L"", 5 });
+
+    uint16_t ArraySize = (uint16_t)values.size();
+    parameters.push_back(EventDataArg(&ArraySize, sizeof(ArraySize)));
 
     // If your event contains a structure, you should write each member
     // of the structure separately. If the structure contained integral data types
@@ -109,17 +114,9 @@ int wmain(void) {
     //
     // Because the array of structures in this example contains both strings 
     // and numbers, you must write each member of the structure separately.
-    NAMEDVALUE NamedValues[MAX_NAMEDVALUES] = {
-        {L"Bill", 1},
-        {L"Bob", 2},
-        {L"William", 3},
-        {L"Robert", 4},
-        {L"", 5}
-    };
-
-    for (int j = 0; j < MAX_NAMEDVALUES; j++) {
-        parameters.push_back(EventDataArg(NamedValues[j].name, (ULONG)(wcslen(NamedValues[j].name) + 1) * sizeof(WCHAR)));
-        parameters.push_back(EventDataArg(&(NamedValues[j].value), sizeof(USHORT)));
+    for (int j = 0; j < values.size(); j++) {
+        parameters.push_back(EventDataArg(values[j].name, (ULONG)(wcslen(values[j].name) + 1) * sizeof(WCHAR)));
+        parameters.push_back(EventDataArg(&(values[j].value), sizeof(USHORT)));
     }
 
     DWORD Day = MONDAY | TUESDAY;
