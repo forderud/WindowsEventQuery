@@ -84,7 +84,7 @@ int wmain(void) {
     std::wstring path = L"c:\\path\\folder\\file.ext";
     parameters.push_back(EventDataArg(path.c_str(), (ULONG)(path.length()+1)*sizeof(wchar_t))); // incl. null-termination
 
-    DWORD days = MONDAY | TUESDAY;
+    DWORD days = 3;
     parameters.push_back(EventDataArg(&days, sizeof(days)));
 
     DWORD transferType = Upload;

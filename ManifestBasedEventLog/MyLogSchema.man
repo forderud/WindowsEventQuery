@@ -28,16 +28,6 @@
                         <map value="2" message="$(string.Map.Upload)"/>
                         <map value="3" message="$(string.Map.UploadReply)"/>
                     </valueMap>
-
-                    <bitMap name="DaysOfTheWeek">
-                        <map value="0x1" message="$(string.Map.Sunday)"/>
-                        <map value="0x2" message="$(string.Map.Monday)"/>
-                        <map value="0x4" message="$(string.Map.Tuesday)"/>
-                        <map value="0x8" message="$(string.Map.Wednesday)"/>
-                        <map value="0x10" message="$(string.Map.Thursday)"/>
-                        <map value="0x20" message="$(string.Map.Friday)"/>
-                        <map value="0x40" message="$(string.Map.Saturday)"/>
-                    </bitMap>
                 </maps>
 
                 <templates>
@@ -48,7 +38,7 @@
                         <data name="IsLocal" inType="win:Boolean" />
                         <data name="Path" inType="win:UnicodeString" />
 
-                        <data name="Day" inType="win:UInt32" map="DaysOfTheWeek"/>
+                        <data name="Day" inType="win:UInt32" />
                         <data name="Transfer" inType="win:UInt32" map="TransferType"/>
 
                         <UserData>
@@ -89,14 +79,6 @@
                 <string id="Map.Download" value="Download"/>
                 <string id="Map.Upload" value="Upload"/>
                 <string id="Map.UploadReply" value="Upload-reply"/>
-
-                <string id="Map.Sunday" value="Sunday"/>
-                <string id="Map.Monday" value="Monday"/>
-                <string id="Map.Tuesday" value="Tuesday"/>
-                <string id="Map.Wednesday" value="Wednesday"/>
-                <string id="Map.Thursday" value="Thursday"/>
-                <string id="Map.Friday" value="Friday"/>
-                <string id="Map.Saturday" value="Saturday"/>
 
                 <string id="Event.WhenToTransfer" value="The %7 transfer will occur %6."/>
             </stringTable>
