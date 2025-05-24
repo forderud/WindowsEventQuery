@@ -27,7 +27,6 @@
                         <data name="Scores" inType="win:UInt16" count="3"/>
                         <data name="ID" inType="win:GUID"/>
                         <data name="Certificate" inType="win:Binary" length="11" />
-                        <data name="IsLocal" inType="win:Boolean" />
                         <data name="Path" inType="win:UnicodeString" />
 
                         <data name="Day" inType="win:UInt32" />
@@ -35,10 +34,9 @@
 
                         <UserData>
                             <EventData xmlns="ProviderNamespace">
-                                <Transfer> %7 </Transfer>
-                                <Day> %6 </Day>
-                                <Path> %5 </Path>
-                                <IsLocal> %4 </IsLocal>
+                                <Transfer> %6 </Transfer>
+                                <Day> %5 </Day>
+                                <Path> %4 </Path>
                                 <Scores> %1 </Scores>
                                 <Certificate> %3 </Certificate>
                                 <ID> %2 </ID>
@@ -67,7 +65,7 @@
         <resources culture="en-US">
             <stringTable>
                 <string id="Provider.Name" value="MyManifestProvider"/>
-                <string id="Event.WhenToTransfer" value="The %7 transfer will occur %6."/>
+                <string id="Event.WhenToTransfer" value="The %6 transfer will occur at day %5."/>
             </stringTable>
         </resources>
     </localization>
