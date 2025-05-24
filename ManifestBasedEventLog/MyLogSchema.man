@@ -10,8 +10,8 @@
             <provider name="MyManifestProvider"
                 guid="{1B9E037D-C2C1-4543-B732-D4BFDF082AF9}"
                 symbol="PROVIDER_GUID"
-                resourceFileName="C:\Dev\WindowsEventQuery\x64\Debug\ManifestBasedEventLog.exe"
-                messageFileName="C:\Dev\WindowsEventQuery\x64\Debug\ManifestBasedEventLog.exe"
+                resourceFileName="PATH\ManifestBasedEventLog.exe"
+                messageFileName="PATH\ManifestBasedEventLog.exe"
                 message="$(string.Provider.Name)"
                 >
 
