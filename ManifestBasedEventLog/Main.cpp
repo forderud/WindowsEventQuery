@@ -56,6 +56,7 @@ private:
     REGHANDLE m_provider = 0;
 };
 
+/** WARNING: Does NOT copy the data. */
 static EVENT_DATA_DESCRIPTOR EventDataArg(const void* DataPtr, ULONG DataSize) {
     EVENT_DATA_DESCRIPTOR desc{};
     EventDataDescCreate(&desc, DataPtr, DataSize);
@@ -80,8 +81,8 @@ int wmain(void) {
     BOOL isLocal = TRUE;
     parameters.push_back(EventDataArg(&isLocal, sizeof(isLocal)));
 
-    std::wstring Path = L"c:\\path\\folder\\file.ext";
-    parameters.push_back(EventDataArg(Path.c_str(), (ULONG)(Path.length()+1)*sizeof(wchar_t)));
+    std::wstring path = L"c:\\path\\folder\\file.ext";
+    parameters.push_back(EventDataArg(path.c_str(), (ULONG)(path.length()+1)*sizeof(wchar_t))); // incl. null-termination
 
     DWORD days = MONDAY | TUESDAY;
     parameters.push_back(EventDataArg(&days, sizeof(days)));
