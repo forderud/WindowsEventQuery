@@ -124,14 +124,6 @@ int wmain(void) {
     // Write the event. You do not have to verify if your provider is enabled before
     // writing the event. ETW will write the event to any session that enabled
     // the provider. If no session enabled the provider, the event is not 
-    // written. If you need to perform extra work to write an event that you
-    // would not otherwise do, you may want to call the EventEnabled function
-    // before performing the extra work. The EventEnabled function tells you if a
-    // session has enabled your provider, so you know if you need to perform the 
-    // extra work or not.
-    provider.Write(
-        &TransferEvent,           // EVENT_DESCRIPTOR generated from the manifest
-        (ULONG)parameters.size(),
-        parameters.data()
-    );
+    // written.
+    provider.Write(&TransferEvent, (ULONG)parameters.size(), parameters.data());
 }
