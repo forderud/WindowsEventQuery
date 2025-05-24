@@ -5,19 +5,6 @@
 #include <vector>
 #include "MyLogSchema.h"  // Generated from manifest
 
-#define SUNDAY     0X1
-#define MONDAY     0X2
-#define TUESDAY    0X4
-#define WEDNESDAY  0X8
-#define THURSDAY   0X10
-#define FRIDAY     0X20
-#define SATURDAY   0X40
-
-enum TRANSFER_TYPE {
-    Download = 1,
-    Upload,
-    UploadReply
-};
 
 /** ETW event provider registration wrapper class. */
 class EventHandle {
@@ -84,11 +71,11 @@ int wmain(void) {
     std::wstring path = L"c:\\path\\folder\\file.ext";
     parameters.push_back(EventDataArg(path.c_str(), (ULONG)(path.length()+1)*sizeof(wchar_t))); // incl. null-termination
 
-    DWORD days = 3;
-    parameters.push_back(EventDataArg(&days, sizeof(days)));
+    DWORD day = 3;
+    parameters.push_back(EventDataArg(&day, sizeof(day)));
 
-    DWORD transferType = Upload;
-    parameters.push_back(EventDataArg(&transferType, sizeof(transferType)));
+    DWORD transfer = 99;
+    parameters.push_back(EventDataArg(&transfer, sizeof(transfer)));
 
     // Write the event. You do not have to verify if your provider is enabled before
     // writing the event. ETW will write the event to any session that enabled
