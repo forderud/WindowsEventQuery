@@ -49,21 +49,13 @@
                         <data name="IsLocal" inType="win:Boolean" />
                         <data name="Path" inType="win:UnicodeString" />
 
-                        <data name="ValuesCount" inType="win:UInt16" />
-                        <struct name="Values" count="ValuesCount" >
-                            <data name="Name" inType="win:UnicodeString" />
-                            <data name="Value" inType="win:UInt16" />
-                        </struct>
-
                         <data name="Day" inType="win:UInt32" map="DaysOfTheWeek"/>
                         <data name="Transfer" inType="win:UInt32" map="TransferType"/>
 
                         <UserData>
                             <EventData xmlns="ProviderNamespace">
-                                <Transfer> %10 </Transfer>
-                                <Day> %9 </Day>
-                                <ValuesCount> %7 </ValuesCount>
-                                <Values> %8 </Values>
+                                <Transfer> %8 </Transfer>
+                                <Day> %7 </Day>
                                 <Path> %6 </Path>
                                 <IsLocal> %5 </IsLocal>
                                 <Scores> %2 </Scores>
@@ -108,7 +100,7 @@
                 <string id="Map.Friday" value="Friday"/>
                 <string id="Map.Saturday" value="Saturday"/>
 
-                <string id="Event.WhenToTransfer" value="The %10 transfer will occur %9."/>
+                <string id="Event.WhenToTransfer" value="The %8 transfer will occur %7."/>
             </stringTable>
         </resources>
     </localization>

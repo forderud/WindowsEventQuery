@@ -19,11 +19,6 @@ enum TRANSFER_TYPE {
     UploadReply
 };
 
-struct NAMEDVALUE {
-    LPCWSTR name;
-    USHORT  value;
-};
-
 /** ETW event provider registration wrapper class. */
 class EventHandle {
 public:
@@ -93,31 +88,6 @@ int wmain(void) {
 
     std::wstring Path = L"c:\\path\\folder\\file.ext";
     parameters.push_back(EventDataArg(Path.c_str(), (ULONG)(Path.length()+1)*sizeof(wchar_t)));
-
-    std::vector<NAMEDVALUE> values;
-    values.push_back({ L"Bill", 1 });
-    values.push_back({ L"Bob", 2 });
-    values.push_back({ L"William", 3 });
-    values.push_back({ L"Robert", 4 });
-    values.push_back({ L"", 5 });
-
-    uint16_t ArraySize = (uint16_t)values.size();
-    parameters.push_back(EventDataArg(&ArraySize, sizeof(ArraySize)));
-
-    // If your event contains a structure, you should write each member
-    // of the structure separately. If the structure contained integral data types
-    // such as DWORDs and the data types were aligned on an 8-byte boundary, you 
-    // could use the following call to write the structure, however, you are 
-    // encouraged to write the members separately.
-    //
-    // EventDataDescCreate(&EvtData, struct, sizeof(struct));
-    //
-    // Because the array of structures in this example contains both strings 
-    // and numbers, you must write each member of the structure separately.
-    for (int j = 0; j < values.size(); j++) {
-        parameters.push_back(EventDataArg(values[j].name, (ULONG)(wcslen(values[j].name) + 1) * sizeof(WCHAR)));
-        parameters.push_back(EventDataArg(&(values[j].value), sizeof(USHORT)));
-    }
 
     DWORD Day = MONDAY | TUESDAY;
     parameters.push_back(EventDataArg(&Day, sizeof(DWORD)));
