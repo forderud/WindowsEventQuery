@@ -91,8 +91,8 @@ int wmain(void) {
     BOOL IsLocal = TRUE;
     parameters.push_back(EventDataArg(&IsLocal, sizeof(BOOL)));
 
-    LPCWSTR Path = L"c:\\path\\folder\\file.ext";
-    parameters.push_back(EventDataArg(Path, (ULONG)(wcslen(Path) + 1) * sizeof(WCHAR)));
+    std::wstring Path = L"c:\\path\\folder\\file.ext";
+    parameters.push_back(EventDataArg(Path.c_str(), (ULONG)(Path.length()+1)*sizeof(wchar_t)));
 
     std::vector<NAMEDVALUE> values;
     values.push_back({ L"Bill", 1 });
