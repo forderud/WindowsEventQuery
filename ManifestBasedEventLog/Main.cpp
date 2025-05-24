@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <evntprov.h>
 #include <stdexcept>
+#include <vector>
 #include "MyLogSchema.h"  // Generated from manifest
 
 #define SUNDAY     0X1
@@ -63,6 +64,11 @@ private:
     REGHANDLE m_provider = 0;
 };
 
+static EVENT_DATA_DESCRIPTOR EventDataArg(const void* DataPtr, ULONG DataSize) {
+    EVENT_DATA_DESCRIPTOR desc{};
+    EventDataDescCreate(&desc, DataPtr, DataSize);
+    return desc;
+}
 
 int wmain(void) {
     EventHandle provider(&PROVIDER_GUID);
@@ -88,15 +94,14 @@ int wmain(void) {
     // Load the array of data descriptors for the TransferEvent event. 
     // Add the data to the array in the order of the <data> elements
     // defined in the event's template. 
-    EVENT_DATA_DESCRIPTOR Descriptors[MAX_PAYLOAD_DESCRIPTORS];
-    DWORD i = 0;
-    EventDataDescCreate(&Descriptors[i++], &pImage, sizeof(pImage));
-    EventDataDescCreate(&Descriptors[i++], Scores, sizeof(Scores));
-    EventDataDescCreate(&Descriptors[i++], Guid, sizeof(GUID));
-    EventDataDescCreate(&Descriptors[i++], Cert, sizeof(Cert));
-    EventDataDescCreate(&Descriptors[i++], &IsLocal, sizeof(BOOL));
-    EventDataDescCreate(&Descriptors[i++], Path, (ULONG)(wcslen(Path) + 1) * sizeof(WCHAR));
-    EventDataDescCreate(&Descriptors[i++], &ArraySize, sizeof(USHORT));
+    std::vector<EVENT_DATA_DESCRIPTOR> parameters;
+    parameters.push_back(EventDataArg(&pImage, sizeof(pImage)));
+    parameters.push_back(EventDataArg(Scores, sizeof(Scores)));
+    parameters.push_back(EventDataArg(Guid, sizeof(GUID)));
+    parameters.push_back(EventDataArg(Cert, sizeof(Cert)));
+    parameters.push_back(EventDataArg(&IsLocal, sizeof(BOOL)));
+    parameters.push_back(EventDataArg(Path, (ULONG)(wcslen(Path) + 1) * sizeof(WCHAR)));
+    parameters.push_back(EventDataArg(&ArraySize, sizeof(USHORT)));
 
     // If your event contains a structure, you should write each member
     // of the structure separately. If the structure contained integral data types
@@ -109,12 +114,12 @@ int wmain(void) {
     // Because the array of structures in this example contains both strings 
     // and numbers, you must write each member of the structure separately.
     for (int j = 0; j < MAX_NAMEDVALUES; j++) {
-        EventDataDescCreate(&Descriptors[i++], NamedValues[j].name, (ULONG)(wcslen(NamedValues[j].name) + 1) * sizeof(WCHAR));
-        EventDataDescCreate(&Descriptors[i++], &(NamedValues[j].value), sizeof(USHORT));
+        parameters.push_back(EventDataArg(NamedValues[j].name, (ULONG)(wcslen(NamedValues[j].name) + 1) * sizeof(WCHAR)));
+        parameters.push_back(EventDataArg(&(NamedValues[j].value), sizeof(USHORT)));
     }
 
-    EventDataDescCreate(&Descriptors[i++], &Day, sizeof(DWORD));
-    EventDataDescCreate(&Descriptors[i++], &TransferType, sizeof(DWORD));
+    parameters.push_back(EventDataArg(&Day, sizeof(DWORD)));
+    parameters.push_back(EventDataArg(&TransferType, sizeof(DWORD)));
 
     // Write the event. You do not have to verify if your provider is enabled before
     // writing the event. ETW will write the event to any session that enabled
@@ -125,8 +130,8 @@ int wmain(void) {
     // session has enabled your provider, so you know if you need to perform the 
     // extra work or not.
     provider.Write(
-        &TransferEvent,                  // EVENT_DESCRIPTOR generated from the manifest
-        (ULONG)MAX_PAYLOAD_DESCRIPTORS,  // Size of the array of EVENT_DATA_DESCRIPTORs
-        &Descriptors[0]                  // Array of descriptors that contain the event data
+        &TransferEvent,           // EVENT_DESCRIPTOR generated from the manifest
+        (ULONG)parameters.size(),
+        parameters.data()
     );
 }
