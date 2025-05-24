@@ -42,7 +42,6 @@
 
                 <templates>
                     <template tid="TransferTemplate">
-                        <data name="Image" inType="win:Pointer"/>
                         <data name="Scores" inType="win:UInt16" count="3"/>
                         <data name="ID" inType="win:GUID"/>
                         <data name="Certificate" inType="win:Binary" length="11" />
@@ -54,14 +53,13 @@
 
                         <UserData>
                             <EventData xmlns="ProviderNamespace">
-                                <Transfer> %8 </Transfer>
-                                <Day> %7 </Day>
-                                <Path> %6 </Path>
-                                <IsLocal> %5 </IsLocal>
-                                <Scores> %2 </Scores>
-                                <Image> %1 </Image>
-                                <Certificate> %4 </Certificate>
-                                <ID> %3 </ID>
+                                <Transfer> %7 </Transfer>
+                                <Day> %6 </Day>
+                                <Path> %5 </Path>
+                                <IsLocal> %4 </IsLocal>
+                                <Scores> %1 </Scores>
+                                <Certificate> %3 </Certificate>
+                                <ID> %2 </ID>
                             </EventData>
                         </UserData>
                     </template>
@@ -100,7 +98,7 @@
                 <string id="Map.Friday" value="Friday"/>
                 <string id="Map.Saturday" value="Saturday"/>
 
-                <string id="Event.WhenToTransfer" value="The %8 transfer will occur %7."/>
+                <string id="Event.WhenToTransfer" value="The %7 transfer will occur %6."/>
             </stringTable>
         </resources>
     </localization>

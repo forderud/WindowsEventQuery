@@ -70,8 +70,6 @@ int wmain(void) {
     std::vector<EVENT_DATA_DESCRIPTOR> parameters;
 
     USHORT scores[3] = { 45, 63, 21 };
-    void* pImage = &scores;
-    parameters.push_back(EventDataArg(&pImage, sizeof(pImage)));
     parameters.push_back(EventDataArg(scores, sizeof(scores)));
 
     parameters.push_back(EventDataArg(&PROVIDER_GUID, sizeof(PROVIDER_GUID)));
