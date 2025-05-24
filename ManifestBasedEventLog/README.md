@@ -14,3 +14,13 @@ From an admin command prompt:
 ```
 wevtutil.exe um MyLogSchema.man
 ```
+
+
+## If experiencing access errors
+Observed problem:
+```
+**** Warning: Publisher MyManifestProvider resources could not be found or are not accessible
+to the EventLog service account (NT SERVICE\EventLog).
+```
+
+Solution: Grant `Everyone` access to `ManifestBasedEventLog.exe`.
