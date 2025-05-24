@@ -7,7 +7,7 @@ Based on [Writing Manifest-based Events](https://learn.microsoft.com/en-us/windo
 From an admin command prompt:
 ```
 wevtutil.exe im MyLogSchema.man /rf:%EXE_PATH% /mf:%EXE_PATH%
-``
+```
 
 ### How to uninstall
 From an admin command prompt:
