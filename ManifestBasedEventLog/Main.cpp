@@ -77,23 +77,22 @@ int wmain(void) {
     parameters.push_back(EventDataArg(&pImage, sizeof(pImage)));
     parameters.push_back(EventDataArg(Scores, sizeof(Scores)));
 
-    PBYTE Guid = (PBYTE)&PROVIDER_GUID;
-    parameters.push_back(EventDataArg(Guid, sizeof(GUID)));
+    parameters.push_back(EventDataArg(&PROVIDER_GUID, sizeof(PROVIDER_GUID)));
 
     BYTE Cert[11] = { 0x2, 0x4, 0x8, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x0, 0x1 };
     parameters.push_back(EventDataArg(Cert, sizeof(Cert)));
 
     BOOL IsLocal = TRUE;
-    parameters.push_back(EventDataArg(&IsLocal, sizeof(BOOL)));
+    parameters.push_back(EventDataArg(&IsLocal, sizeof(IsLocal)));
 
     std::wstring Path = L"c:\\path\\folder\\file.ext";
     parameters.push_back(EventDataArg(Path.c_str(), (ULONG)(Path.length()+1)*sizeof(wchar_t)));
 
     DWORD Day = MONDAY | TUESDAY;
-    parameters.push_back(EventDataArg(&Day, sizeof(DWORD)));
+    parameters.push_back(EventDataArg(&Day, sizeof(Day)));
 
     DWORD TransferType = Upload;
-    parameters.push_back(EventDataArg(&TransferType, sizeof(DWORD)));
+    parameters.push_back(EventDataArg(&TransferType, sizeof(TransferType)));
 
     // Write the event. You do not have to verify if your provider is enabled before
     // writing the event. ETW will write the event to any session that enabled
