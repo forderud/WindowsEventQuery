@@ -46,6 +46,6 @@ int wmain() {
         log.ReportInsertStrings(type, category, eventId, std::size(messages), messages);
     }
 
-    printf("[done]\n");
+    wprintf(L"[done]\n");
     return 0;
 }

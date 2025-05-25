@@ -31,5 +31,7 @@ int wmain(void) {
     // Write the event. You do not have to verify if your provider is enabled before
     // writing the event. ETW will write the event to any session that enabled
     // the provider. If no session enabled the provider, the event is not written.
+    wprintf(L"Writing log entry...\n");
     provider.Write(&TransferEvent, (ULONG)parameters.size(), parameters.data());
+    wprintf(L"[done]\n");
 }
