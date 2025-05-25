@@ -29,6 +29,16 @@ int wmain(void) {
 
     {
         // generate InteractiveInfoEvent log entry
+        std::vector<EVENT_DATA_DESCRIPTOR> params;
+        std::wstring path = L"User clicked on X...";
+        params.push_back(EventDataArg(path.c_str(), (path.length() + 1) * sizeof(wchar_t))); // incl. null-termination
+
+        wprintf(L"Writing log entry...\n");
+        provider.Write(&InteractiveInfoEvent, params.size(), params.data());
+    }
+
+    {
+        // generate BackgroundInfoEvent log entry
         // Parameter order need to match the EventData element order.
         std::vector<EVENT_DATA_DESCRIPTOR> params;
 
@@ -50,7 +60,7 @@ int wmain(void) {
         params.push_back(EventDataArg(&transfer, sizeof(transfer)));
 
         wprintf(L"Writing log entry...\n");
-        provider.Write(&InteractiveInfoEvent, params.size(), params.data());
+        provider.Write(&BackgroundInfoEvent, params.size(), params.data());
     }
 
     wprintf(L"[done]\n");

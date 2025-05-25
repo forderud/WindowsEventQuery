@@ -61,11 +61,18 @@
                 message ="$(string.Event.ErrorMessage)"/>
             <event value="3"
               level="win:Informational"
-              template="TransferTemplate"
+              template="PlainTemplate"
               channel="Application"
               task="Interactive"
               symbol="InteractiveInfoEvent"
               message ="$(string.Event.InteractiveInfoEvent)"/>
+            <event value="4"
+              level="win:Informational"
+              template="TransferTemplate"
+              channel="Application"
+              task="Background"
+              symbol="BackgroundInfoEvent"
+              message ="$(string.Event.BackgroundInfoEvent)"/>
         </events>
         <channels>
           <!-- standard "Application" log folder -->
@@ -87,8 +94,9 @@
         <!-- write first parameter string as-is. -->
         <string id="Event.WarningMessage" value="%1"/>
         <string id="Event.ErrorMessage" value="%1"/>
+        <string id="Event.InteractiveInfoEvent" value="%1"/>
         <!-- include 6th and 5th parameters in string. -->
-        <string id="Event.InteractiveInfoEvent" value="The %6 transfer will occur at day %5."/>
+        <string id="Event.BackgroundInfoEvent" value="The %6 transfer will occur at day %5."/>
       </stringTable>
     </resources>
   </localization>
