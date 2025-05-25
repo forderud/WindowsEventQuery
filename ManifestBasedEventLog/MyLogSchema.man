@@ -1,17 +1,17 @@
 <!-- <?xml version="1.0" encoding="UTF-16"?> -->
 <instrumentationManifest
-    xmlns="http://schemas.microsoft.com/win/2004/08/events"
+    xmlns="http://schemas.microsoft.com/win/2004/08/events" 
     xmlns:win="http://manifests.microsoft.com/win/2004/08/windows/events"
-    xmlns:xs="https://www.w3.org/2001/XMLSchema"
+    xmlns:xs="https://www.w3.org/2001/XMLSchema"    
     >
 
     <instrumentation>
         <events>
 
-            <provider name="Microsoft-Windows-ETWProvider"
-                guid="{D8909C24-5BE9-4502-98CA-AB7BDC24899D}"
-                symbol="ProviderGuid"
-                resourceFileName="C:\Dev\WindowsEventQuery\x64\Debug\ManifestBasedEventLog.exe"
+            <provider name="Microsoft-Windows-ETWProvider" 
+                guid="{D8909C24-5BE9-4502-98CA-AB7BDC24899D}" 
+                symbol="ProviderGuid" 
+                resourceFileName="C:\Dev\WindowsEventQuery\x64\Debug\ManifestBasedEventLog.exe" 
                 messageFileName="C:\Dev\WindowsEventQuery\x64\Debug\ManifestBasedEventLog.exe"
                 message="$(string.Provider.Name)"
                 >
@@ -43,7 +43,7 @@
 
                 <templates>
 
-                    <template tid="TransferTemplate">
+                   <template tid="TransferTemplate">
                         <data name="Image" inType="win:Pointer"/>
                         <data name="Scores" inType="win:UInt16" count="3"/>
                         <data name="ID" inType="win:GUID"/>
@@ -79,19 +79,18 @@
                 </templates>
 
                 <events>
-                    <event value="1"
-                        level="win:Informational"
-                        template="TransferTemplate"
+                    <event value="1" 
+                        level="win:Informational" 
+                        template="TransferTemplate" 
                         channel="Application"
                         symbol="TransferEvent"
                         message ="$(string.Event.WhenToTransfer)"
                         keywords="Read Local" />
                 </events>
-                
+
                 <channels>
                     <importChannel name="Application" chid="Application"/>
                 </channels>
-
             </provider>
 
         </events>
@@ -106,7 +105,7 @@
 
                 <string id="Map.Download" value="Download"/>
                 <string id="Map.Upload" value="Upload"/>
-                <string id="Map.UploadReply" value="Upload-reply"/>
+                <string id="Map.UploadReply" value="Upload-reply"/> 
 
                 <string id="Map.Sunday" value="Sunday"/>
                 <string id="Map.Monday" value="Monday"/>

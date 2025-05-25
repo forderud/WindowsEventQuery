@@ -1,7 +1,6 @@
 #include <windows.h>
 #include <stdio.h>
 #include <evntprov.h>
-#include <stdexcept>
 #include "MyLogSchema.h"  // Generated from manifest
 
 #define SUNDAY     0X1
@@ -13,84 +12,63 @@
 #define SATURDAY   0X40
 
 enum TRANSFER_TYPE {
-    Download = 1,
-    Upload,
-    UploadReply
+  Download = 1,
+  Upload,
+  UploadReply
 };
 
 #define MAX_NAMEDVALUES          5  // Maximum array size
 #define MAX_PAYLOAD_DESCRIPTORS  9 + (2 * MAX_NAMEDVALUES)
 
-struct NAMEDVALUE {
-    LPCWSTR name;
-    USHORT  value;
-};
+typedef struct _namedvalue {
+  LPCWSTR name;
+  USHORT  value;
+} NAMEDVALUE, *PNAMEDVALUE;
 
-/** ETW event provider registration wrapper class. */
-class EventHandle {
-public:
-    EventHandle(const GUID* providerGuid) {
-        DWORD status = EventRegister(
-            providerGuid, // GUID that identifies the provider
-            NULL,         // Callback not used
-            NULL,         // Context noot used
-            &m_provider   // Used when calling EventWrite and EventUnregister
-        );
-        if (ERROR_SUCCESS != status) {
-            wprintf(L"EventRegister failed with %lu\n", status);
-            throw std::runtime_error("EventRegister failed");
-        }
-    }
-
-    EventHandle(EventHandle&& obj) {
-        std::swap(m_provider, obj.m_provider);
-    }
-
-    ~EventHandle() {
-        EventUnregister(m_provider);
-        m_provider = 0;
-    }
-
-    void Write(const EVENT_DESCRIPTOR* EventDescriptor, ULONG UserDataCount, EVENT_DATA_DESCRIPTOR* UserData) {
-        DWORD status = EventWrite(m_provider, EventDescriptor, UserDataCount, UserData);
-        if (status != ERROR_SUCCESS) {
-            wprintf(L"EventWrite failed with 0x%x", status);
-            throw std::runtime_error("EventWrite failed");
-        }
-    }
-
-private:
-    REGHANDLE m_provider = 0;
-};
-
-
-int wmain(void) {
-    EventHandle provider(&ProviderGuid);
+void wmain(void)
+{
+    DWORD status = ERROR_SUCCESS;
+    REGHANDLE RegistrationHandle = NULL; 
+    EVENT_DATA_DESCRIPTOR Descriptors[MAX_PAYLOAD_DESCRIPTORS]; 
+    DWORD i = 0;
 
     // Data to load into event descriptors
-    USHORT Scores[3] = { 45, 63, 21 };
-    ULONG pImage = (ULONG)&Scores;
+
+    USHORT Scores[3] = {45, 63, 21};
+    void* pImage = &Scores;
     DWORD TransferType = Upload;
     DWORD Day = MONDAY | TUESDAY;
     LPCWSTR Path = L"c:\\path\\folder\\file.ext";
-    BYTE Cert[11] = { 0x2, 0x4, 0x8, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x0, 0x1 };
-    PBYTE Guid = (PBYTE)&ProviderGuid;
+    BYTE Cert[11] = {0x2, 0x4, 0x8, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x0, 0x1};
+    PBYTE Guid = (PBYTE) &ProviderGuid;
     USHORT ArraySize = MAX_NAMEDVALUES;
     BOOL IsLocal = TRUE;
-    NAMEDVALUE NamedValues[MAX_NAMEDVALUES] = {
+    NAMEDVALUE NamedValues[MAX_NAMEDVALUES] = { 
         {L"Bill", 1},
         {L"Bob", 2},
         {L"William", 3},
         {L"Robert", 4},
         {L"", 5}
-    };
+        };
 
+    status = EventRegister(
+        &ProviderGuid,      // GUID that identifies the provider
+        NULL,               // Callback not used
+        NULL,               // Context noot used
+        &RegistrationHandle // Used when calling EventWrite and EventUnregister
+        );
+
+    if (ERROR_SUCCESS != status)
+    {
+        wprintf(L"EventRegister failed with %lu\n", status);
+        goto cleanup;
+    }
+  
     // Load the array of data descriptors for the TransferEvent event. 
     // Add the data to the array in the order of the <data> elements
     // defined in the event's template. 
-    EVENT_DATA_DESCRIPTOR Descriptors[MAX_PAYLOAD_DESCRIPTORS];
-    DWORD i = 0;
-    EventDataDescCreate(&Descriptors[i++], &pImage, sizeof(ULONG));
+   
+    EventDataDescCreate(&Descriptors[i++], &pImage, sizeof(pImage));
     EventDataDescCreate(&Descriptors[i++], Scores, sizeof(Scores));
     EventDataDescCreate(&Descriptors[i++], Guid, sizeof(GUID));
     EventDataDescCreate(&Descriptors[i++], Cert, sizeof(Cert));
@@ -108,9 +86,11 @@ int wmain(void) {
     //
     // Because the array of structures in this example contains both strings 
     // and numbers, you must write each member of the structure separately.
-    for (int j = 0; j < MAX_NAMEDVALUES; j++) {
-        EventDataDescCreate(&Descriptors[i++], NamedValues[j].name, (ULONG)(wcslen(NamedValues[j].name) + 1) * sizeof(WCHAR));
-        EventDataDescCreate(&Descriptors[i++], &(NamedValues[j].value), sizeof(USHORT));
+
+    for (int j = 0; j < MAX_NAMEDVALUES; j++)
+    {
+        EventDataDescCreate(&Descriptors[i++], NamedValues[j].name, (ULONG)(wcslen(NamedValues[j].name)+1) * sizeof(WCHAR) );
+        EventDataDescCreate(&Descriptors[i++], &(NamedValues[j].value), sizeof(USHORT) );
     }
 
     EventDataDescCreate(&Descriptors[i++], &Day, sizeof(DWORD));
@@ -124,9 +104,20 @@ int wmain(void) {
     // before performing the extra work. The EventEnabled function tells you if a
     // session has enabled your provider, so you know if you need to perform the 
     // extra work or not.
-    provider.Write(
+
+    status = EventWrite(
+        RegistrationHandle,              // From EventRegister
         &TransferEvent,                  // EVENT_DESCRIPTOR generated from the manifest
         (ULONG)MAX_PAYLOAD_DESCRIPTORS,  // Size of the array of EVENT_DATA_DESCRIPTORs
         &Descriptors[0]                  // Array of descriptors that contain the event data
-    );
+        );
+
+    if (status != ERROR_SUCCESS) 
+    {
+        wprintf(L"EventWrite failed with 0x%x", status);
+    }
+
+cleanup:
+
+    EventUnregister(RegistrationHandle);
 }
