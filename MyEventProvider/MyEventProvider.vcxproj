@@ -60,6 +60,7 @@
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>copy MyEventProvider.man $(OutDir)
+echo wevtutil.exe um $(OutDir)MyEventProvider.man &gt; $(OutDir)UNREGISTER_MyEventProvider.bat
 echo wevtutil.exe im $(OutDir)MyEventProvider.man /rf:$(TargetPath) /mf:$(TargetPath) &gt; $(OutDir)REGISTER_MyEventProvider.bat</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -82,6 +83,7 @@ echo wevtutil.exe im $(OutDir)MyEventProvider.man /rf:$(TargetPath) /mf:$(Target
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>copy MyEventProvider.man $(OutDir)
+echo wevtutil.exe um $(OutDir)MyEventProvider.man &gt; $(OutDir)UNREGISTER_MyEventProvider.bat
 echo wevtutil.exe im $(OutDir)MyEventProvider.man /rf:$(TargetPath) /mf:$(TargetPath) &gt; $(OutDir)REGISTER_MyEventProvider.bat</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
