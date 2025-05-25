@@ -20,6 +20,9 @@
         </tasks>
 
         <templates>
+          <template tid="WarningTemplate">
+            <data name="Message" inType="win:UnicodeString" />
+          </template>
           <template tid="TransferTemplate">
             <data name="Scores" inType="win:UInt16" count="3"/>
             <data name="ID" inType="win:GUID"/>
@@ -45,6 +48,12 @@
         <events>
           <!-- level=severity, channel=destination_folder, task=task_category, symbol=preprocessor_name -->
           <event value="1"
+              level="win:Warning"
+              template="WarningTemplate"
+              channel="Application"
+              symbol="WarningMessage"
+              message ="$(string.Event.WarningMessage)"/>
+          <event value="2"
               level="win:Informational"
               template="TransferTemplate"
               channel="Application"
@@ -67,6 +76,7 @@
         <string id="Task.Disconnect" value="Disconnect"/>
         <string id="Task.Connect" value="Connect"/>
         <string id="Task.Validate" value="Connect"/>
+        <string id="Event.WarningMessage" value="%1"/>
         <string id="Event.WhenToTransfer" value="The %6 transfer will occur at day %5."/>
       </stringTable>
     </resources>
