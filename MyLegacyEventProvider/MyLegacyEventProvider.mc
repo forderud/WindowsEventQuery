@@ -1,4 +1,4 @@
-; // MyLegacyEventProvider
+; // Message Text File (.mc) with logging schema.
 ; // Based on https://learn.microsoft.com/en-us/windows/win32/eventlog/reporting-an-event
 
 ; // This is the header section.

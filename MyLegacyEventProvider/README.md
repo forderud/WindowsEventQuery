@@ -1,4 +1,5 @@
-Custom Windows event provider. Used to enable custom log entry types throgh the legacy [Event Logging](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-logging) API.
+Custom Windows event provider. Used to enable custom log entry types throgh the legacy [Event Logging](https://learn.microsoft.com/en-us/windows/win32/eventlog/event-logging)
+API. The log schema is defined in message text files (.mc).
 
 **WARNING**: Not recommended for new projects.
 
