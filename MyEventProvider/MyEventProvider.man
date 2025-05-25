@@ -62,6 +62,7 @@
               message ="$(string.Event.WhenToTransfer)"/>
         </events>
         <channels>
+          <!-- standard "Application" log folder -->
           <importChannel name="Application" chid="Application"/>
         </channels>
       </provider>
@@ -76,7 +77,10 @@
         <string id="Task.Disconnect" value="Disconnect"/>
         <string id="Task.Connect" value="Connect"/>
         <string id="Task.Validate" value="Connect"/>
+
+        <!-- write first parameter string as-is. -->
         <string id="Event.WarningMessage" value="%1"/>
+        <!-- include 6th and 5th parameters in string. -->
         <string id="Event.WhenToTransfer" value="The %6 transfer will occur at day %5."/>
       </stringTable>
     </resources>
