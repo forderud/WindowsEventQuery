@@ -58,6 +58,10 @@
     <PreBuildEvent>
       <Command>mc.exe MyEventProvider.man</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy MyEventProvider.man $(OutDir)
+echo wevtutil.exe im $(OutDir)MyEventProvider.man /rf:$(TargetPath) /mf:$(TargetPath) &gt; $(OutDir)REGISTER_MyEventProvider.bat</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -76,6 +80,10 @@
     <PreBuildEvent>
       <Command>mc.exe MyEventProvider.man</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy MyEventProvider.man $(OutDir)
+echo wevtutil.exe im $(OutDir)MyEventProvider.man /rf:$(TargetPath) /mf:$(TargetPath) &gt; $(OutDir)REGISTER_MyEventProvider.bat</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
