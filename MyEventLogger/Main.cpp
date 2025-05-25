@@ -8,16 +8,17 @@ int wmain(void) {
     EventHandle provider(&PROVIDER_GUID);
 
     {
+        // generate WarningMessage log entry
         std::vector<EVENT_DATA_DESCRIPTOR> params;
         std::wstring path = L"Something strange happened...";
-        params.push_back(EventDataArg(path.c_str(), (ULONG)(path.length() + 1) * sizeof(wchar_t))); // incl. null-termination
+        params.push_back(EventDataArg(path.c_str(), (path.length() + 1) * sizeof(wchar_t))); // incl. null-termination
 
         wprintf(L"Writing log entry...\n");
-        provider.Write(&WarningMessage, (ULONG)params.size(), params.data());
+        provider.Write(&WarningMessage, params.size(), params.data());
     }
 
     {
-        // Prepare UserData parameters for the TransferEvent event. 
+        // generate TransferEvent log entry
         // Parameter order need to match the EventData element order.
         std::vector<EVENT_DATA_DESCRIPTOR> params;
 
@@ -30,7 +31,7 @@ int wmain(void) {
         params.push_back(EventDataArg(cert, sizeof(cert)));
 
         std::wstring path = L"C:\\SomeFolder\\SomeFile.txt";
-        params.push_back(EventDataArg(path.c_str(), (ULONG)(path.length() + 1) * sizeof(wchar_t))); // incl. null-termination
+        params.push_back(EventDataArg(path.c_str(), (path.length() + 1) * sizeof(wchar_t))); // incl. null-termination
 
         DWORD day = 3;
         params.push_back(EventDataArg(&day, sizeof(day)));
@@ -38,11 +39,9 @@ int wmain(void) {
         DWORD transfer = 99;
         params.push_back(EventDataArg(&transfer, sizeof(transfer)));
 
-        // Write the event. You do not have to verify if your provider is enabled before
-        // writing the event. ETW will write the event to any session that enabled
-        // the provider. If no session enabled the provider, the event is not written.
         wprintf(L"Writing log entry...\n");
-        provider.Write(&TransferEvent, (ULONG)params.size(), params.data());
+        provider.Write(&TransferEvent, params.size(), params.data());
     }
+
     wprintf(L"[done]\n");
 }

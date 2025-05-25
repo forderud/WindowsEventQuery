@@ -29,8 +29,8 @@ public:
         m_provider = 0;
     }
 
-    void Write(const EVENT_DESCRIPTOR* EventDescriptor, ULONG UserDataCount, EVENT_DATA_DESCRIPTOR* UserData) {
-        DWORD status = EventWrite(m_provider, EventDescriptor, UserDataCount, UserData);
+    void Write(const EVENT_DESCRIPTOR* EventDescriptor, size_t UserDataCount, EVENT_DATA_DESCRIPTOR* UserData) {
+        DWORD status = EventWrite(m_provider, EventDescriptor, (ULONG)UserDataCount, UserData);
         if (status != ERROR_SUCCESS) {
             wprintf(L"EventWrite failed with 0x%x", status);
             throw std::runtime_error("EventWrite failed");
@@ -42,8 +42,8 @@ private:
 };
 
 /** WARNING: Does NOT copy the data. */
-static EVENT_DATA_DESCRIPTOR EventDataArg(const void* DataPtr, ULONG DataSize) {
+static EVENT_DATA_DESCRIPTOR EventDataArg(const void* DataPtr, size_t DataSize) {
     EVENT_DATA_DESCRIPTOR desc{};
-    EventDataDescCreate(&desc, DataPtr, DataSize);
+    EventDataDescCreate(&desc, DataPtr, (ULONG)DataSize);
     return desc;
 }
