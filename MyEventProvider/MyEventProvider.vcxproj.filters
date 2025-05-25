@@ -3,4 +3,11 @@
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="MyLogSchema.man" />
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MyLogSchema.rc" />
+  </ItemGroup>
 </Project>

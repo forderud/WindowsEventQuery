@@ -4,15 +4,6 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="MyLogSchema.man" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="README.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="MyLogSchema.rc" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="EventHandle.hpp" />
   </ItemGroup>
 </Project>

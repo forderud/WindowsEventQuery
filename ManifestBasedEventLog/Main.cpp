@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <vector>
 #include "EventHandle.hpp"
-#include "MyLogSchema.h"  // Generated from manifest
+#include "../MyEventProvider/MyLogSchema.h"  // Generated from manifest
 
 
 
