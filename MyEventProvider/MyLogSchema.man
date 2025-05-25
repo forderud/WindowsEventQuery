@@ -7,7 +7,7 @@
 
     <instrumentation>
         <events>
-            <provider name="MyManifestProvider"
+            <provider name="MyEventProvider"
                 guid="{1B9E037D-C2C1-4543-B732-D4BFDF082AF9}"
                 symbol="PROVIDER_GUID"
                 resourceFileName="PATH\MyEventProvider.dll"
@@ -72,7 +72,7 @@
       <!-- add translated strings here -->
         <resources culture="en-US">
             <stringTable>
-                <string id="Provider.Name" value="MyManifestProvider"/>
+                <string id="Provider.Name" value="MyEventProvider"/>
                 <string id="Task.Disconnect" value="Disconnect"/>
                 <string id="Task.Connect" value="Connect"/>
                 <string id="Task.Validate" value="Connect"/>
