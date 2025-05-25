@@ -21,6 +21,7 @@
 
         <templates>
           <template tid="PlainTemplate">
+            <!-- template for single-parameter string events -->
             <data name="Message" inType="win:UnicodeString" />
           </template>
           <template tid="TransferTemplate">
