@@ -4,10 +4,10 @@
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MyEventProvider.rc" />
+    <ResourceCompile Include="MyLegacyEventProvider.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MyEventProvider.mc" />
+    <None Include="MyLegacyEventProvider.mc" />
     <None Include="module.def" />
     <None Include="README.md" />
   </ItemGroup>

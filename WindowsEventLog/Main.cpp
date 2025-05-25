@@ -3,7 +3,7 @@
 #include <cassert>
 #include <iostream>
 
-#include "../MyEventProvider/MyEventProvider.h" // custom event provider
+#include "../MyLegacyEventProvider/MyLegacyEventProvider.h" // custom event provider
 
 
 /** C++ RAII wrapper of the legacy "Event Logging" API for generating log events. */
@@ -54,7 +54,7 @@ private:
 
 int wmain() {
     // open event provider
-    EventLogger log(L"MyEventProvider"); // or L"Application" or L"System"
+    EventLogger log(L"MyLegacyEventProvider"); // or L"Application" or L"System"
 
     // generate log entries defined by the provider
     {

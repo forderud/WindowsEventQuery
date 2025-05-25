@@ -10,7 +10,7 @@ int wmain(int argc, wchar_t* argv[]) {
         wprintf(L"  List all channels: WindowsEventQuery.exe channels\n");
         wprintf(L"  List all publishers: WindowsEventQuery.exe publishers\n");
         wprintf(L"Examples:\n");
-        wprintf(L"  List all MyEventProvider events: WindowsEventQuery.exe Application */System/Provider[@Name='MyEventProvider']\n");
+        wprintf(L"  List all MyLegacyEventProvider events: WindowsEventQuery.exe Application */System/Provider[@Name='MyLegacyEventProvider']\n");
         return 1;
     }
 
@@ -41,7 +41,7 @@ int wmain(int argc, wchar_t* argv[]) {
 
         // perform event query
         std::wstring channel = argv[2]; // examples: L"System" or L"Application"
-        std::wstring query = argv[3];   // examples: L"*/System[(Level>=1) and (Level<=2)]" or L"*/System/Provider[@Name='MyEventProvider']"
+        std::wstring query = argv[3];   // examples: L"*/System[(Level>=1) and (Level<=2)]" or L"*/System/Provider[@Name='MyLegacyEventProvider']"
         EventQuery(channel, query, 10);
     } else {
         wprintf(L"ERROR: Incorrect arguments.\n");

@@ -4,7 +4,7 @@
 #include <cassert>
 #include <string>
 
-#include "../MyEventProvider/MyEventProvider.h" // custom event provider
+#include "../MyLegacyEventProvider/MyLegacyEventProvider.h" // custom event provider
 
 
 /** Return the full path for the current EXE or DLL. */
@@ -43,7 +43,7 @@ STDAPI DllRegisterServer() {
         return E_UNEXPECTED;
 
     CRegKey reg;
-    res = reg.Create(parent, L"MyEventProvider");
+    res = reg.Create(parent, L"MyLegacyEventProvider");
     assert(res == ERROR_SUCCESS);
     if (res != ERROR_SUCCESS)
         return E_UNEXPECTED;
@@ -84,7 +84,7 @@ STDAPI DllUnregisterServer() {
     if (res != ERROR_SUCCESS)
         return E_UNEXPECTED;
 
-    res = parent.DeleteSubKey(L"MyEventProvider");
+    res = parent.DeleteSubKey(L"MyLegacyEventProvider");
     assert(res == ERROR_SUCCESS);
     if (res != ERROR_SUCCESS)
         return E_UNEXPECTED;

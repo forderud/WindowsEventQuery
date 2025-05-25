@@ -1,0 +1,6 @@
+/x64
+/*.vcxproj.user
+/*.bin
+/MyLegacyEventProvider.aps
+/MyLegacyEventProvider.h
+/MyLegacyEventProvider.rc

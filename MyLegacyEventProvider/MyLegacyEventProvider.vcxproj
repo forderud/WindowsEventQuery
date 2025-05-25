@@ -14,7 +14,7 @@
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{4fadaf43-9be7-4a30-8720-9d294aa3b7b1}</ProjectGuid>
-    <RootNamespace>MyEventProvider</RootNamespace>
+    <RootNamespace>MyLegacyEventProvider</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -57,7 +57,7 @@
       <ModuleDefinitionFile>module.def</ModuleDefinitionFile>
     </Link>
     <PreBuildEvent>
-      <Command>mc.exe MyEventProvider.mc
+      <Command>mc.exe MyLegacyEventProvider.mc
 </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -79,7 +79,7 @@
       <ModuleDefinitionFile>module.def</ModuleDefinitionFile>
     </Link>
     <PreBuildEvent>
-      <Command>mc.exe MyEventProvider.mc
+      <Command>mc.exe MyLegacyEventProvider.mc
 </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -87,11 +87,11 @@
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MyEventProvider.rc" />
+    <ResourceCompile Include="MyLegacyEventProvider.rc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="module.def" />
-    <None Include="MyEventProvider.mc" />
+    <None Include="MyLegacyEventProvider.mc" />
     <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

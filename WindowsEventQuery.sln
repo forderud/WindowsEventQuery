@@ -10,7 +10,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsEventLog", "WindowsE
 		{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1} = {4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyEventProvider", "MyEventProvider\MyEventProvider.vcxproj", "{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyLegacyEventProvider", "MyLegacyEventProvider\MyLegacyEventProvider.vcxproj", "{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ManifestBasedEventLog", "ManifestBasedEventLog\ManifestBasedEventLog.vcxproj", "{5B1822E6-5C54-4CDA-A562-EFEBE4D1DCED}"
 EndProject
