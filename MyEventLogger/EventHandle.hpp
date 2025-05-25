@@ -42,7 +42,7 @@ private:
 };
 
 /** WARNING: Does NOT copy the data. */
-static EVENT_DATA_DESCRIPTOR EventDataArg(const void* DataPtr, size_t DataSize) {
+static EVENT_DATA_DESCRIPTOR EventData(const void* DataPtr, size_t DataSize) {
     EVENT_DATA_DESCRIPTOR desc{};
     EventDataDescCreate(&desc, DataPtr, (ULONG)DataSize);
     return desc;
