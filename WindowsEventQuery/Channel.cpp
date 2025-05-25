@@ -1,3 +1,4 @@
+/* DOC: https://learn.microsoft.com/en-us/windows/win32/wes/getting-and-setting-a-channel-s-configuration-properties */
 #include <stdio.h>
 #include <cassert>
 #include "Channel.hpp"
