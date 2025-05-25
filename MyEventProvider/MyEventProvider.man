@@ -52,6 +52,7 @@
                 </templates>
 
                 <events>
+                  <!-- level=severity, channel=destination_folder, task=task_category, symbol=preprocessor_name -->
                     <event value="1"
                         level="win:Informational"
                         template="TransferTemplate"
