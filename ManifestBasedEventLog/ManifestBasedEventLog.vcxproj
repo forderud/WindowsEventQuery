@@ -89,6 +89,9 @@
   <ItemGroup>
     <ResourceCompile Include="MyLogSchema.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EventHandle.hpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

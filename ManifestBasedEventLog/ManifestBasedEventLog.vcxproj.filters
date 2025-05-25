@@ -12,4 +12,7 @@
   <ItemGroup>
     <ResourceCompile Include="MyLogSchema.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EventHandle.hpp" />
+  </ItemGroup>
 </Project>
