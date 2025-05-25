@@ -14,7 +14,7 @@
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{5b1822e6-5c54-4cda-a562-efebe4d1dced}</ProjectGuid>
-    <RootNamespace>ManifestBasedEventLog</RootNamespace>
+    <RootNamespace>MyEventLogger</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
