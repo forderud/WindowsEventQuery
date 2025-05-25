@@ -56,7 +56,7 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <PreBuildEvent>
-      <Command>mc.exe MyLogSchema.man</Command>
+      <Command>mc.exe MyEventProvider.man</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -74,18 +74,18 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <PreBuildEvent>
-      <Command>mc.exe MyLogSchema.man</Command>
+      <Command>mc.exe MyEventProvider.man</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MyLogSchema.man" />
+    <None Include="MyEventProvider.man" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MyLogSchema.rc" />
+    <ResourceCompile Include="MyEventProvider.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

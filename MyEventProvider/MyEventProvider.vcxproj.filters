@@ -4,10 +4,10 @@
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MyLogSchema.man" />
+    <None Include="MyEventProvider.man" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MyLogSchema.rc" />
+    <ResourceCompile Include="MyEventProvider.rc" />
   </ItemGroup>
 </Project>

@@ -6,13 +6,13 @@ Based on [Writing Manifest-based Events](https://learn.microsoft.com/en-us/windo
 ### How to install
 From an admin command prompt:
 ```
-wevtutil.exe im MyLogSchema.man /rf:%DLL_PATH% /mf:%DLL_PATH%
+wevtutil.exe im MyEventProvider.man /rf:%DLL_PATH% /mf:%DLL_PATH%
 ```
 
 ### How to uninstall
 From an admin command prompt:
 ```
-wevtutil.exe um MyLogSchema.man
+wevtutil.exe um MyEventProvider.man
 ```
 
 
