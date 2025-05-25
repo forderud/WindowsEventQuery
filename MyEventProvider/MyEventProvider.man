@@ -14,9 +14,8 @@
           message="$(string.Provider.Name)">
 
         <tasks>
-          <task name="Disconnect" symbol="TASK_DISCONNECT" value="1" message="$(string.Task.Disconnect)" />
-          <task name="Connect" symbol="TASK_CONNECT" value="2" message="$(string.Task.Connect)" />
-          <task name="Validate" symbol="TASK_VALIDATE" value="3" message="$(string.Task.Validate)" />
+          <task name="Interactive" symbol="TASK_INTERACTIVE" value="1" message="$(string.Task.Interactive)" />
+          <task name="Background" symbol="TASK_BACKGROUND" value="2" message="$(string.Task.Background)" />
         </tasks>
 
         <templates>
@@ -64,7 +63,7 @@
               level="win:Informational"
               template="TransferTemplate"
               channel="Application"
-              task="Connect"
+              task="Interactive"
               symbol="TransferEvent"
               message ="$(string.Event.WhenToTransfer)"/>
         </events>
@@ -81,9 +80,9 @@
     <resources culture="en-US">
       <stringTable>
         <string id="Provider.Name" value="MyEventProvider"/>
-        <string id="Task.Disconnect" value="Disconnect"/>
-        <string id="Task.Connect" value="Connect"/>
-        <string id="Task.Validate" value="Connect"/>
+
+        <string id="Task.Interactive" value="Interactive"/>
+        <string id="Task.Background" value="Background"/>
 
         <!-- write first parameter string as-is. -->
         <string id="Event.WarningMessage" value="%1"/>
