@@ -19,7 +19,7 @@ int wmain(void) {
     BYTE cert[11] = { 0x2, 0x4, 0x8, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x0, 0x1 };
     parameters.push_back(EventDataArg(cert, sizeof(cert)));
 
-    std::wstring path = L"c:\\path\\folder\\file.ext";
+    std::wstring path = L"C:\\folder\\SomeFile.txt";
     parameters.push_back(EventDataArg(path.c_str(), (ULONG)(path.length()+1)*sizeof(wchar_t))); // incl. null-termination
 
     DWORD day = 3;
