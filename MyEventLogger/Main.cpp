@@ -4,14 +4,6 @@
 #include "../MyEventProvider/MyLogSchema.h"  // Generated from manifest
 
 
-
-/** WARNING: Does NOT copy the data. */
-static EVENT_DATA_DESCRIPTOR EventDataArg(const void* DataPtr, ULONG DataSize) {
-    EVENT_DATA_DESCRIPTOR desc{};
-    EventDataDescCreate(&desc, DataPtr, DataSize);
-    return desc;
-}
-
 int wmain(void) {
     EventHandle provider(&PROVIDER_GUID);
 

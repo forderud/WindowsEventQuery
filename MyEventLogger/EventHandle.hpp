@@ -40,3 +40,10 @@ public:
 private:
     REGHANDLE m_provider = 0;
 };
+
+/** WARNING: Does NOT copy the data. */
+static EVENT_DATA_DESCRIPTOR EventDataArg(const void* DataPtr, ULONG DataSize) {
+    EVENT_DATA_DESCRIPTOR desc{};
+    EventDataDescCreate(&desc, DataPtr, DataSize);
+    return desc;
+}
