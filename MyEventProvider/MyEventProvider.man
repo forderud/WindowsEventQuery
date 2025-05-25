@@ -69,7 +69,7 @@
             <event value="4"
               level="win:Informational"
               template="TransferTemplate"
-              channel="Application"
+              channel="AdminChannel"
               task="Background"
               symbol="BackgroundInfoEvent"
               message ="$(string.Event.BackgroundInfoEvent)"/>
@@ -77,6 +77,12 @@
         <channels>
           <!-- standard "Application" log folder -->
           <importChannel name="Application" chid="Application"/>
+
+          <!-- Dedicated MyEventProvider log channel -->
+          <channel chid="AdminChannel"
+            name="MyEventProvider/Admin"
+            type="Admin"
+            enabled="true"/>
         </channels>
       </provider>
     </events>
