@@ -20,7 +20,7 @@
         </tasks>
 
         <templates>
-          <template tid="WarningTemplate">
+          <template tid="PlainTemplate">
             <data name="Message" inType="win:UnicodeString" />
           </template>
           <template tid="TransferTemplate">
@@ -49,11 +49,17 @@
           <!-- level=severity, channel=destination_folder, task=task_category, symbol=preprocessor_name -->
           <event value="1"
               level="win:Warning"
-              template="WarningTemplate"
+              template="PlainTemplate"
               channel="Application"
               symbol="WarningMessage"
               message ="$(string.Event.WarningMessage)"/>
-          <event value="2"
+            <event value="2"
+                level="win:Error"
+                template="PlainTemplate"
+                channel="Application"
+                symbol="ErrorMessage"
+                message ="$(string.Event.ErrorMessage)"/>
+            <event value="3"
               level="win:Informational"
               template="TransferTemplate"
               channel="Application"
@@ -80,6 +86,7 @@
 
         <!-- write first parameter string as-is. -->
         <string id="Event.WarningMessage" value="%1"/>
+        <string id="Event.ErrorMessage" value="%1"/>
         <!-- include 6th and 5th parameters in string. -->
         <string id="Event.WhenToTransfer" value="The %6 transfer will occur at day %5."/>
       </stringTable>

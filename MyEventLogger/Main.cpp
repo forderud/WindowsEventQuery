@@ -18,6 +18,16 @@ int wmain(void) {
     }
 
     {
+        // generate ErrorMessage log entry
+        std::vector<EVENT_DATA_DESCRIPTOR> params;
+        std::wstring path = L"Something fucked up...";
+        params.push_back(EventDataArg(path.c_str(), (path.length() + 1) * sizeof(wchar_t))); // incl. null-termination
+
+        wprintf(L"Writing log entry...\n");
+        provider.Write(&ErrorMessage, params.size(), params.data());
+    }
+
+    {
         // generate TransferEvent log entry
         // Parameter order need to match the EventData element order.
         std::vector<EVENT_DATA_DESCRIPTOR> params;
