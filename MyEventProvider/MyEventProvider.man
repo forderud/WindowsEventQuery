@@ -64,8 +64,8 @@
               template="TransferTemplate"
               channel="Application"
               task="Interactive"
-              symbol="TransferEvent"
-              message ="$(string.Event.WhenToTransfer)"/>
+              symbol="InteractiveInfoEvent"
+              message ="$(string.Event.InteractiveInfoEvent)"/>
         </events>
         <channels>
           <!-- standard "Application" log folder -->
@@ -88,7 +88,7 @@
         <string id="Event.WarningMessage" value="%1"/>
         <string id="Event.ErrorMessage" value="%1"/>
         <!-- include 6th and 5th parameters in string. -->
-        <string id="Event.WhenToTransfer" value="The %6 transfer will occur at day %5."/>
+        <string id="Event.InteractiveInfoEvent" value="The %6 transfer will occur at day %5."/>
       </stringTable>
     </resources>
   </localization>

@@ -28,7 +28,7 @@ int wmain(void) {
     }
 
     {
-        // generate TransferEvent log entry
+        // generate InteractiveInfoEvent log entry
         // Parameter order need to match the EventData element order.
         std::vector<EVENT_DATA_DESCRIPTOR> params;
 
@@ -50,7 +50,7 @@ int wmain(void) {
         params.push_back(EventDataArg(&transfer, sizeof(transfer)));
 
         wprintf(L"Writing log entry...\n");
-        provider.Write(&TransferEvent, params.size(), params.data());
+        provider.Write(&InteractiveInfoEvent, params.size(), params.data());
     }
 
     wprintf(L"[done]\n");
