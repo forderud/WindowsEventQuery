@@ -2,75 +2,73 @@
 <instrumentationManifest
     xmlns="http://schemas.microsoft.com/win/2004/08/events"
     xmlns:win="http://manifests.microsoft.com/win/2004/08/windows/events"
-    xmlns:xs="https://www.w3.org/2001/XMLSchema"
-    >
+    xmlns:xs="https://www.w3.org/2001/XMLSchema">
 
-    <instrumentation>
+  <instrumentation>
+    <events>
+      <provider name="MyEventProvider"
+          guid="{1B9E037D-C2C1-4543-B732-D4BFDF082AF9}"
+          symbol="PROVIDER_GUID"
+          resourceFileName="PATH\MyEventProvider.dll"
+          messageFileName="PATH\MyEventProvider.dll"
+          message="$(string.Provider.Name)">
+
+        <tasks>
+          <task name="Disconnect" symbol="TASK_DISCONNECT" value="1" message="$(string.Task.Disconnect)" />
+          <task name="Connect" symbol="TASK_CONNECT" value="2" message="$(string.Task.Connect)" />
+          <task name="Validate" symbol="TASK_VALIDATE" value="3" message="$(string.Task.Validate)" />
+        </tasks>
+
+        <templates>
+          <template tid="TransferTemplate">
+            <data name="Scores" inType="win:UInt16" count="3"/>
+            <data name="ID" inType="win:GUID"/>
+            <data name="Certificate" inType="win:Binary" length="11" />
+            <data name="Path" inType="win:UnicodeString" />
+
+            <data name="Day" inType="win:UInt32" />
+            <data name="Transfer" inType="win:UInt32" />
+
+            <UserData>
+              <EventData xmlns="ProviderNamespace">
+                <Transfer> %6 </Transfer>
+                <Day> %5 </Day>
+                <Path> %4 </Path>
+                <Scores> %1 </Scores>
+                <Certificate> %3 </Certificate>
+                <ID> %2 </ID>
+              </EventData>
+            </UserData>
+          </template>
+        </templates>
+
         <events>
-            <provider name="MyEventProvider"
-                guid="{1B9E037D-C2C1-4543-B732-D4BFDF082AF9}"
-                symbol="PROVIDER_GUID"
-                resourceFileName="PATH\MyEventProvider.dll"
-                messageFileName="PATH\MyEventProvider.dll"
-                message="$(string.Provider.Name)"
-                >
-
-              <tasks>
-                <task name="Disconnect" symbol="TASK_DISCONNECT" value="1" message="$(string.Task.Disconnect)" />
-                <task name="Connect" symbol="TASK_CONNECT" value="2" message="$(string.Task.Connect)" />
-                <task name="Validate" symbol="TASK_VALIDATE" value="3" message="$(string.Task.Validate)" />
-              </tasks>
-
-                <templates>
-                    <template tid="TransferTemplate">
-                        <data name="Scores" inType="win:UInt16" count="3"/>
-                        <data name="ID" inType="win:GUID"/>
-                        <data name="Certificate" inType="win:Binary" length="11" />
-                        <data name="Path" inType="win:UnicodeString" />
-
-                        <data name="Day" inType="win:UInt32" />
-                        <data name="Transfer" inType="win:UInt32" />
-
-                        <UserData>
-                            <EventData xmlns="ProviderNamespace">
-                                <Transfer> %6 </Transfer>
-                                <Day> %5 </Day>
-                                <Path> %4 </Path>
-                                <Scores> %1 </Scores>
-                                <Certificate> %3 </Certificate>
-                                <ID> %2 </ID>
-                            </EventData>
-                        </UserData>
-                    </template>
-                </templates>
-
-                <events>
-                  <!-- level=severity, channel=destination_folder, task=task_category, symbol=preprocessor_name -->
-                    <event value="1"
-                        level="win:Informational"
-                        template="TransferTemplate"
-                        channel="Application"
-                        task="Connect"
-                        symbol="TransferEvent"
-                        message ="$(string.Event.WhenToTransfer)" />
-                </events>
-                <channels>
-                    <importChannel name="Application" chid="Application"/>
-                </channels>
-            </provider>
+          <!-- level=severity, channel=destination_folder, task=task_category, symbol=preprocessor_name -->
+          <event value="1"
+              level="win:Informational"
+              template="TransferTemplate"
+              channel="Application"
+              task="Connect"
+              symbol="TransferEvent"
+              message ="$(string.Event.WhenToTransfer)"/>
         </events>
-    </instrumentation>
+        <channels>
+          <importChannel name="Application" chid="Application"/>
+        </channels>
+      </provider>
+    </events>
+  </instrumentation>
 
-    <localization>
-      <!-- add translated strings here -->
-        <resources culture="en-US">
-            <stringTable>
-                <string id="Provider.Name" value="MyEventProvider"/>
-                <string id="Task.Disconnect" value="Disconnect"/>
-                <string id="Task.Connect" value="Connect"/>
-                <string id="Task.Validate" value="Connect"/>
-                <string id="Event.WhenToTransfer" value="The %6 transfer will occur at day %5."/>
-            </stringTable>
-        </resources>
-    </localization>
+  <localization>
+    <!-- add translated strings here -->
+    <resources culture="en-US">
+      <stringTable>
+        <string id="Provider.Name" value="MyEventProvider"/>
+        <string id="Task.Disconnect" value="Disconnect"/>
+        <string id="Task.Connect" value="Connect"/>
+        <string id="Task.Validate" value="Connect"/>
+        <string id="Event.WhenToTransfer" value="The %6 transfer will occur at day %5."/>
+      </stringTable>
+    </resources>
+  </localization>
 </instrumentationManifest>
