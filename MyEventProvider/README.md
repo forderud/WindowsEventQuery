@@ -23,4 +23,4 @@ Observed problem:
 to the EventLog service account (NT SERVICE\EventLog).
 ```
 
-Solution: Grant `Users` access to `ManifestBasedEventLog.exe`.
+Solution: Grant `Users` access to `MyEventProvider.dll`.
