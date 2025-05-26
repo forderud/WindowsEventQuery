@@ -54,7 +54,7 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <PreBuildEvent>
-      <Command>mc.exe MyEventProvider.man</Command>
+      <Command>mc.exe -cs MyEvent MyEventProvider.man</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>copy MyEventProvider.man $(OutDir)
@@ -77,7 +77,7 @@ echo wevtutil.exe im $(OutDir)MyEventProvider.man /rf:$(TargetPath) /mf:$(Target
       <EnableUAC>false</EnableUAC>
     </Link>
     <PreBuildEvent>
-      <Command>mc.exe MyEventProvider.man</Command>
+      <Command>mc.exe -cs MyEvent MyEventProvider.man</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>copy MyEventProvider.man $(OutDir)
