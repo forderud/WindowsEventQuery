@@ -11,4 +11,7 @@
     <ClInclude Include="Event.hpp" />
     <ClInclude Include="Publisher.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
 </Project>

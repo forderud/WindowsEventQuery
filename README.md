@@ -1,8 +1,8 @@
-Sample code for **querying the Windows event logs**. Based on Microsoft's [Consuming Events (Windows Event Log)](https://learn.microsoft.com/en-us/windows/win32/wes/consuming-events) article.
-
-## WindowsEventQuery tool
-Command-line C++ application that demonstrates how to query the Windows event log APIs with XPath queries. Has a command-line interface resembling `wevtutil`.
-
+Sample projects for logging on Windows, including:
+* `MyEventProvider`: Project for defining logging schemas.
+* `MyEventLogger`: C++ project for logging through the provider.
+* `MyEventLoggerCs`: C¤ project for logging through the provider.
+* `WindowsEventQuery`: C++ project for querying Windows event logs.
 
 ## wevtutil tool
 [wevtutil](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wevtutil) can be used to query the Windows Event log from the command-line.
