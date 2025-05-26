@@ -5,7 +5,7 @@
 
 
 int wmain(void) {
-    EventHandle provider(&PROVIDER_GUID);
+    EventHandle provider(&MyEventProvider);
 
     {
         // generate WarningMessage log entry
@@ -45,7 +45,7 @@ int wmain(void) {
         USHORT scores[3] = { 45, 63, 21 };
         params.push_back(EventData(scores, sizeof(scores)));
 
-        params.push_back(EventData(&PROVIDER_GUID, sizeof(PROVIDER_GUID)));
+        params.push_back(EventData(&MyEventProvider, sizeof(MyEventProvider)));
 
         BYTE cert[11] = { 0x2, 0x4, 0x8, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x0, 0x1 };
         params.push_back(EventData(cert, sizeof(cert)));
