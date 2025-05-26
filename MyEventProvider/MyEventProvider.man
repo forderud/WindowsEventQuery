@@ -47,8 +47,9 @@
 
         <events>
           <!-- level=severity (win:Critical, win:Error, win:Warning, win:Informational or win:Verbose),
+               template=parameter_template (optional)
                channel=destination_folder,
-               task=task_category,
+               task=task_category (optional),
                symbol=preprocessor_name -->
           <event value="1"
               level="win:Warning"
