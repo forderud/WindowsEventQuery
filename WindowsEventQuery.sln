@@ -5,13 +5,6 @@ VisualStudioVersion = 17.12.35827.183
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsEventQuery", "WindowsEventQuery\WindowsEventQuery.vcxproj", "{B400B20C-F246-430E-851B-A32F722A4259}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyLegacyEventLogger", "MyLegacyEventLogger\MyLegacyEventLogger.vcxproj", "{8E5047D3-F8F3-40FE-8A9C-2F8E20C85829}"
-	ProjectSection(ProjectDependencies) = postProject
-		{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1} = {4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyLegacyEventProvider", "MyLegacyEventProvider\MyLegacyEventProvider.vcxproj", "{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyEventLogger", "MyEventLogger\MyEventLogger.vcxproj", "{5B1822E6-5C54-4CDA-A562-EFEBE4D1DCED}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B7D5FFAA-D26D-4708-94F7-20205E880CEB} = {B7D5FFAA-D26D-4708-94F7-20205E880CEB}
@@ -45,22 +38,6 @@ Global
 		{B400B20C-F246-430E-851B-A32F722A4259}.Release|Any CPU.Build.0 = Release|x64
 		{B400B20C-F246-430E-851B-A32F722A4259}.Release|x64.ActiveCfg = Release|x64
 		{B400B20C-F246-430E-851B-A32F722A4259}.Release|x64.Build.0 = Release|x64
-		{8E5047D3-F8F3-40FE-8A9C-2F8E20C85829}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{8E5047D3-F8F3-40FE-8A9C-2F8E20C85829}.Debug|Any CPU.Build.0 = Debug|x64
-		{8E5047D3-F8F3-40FE-8A9C-2F8E20C85829}.Debug|x64.ActiveCfg = Debug|x64
-		{8E5047D3-F8F3-40FE-8A9C-2F8E20C85829}.Debug|x64.Build.0 = Debug|x64
-		{8E5047D3-F8F3-40FE-8A9C-2F8E20C85829}.Release|Any CPU.ActiveCfg = Release|x64
-		{8E5047D3-F8F3-40FE-8A9C-2F8E20C85829}.Release|Any CPU.Build.0 = Release|x64
-		{8E5047D3-F8F3-40FE-8A9C-2F8E20C85829}.Release|x64.ActiveCfg = Release|x64
-		{8E5047D3-F8F3-40FE-8A9C-2F8E20C85829}.Release|x64.Build.0 = Release|x64
-		{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}.Debug|Any CPU.Build.0 = Debug|x64
-		{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}.Debug|x64.ActiveCfg = Debug|x64
-		{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}.Debug|x64.Build.0 = Debug|x64
-		{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}.Release|Any CPU.ActiveCfg = Release|x64
-		{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}.Release|Any CPU.Build.0 = Release|x64
-		{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}.Release|x64.ActiveCfg = Release|x64
-		{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}.Release|x64.Build.0 = Release|x64
 		{5B1822E6-5C54-4CDA-A562-EFEBE4D1DCED}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{5B1822E6-5C54-4CDA-A562-EFEBE4D1DCED}.Debug|Any CPU.Build.0 = Debug|x64
 		{5B1822E6-5C54-4CDA-A562-EFEBE4D1DCED}.Debug|x64.ActiveCfg = Debug|x64
