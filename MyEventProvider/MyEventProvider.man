@@ -6,9 +6,9 @@
 
   <instrumentation>
     <events>
-      <provider name="MyEventProvider"
+      <provider name="MyMoviePlayer"
           guid="{1B9E037D-C2C1-4543-B732-D4BFDF082AF9}"
-          symbol="MyEventProvider"
+          symbol="MyMoviePlayer"
           resourceFileName="PATH\MyEventProvider.dll"
           messageFileName="PATH\MyEventProvider.dll"
           message="$(string.Provider.Name)">
@@ -62,13 +62,13 @@
           <importChannel name="Application" chid="Application"/>
 
           <!-- type = Admin, Operational, Analytic or Debug -->
-          <!-- Dedicated MyEventProvider log channels -->
+          <!-- Dedicated MyMoviePlayer log channels -->
           <channel chid="AdminChannel"
-            name="MyEventProvider/Admin"
+            name="MyMoviePlayer/Admin"
             type="Admin"
             enabled="true"/>
           <channel chid="OperationalChannel"
-            name="MyEventProvider/Operational"
+            name="MyMoviePlayer/Operational"
             type="Operational"
             enabled="true"/>
         </channels>
@@ -81,7 +81,7 @@
     <!-- Translatable strings here. -->
     <resources culture="en-US">
       <stringTable>
-        <string id="Provider.Name" value="MyEventProvider"/>
+        <string id="Provider.Name" value="MyMoviePlayer"/>
 
         <string id="Task.Interactive" value="Interactive"/>
         <string id="Task.Background" value="Background"/>

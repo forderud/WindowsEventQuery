@@ -5,7 +5,7 @@
 
 
 int wmain(void) {
-    EventHandle provider(&MyEventProvider);
+    EventHandle provider(&MyMoviePlayer);
 
     {
         // generate WarningMessage log entry
