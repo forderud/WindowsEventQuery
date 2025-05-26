@@ -14,8 +14,13 @@
           message="$(string.Provider.Name)">
 
         <tasks>
-          <task name="Interactive" symbol="TASK_INTERACTIVE" value="1" message="$(string.Task.Interactive)" />
-          <task name="Background" symbol="TASK_BACKGROUND" value="2" message="$(string.Task.Background)" />
+          <task name="Playback" symbol="TASK_PLAYBACK" value="1" message="$(string.Task.Playback)" />
+          <task name="Security" symbol="TASK_SECURITY" value="2" message="$(string.Task.Security)" />
+          <task name="Connectivity" symbol="TASK_CONNECTIVITY" value="3" message="$(string.Task.Connectivity)" />
+          <task name="Settings" symbol="TASK_SETTINGS" value="4" message="$(string.Task.Settings)" />
+
+            <task name="Interactive" symbol="TASK_INTERACTIVE" value="11" message="$(string.Task.Interactive)" />
+          <task name="Background" symbol="TASK_BACKGROUND" value="12" message="$(string.Task.Background)" />
         </tasks>
 
         <templates>
@@ -35,6 +40,91 @@
                channel=destination_folder,
                task=task_category (optional),
                symbol=preprocessor_name -->
+          <event value="1"
+                level="win:Informational"
+                template="SingleStringTemplate"
+                channel="OperationalChannel"
+                task="Playback"
+                symbol="Play"
+                message ="$(string.Event.PlayMessage)"/>
+          <event value="2"
+                level="win:Informational"
+                channel="OperationalChannel"
+                task="Playback"
+                symbol="Pause"
+                message ="$(string.Event.PauseMessage)"/>
+          <event value="3"
+                level="win:Informational"
+                template="SingleStringTemplate"
+                channel="OperationalChannel"
+                task="Playback"
+                symbol="Next"
+                message ="$(string.Event.NextMessage)"/>
+          <event value="4"
+                level="win:Informational"
+                template="SingleStringTemplate"
+                channel="OperationalChannel"
+                task="Playback"
+                symbol="Restart"
+                message ="$(string.Event.RestartMessage)"/>
+          <event value="5"
+                level="win:Informational"
+                template="SingleStringTemplate"
+                channel="OperationalChannel"
+                task="Playback"
+                symbol="Previous"
+                message ="$(string.Event.PreviousMessage)"/>
+          <event value="6"
+                level="win:Informational"
+                template="SingleStringTemplate"
+                channel="OperationalChannel"
+                task="Playback"
+                symbol="Goto"
+                message ="$(string.Event.GotoMessage)"/>
+
+          <event value="10"
+                level="win:Informational"
+                template="SingleStringTemplate"
+                channel="AdminChannel"
+                task="Security"
+                symbol="Authsuccess"
+                message ="$(string.Event.AuthsuccessMessage)"/>
+          <event value="11"
+                level="win:Error"
+                template="SingleStringTemplate"
+                channel="AdminChannel"
+                task="Security"
+                symbol="AuthFailure"
+                message ="$(string.Event.AuthFailureMessage)"/>
+
+          <event value="20"
+                level="win:Informational"
+                channel="AdminChannel"
+                task="Connectivity"
+                symbol="Connected"
+                message ="$(string.Event.ConnectedMessage)"/>
+          <event value="21"
+                level="win:Warning"
+                channel="AdminChannel"
+                task="Connectivity"
+                symbol="Disconnected"
+                message ="$(string.Event.DisconnectedMessage)"/>
+
+          <event value="30"
+                level="win:Informational"
+                template="SingleUintTemplate"
+                channel="OperationalChannel"
+                task="Settings"
+                symbol="CacheSizeMB"
+                message ="$(string.Event.CacheSizeMessage)"/>
+          <event value="31"
+                level="win:Informational"
+                template="SingleUintTemplate"
+                channel="OperationalChannel"
+                task="Settings"
+                symbol="ThrottlingMbps"
+                message ="$(string.Event.ThrottlingMessage)"/>
+
           <event value="101"
               level="win:Warning"
               template="SingleUintTemplate"
@@ -42,13 +132,13 @@
               task="Background"
               symbol="WarningMessage"
               message ="$(string.Event.WarningMessage)"/>
-            <event value="102"
+          <event value="102"
                 level="win:Error"
                 template="SingleStringTemplate"
                 channel="Application"
                 symbol="ErrorMessage"
                 message ="$(string.Event.ErrorMessage)"/>
-            <event value="103"
+          <event value="103"
               level="win:Informational"
               template="SingleStringTemplate"
               channel="Application"
@@ -83,10 +173,27 @@
       <stringTable>
         <string id="Provider.Name" value="MyMoviePlayer"/>
 
+        <string id="Task.Playback" value="Playback"/>
+        <string id="Task.Security" value="Security"/>
+        <string id="Task.Connectivity" value="Connectivity"/>
+        <string id="Task.Settings" value="Settings"/>
         <string id="Task.Interactive" value="Interactive"/>
         <string id="Task.Background" value="Background"/>
 
         <!-- Even description strings. Parameters are inserted with "%n", where "n" is the parameter number. -->
+        <string id="Event.PlayMessage" value="Starting to play %1."/>
+        <string id="Event.PauseMessage" value="Pausing playback."/>
+        <string id="Event.NextMessage" value="Moving ahead to next movie %1."/>
+        <string id="Event.RestartMessage" value="Restartig playback of %1."/>
+        <string id="Event.PreviousMessage" value="Going back to to previous movie %1."/>
+        <string id="Event.GotoMessage" value="Starting to play %1."/>
+        <string id="Event.AuthsuccessMessage" value="User %1 authenticated successfully."/>
+        <string id="Event.AuthFailureMessage" value="Authentication failure for user %1."/>
+        <string id="Event.ConnectedMessage" value="Server connection established."/>
+        <string id="Event.DisconnectedMessage" value="Server connection lost"/>
+        <string id="Event.CacheSizeMessage" value="Local cache size changed to %1 MB."/>
+        <string id="Event.ThrottlingMessage" value="Throttling server downloads to max %1 Mbps."/>
+
         <string id="Event.WarningMessage" value="Warning code %1"/>
         <string id="Event.ErrorMessage" value="%1"/>
         <string id="Event.InteractiveInfoEvent" value="%1"/>
