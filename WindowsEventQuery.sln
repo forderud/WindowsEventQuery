@@ -13,6 +13,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyLegacyEventProvider", "MyLegacyEventProvider\MyLegacyEventProvider.vcxproj", "{4FADAF43-9BE7-4A30-8720-9D294AA3B7B1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyEventLogger", "MyEventLogger\MyEventLogger.vcxproj", "{5B1822E6-5C54-4CDA-A562-EFEBE4D1DCED}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B7D5FFAA-D26D-4708-94F7-20205E880CEB} = {B7D5FFAA-D26D-4708-94F7-20205E880CEB}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{82835A93-6D1F-455E-AE3A-F3C757E82D08}"
 	ProjectSection(SolutionItems) = preProject
