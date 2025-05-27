@@ -62,10 +62,14 @@
           <importChannel name="Application" chid="Application"/>
 
           <!-- type = Admin, Operational, Analytic or Debug -->
-          <!-- Dedicated MyEventProvider log channel -->
+          <!-- Dedicated MyEventProvider log channels -->
           <channel chid="AdminChannel"
             name="MyEventProvider/Admin"
             type="Admin"
+            enabled="true"/>
+          <channel chid="OperationalChannel"
+            name="MyEventProvider/Operational"
+            type="Operational"
             enabled="true"/>
         </channels>
           
