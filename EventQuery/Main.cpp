@@ -8,7 +8,7 @@ int wmain(int argc, wchar_t* argv[]) {
         wprintf(L"Usage:\n");
         wprintf(L"  XPath query: EventQuery.exe qe <channel> <query>\n");
         wprintf(L"  List all channels: EventQuery.exe channels\n");
-        wprintf(L"  List all publishers: EventQuery.exe publishers\n");
+        wprintf(L"  List all providers: EventQuery.exe providers\n");
         wprintf(L"Examples:\n");
         wprintf(L"  List all MyLegacyEventProvider events: EventQuery.exe Application */System/Provider[@Name='MyLegacyEventProvider']\n");
         return 1;
@@ -27,8 +27,8 @@ int wmain(int argc, wchar_t* argv[]) {
             wprintf(L"\n");
 #endif
         }
-    } else if (mode == L"publishers") {
-        wprintf(L"List of publishers:\n");
+    } else if (mode == L"providers") {
+        wprintf(L"List of providers:\n");
         std::vector<std::wstring> providers = EnumerateProviders();
         for (const std::wstring& provider : providers)
             wprintf(L"  %s\n", provider.c_str());
