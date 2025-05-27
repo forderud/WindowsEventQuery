@@ -27,26 +27,6 @@
             <!-- template for single-parameter integer events -->
             <data name="Value" inType="win:UInt32" />
           </template>
-          <template tid="TransferTemplate">
-            <data name="Scores" inType="win:UInt16" count="3"/>
-            <data name="ID" inType="win:GUID"/>
-            <data name="Certificate" inType="win:Binary" length="11" />
-            <data name="Path" inType="win:UnicodeString" />
-
-            <data name="Day" inType="win:UInt32" />
-            <data name="Transfer" inType="win:UInt32" />
-
-            <UserData>
-              <EventData xmlns="ProviderNamespace">
-                <Transfer> %6 </Transfer>
-                <Day> %5 </Day>
-                <Path> %4 </Path>
-                <Scores> %1 </Scores>
-                <Certificate> %3 </Certificate>
-                <ID> %2 </ID>
-              </EventData>
-            </UserData>
-          </template>
         </templates>
 
         <events>
@@ -74,13 +54,6 @@
               task="Interactive"
               symbol="InteractiveInfoEvent"
               message ="$(string.Event.InteractiveInfoEvent)"/>
-            <event value="104"
-              level="win:Informational"
-              template="TransferTemplate"
-              channel="AdminChannel"
-              task="Background"
-              symbol="BackgroundInfoEvent"
-              message ="$(string.Event.BackgroundInfoEvent)"/>
         </events>
         <channels>
           <!-- standard "Application" log folder -->
@@ -109,8 +82,6 @@
         <string id="Event.WarningMessage" value="Warning code %1"/>
         <string id="Event.ErrorMessage" value="%1"/>
         <string id="Event.InteractiveInfoEvent" value="%1"/>
-        <!-- include 6th and 5th parameters in string. -->
-        <string id="Event.BackgroundInfoEvent" value="The %6 transfer will occur at day %5."/>
       </stringTable>
     </resources>
   </localization>
