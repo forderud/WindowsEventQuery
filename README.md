@@ -18,6 +18,11 @@ Event severity level values: Critical (`System/Level=1`), Error (`System/Level=2
 
 NOTICE: `System/Level=0` information events have been observed in the "Application" log.
 
+## Example of log channel properties
+Logging destination folders are referred to as "channels". Each channel can be configured with maximum size and retention policy settings:  
+![image](https://github.com/user-attachments/assets/85c440c0-143b-4d2b-803a-95ed9dcf971b)
+
+
 ## Examples of logged events
 Some examples of system problems automatically logged by Windows. All of these events can also be accessed through the Windows Event Log APIs.
 
