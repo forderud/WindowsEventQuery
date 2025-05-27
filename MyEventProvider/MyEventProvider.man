@@ -128,7 +128,7 @@
           <importChannel name="Application" chid="Application"/>
 
           <!-- type = Admin, Operational, Analytic or Debug -->
-          <!-- Dedicated MyMoviePlayer log channels -->
+          <!-- Dedicated MyMoviePlayer log folders -->
           <channel chid="AdminChannel"
             name="MyMoviePlayer/Admin"
             type="Admin"
