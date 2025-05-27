@@ -23,6 +23,10 @@
             <!-- template for single-parameter string events -->
             <data name="Message" inType="win:UnicodeString" />
           </template>
+          <template tid="SingleUintTemplate">
+            <!-- template for single-parameter integer events -->
+            <data name="Value" inType="win:UInt32" />
+          </template>
           <template tid="TransferTemplate">
             <data name="Scores" inType="win:UInt16" count="3"/>
             <data name="ID" inType="win:GUID"/>
