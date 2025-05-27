@@ -39,6 +39,7 @@
               level="win:Warning"
               template="SingleUintTemplate"
               channel="Application"
+              task="Background"
               symbol="WarningMessage"
               message ="$(string.Event.WarningMessage)"/>
             <event value="102"
@@ -55,6 +56,7 @@
               symbol="InteractiveInfoEvent"
               message ="$(string.Event.InteractiveInfoEvent)"/>
         </events>
+          
         <channels>
           <!-- standard "Application" log folder -->
           <importChannel name="Application" chid="Application"/>
@@ -65,12 +67,13 @@
             type="Admin"
             enabled="true"/>
         </channels>
+          
       </provider>
     </events>
   </instrumentation>
 
   <localization>
-    <!-- add translated strings here -->
+    <!-- Translatable strings here. -->
     <resources culture="en-US">
       <stringTable>
         <string id="Provider.Name" value="MyEventProvider"/>
@@ -78,7 +81,7 @@
         <string id="Task.Interactive" value="Interactive"/>
         <string id="Task.Background" value="Background"/>
 
-        <!-- write first parameter string as-is. -->
+        <!-- Even description strings. Parameters are inserted with "%n", where "n" is the parameter number. -->
         <string id="Event.WarningMessage" value="Warning code %1"/>
         <string id="Event.ErrorMessage" value="%1"/>
         <string id="Event.InteractiveInfoEvent" value="%1"/>
