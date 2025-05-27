@@ -93,16 +93,14 @@ cleanup:
 // Render the event as an XML string and print it.
 DWORD PrintEvent(EVT_HANDLE hEvent) {
     DWORD status = ERROR_SUCCESS;
-    DWORD dwBufferSize = 0;
     DWORD dwBufferUsed = 0;
     DWORD dwPropertyCount = 0;
 
     std::vector<wchar_t> buffer;
-    if (!EvtRender(NULL, hEvent, EvtRenderEventXml, dwBufferSize, nullptr, &dwBufferUsed, &dwPropertyCount)) {
+    if (!EvtRender(NULL, hEvent, EvtRenderEventXml, 0, nullptr, &dwBufferUsed, &dwPropertyCount)) {
         if (ERROR_INSUFFICIENT_BUFFER == (status = GetLastError())) {
-            dwBufferSize = dwBufferUsed;
-            buffer.resize(dwBufferSize/sizeof(wchar_t));
-            EvtRender(NULL, hEvent, EvtRenderEventXml, dwBufferSize, buffer.data(), &dwBufferUsed, &dwPropertyCount);
+            buffer.resize(dwBufferUsed /sizeof(wchar_t));
+            EvtRender(NULL, hEvent, EvtRenderEventXml, dwBufferUsed, buffer.data(), &dwBufferUsed, &dwPropertyCount);
         }
 
         if (ERROR_SUCCESS != (status = GetLastError())) {
