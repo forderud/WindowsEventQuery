@@ -1,5 +1,5 @@
 /* DOC: https://learn.microsoft.com/en-us/windows/win32/wes/getting-a-provider-s-metadata- */
-#include "Publisher.hpp"
+#include "Provider.hpp"
 #include "Event.hpp"
 #include <cassert>
 

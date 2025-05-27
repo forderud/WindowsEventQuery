@@ -1,6 +1,6 @@
 #include "Channel.hpp"
 #include "Event.hpp"
-#include "Publisher.hpp"
+#include "Provider.hpp"
 
 
 int wmain(int argc, wchar_t* argv[]) {

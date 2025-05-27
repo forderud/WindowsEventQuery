@@ -14,12 +14,12 @@
     <ClCompile Include="Channel.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Publisher.cpp" />
+    <ClCompile Include="Provider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Channel.hpp" />
     <ClInclude Include="Event.hpp" />
-    <ClInclude Include="Publisher.hpp" />
+    <ClInclude Include="Provider.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
