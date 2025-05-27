@@ -61,6 +61,7 @@
           <!-- standard "Application" log folder -->
           <importChannel name="Application" chid="Application"/>
 
+          <!-- type = Admin, Operational, Analytic or Debug -->
           <!-- Dedicated MyEventProvider log channel -->
           <channel chid="AdminChannel"
             name="MyEventProvider/Admin"
