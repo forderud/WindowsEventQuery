@@ -103,7 +103,8 @@ DWORD PrintEvent(EVT_HANDLE hEvent) {
             EvtRender(NULL, hEvent, EvtRenderEventXml, dwBufferUsed, buffer.data(), &dwBufferUsed, &dwPropertyCount);
         }
 
-        if (ERROR_SUCCESS != (status = GetLastError())) {
+        status = GetLastError();
+        if (status != ERROR_SUCCESS) {
             wprintf(L"EvtRender failed with %d\n", status);
             return status;
         }
