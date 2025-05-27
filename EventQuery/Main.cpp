@@ -1,3 +1,4 @@
+/* DOC: https://learn.microsoft.com/en-us/windows/win32/wes/consuming-events */
 #include "Channel.hpp"
 #include "Event.hpp"
 #include "Provider.hpp"

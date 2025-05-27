@@ -1,3 +1,4 @@
+/* DOC: https://learn.microsoft.com/en-us/windows/win32/wes/subscribing-to-events */
 #include <Windows.h>
 #include <iostream>
 

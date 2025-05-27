@@ -1,3 +1,4 @@
+/* DOC: https://learn.microsoft.com/en-us/windows/win32/wes/querying-for-events */
 #include <stdio.h>
 #include "Event.hpp"
 #include <vector>
