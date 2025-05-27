@@ -18,7 +18,7 @@ int wmain(int argc, wchar_t* argv[]) {
     }
 
     std::wstring channel = argv[1]; // examples: L"System" or L"Application"
-    std::wstring query = argv[2];   // examples: L"*/System[(Level>=1) and (Level<=2)]" or L"*/System/Provider[@Name='MyLegacyEventProvider']"
+    std::wstring query = argv[2];   // examples: L"*/System[(Level>=1) and (Level<=2)]" or L"*/System/Provider[@Name='MyMoviePlayer']"
 
     DWORD status = ERROR_SUCCESS;
     EVT_HANDLE hSubscription = NULL;
