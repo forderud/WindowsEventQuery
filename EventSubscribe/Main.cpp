@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <winevt.h>
 #include <string>
+#include <vector>
 
 #pragma comment(lib, "wevtapi.lib")
 
@@ -95,32 +96,21 @@ DWORD PrintEvent(EVT_HANDLE hEvent) {
     DWORD dwBufferSize = 0;
     DWORD dwBufferUsed = 0;
     DWORD dwPropertyCount = 0;
-    LPWSTR pRenderedContent = NULL;
 
-    if (!EvtRender(NULL, hEvent, EvtRenderEventXml, dwBufferSize, pRenderedContent, &dwBufferUsed, &dwPropertyCount)) {
+    std::vector<wchar_t> buffer;
+    if (!EvtRender(NULL, hEvent, EvtRenderEventXml, dwBufferSize, nullptr, &dwBufferUsed, &dwPropertyCount)) {
         if (ERROR_INSUFFICIENT_BUFFER == (status = GetLastError())) {
             dwBufferSize = dwBufferUsed;
-            pRenderedContent = (LPWSTR)malloc(dwBufferSize);
-            if (pRenderedContent) {
-                EvtRender(NULL, hEvent, EvtRenderEventXml, dwBufferSize, pRenderedContent, &dwBufferUsed, &dwPropertyCount);
-            } else {
-                wprintf(L"malloc failed\n");
-                status = ERROR_OUTOFMEMORY;
-                goto cleanup;
-            }
+            buffer.resize(dwBufferSize/sizeof(wchar_t));
+            EvtRender(NULL, hEvent, EvtRenderEventXml, dwBufferSize, buffer.data(), &dwBufferUsed, &dwPropertyCount);
         }
 
         if (ERROR_SUCCESS != (status = GetLastError())) {
             wprintf(L"EvtRender failed with %d\n", status);
-            goto cleanup;
+            return status;
         }
     }
 
-    wprintf(L"%s\n\n", pRenderedContent);
-
-cleanup:
-    if (pRenderedContent)
-        free(pRenderedContent);
-
+    wprintf(L"%s\n\n", buffer.data());
     return status;
 }
