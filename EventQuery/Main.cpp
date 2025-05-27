@@ -11,7 +11,7 @@ int wmain(int argc, wchar_t* argv[]) {
         wprintf(L"  List all channels: EventQuery.exe channels\n");
         wprintf(L"  List all providers: EventQuery.exe providers\n");
         wprintf(L"Examples:\n");
-        wprintf(L"  List all MyLegacyEventProvider events: EventQuery.exe Application */System/Provider[@Name='MyLegacyEventProvider']\n");
+        wprintf(L"  List all MyMoviePlayer usage events: EventQuery.exe qe MyMoviePlayer/Operational  */System/Provider[@Name='MyMoviePlayer']\n");
         return 1;
     }
 
