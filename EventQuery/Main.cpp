@@ -29,9 +29,9 @@ int wmain(int argc, wchar_t* argv[]) {
         }
     } else if (mode == L"publishers") {
         wprintf(L"List of publishers:\n");
-        std::vector<std::wstring> publishers = EnumeratePublishers();
-        for (const std::wstring& publisher : publishers)
-            wprintf(L"  %s\n", publisher.c_str());
+        std::vector<std::wstring> providers = EnumerateProviders();
+        for (const std::wstring& provider : providers)
+            wprintf(L"  %s\n", provider.c_str());
 
     } else if (mode == L"qe") {
         if (argc < 4) {
