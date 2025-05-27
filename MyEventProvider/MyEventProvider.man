@@ -57,7 +57,7 @@
                symbol=preprocessor_name -->
           <event value="101"
               level="win:Warning"
-              template="SingleStringTemplate"
+              template="SingleUintTemplate"
               channel="Application"
               symbol="WarningMessage"
               message ="$(string.Event.WarningMessage)"/>
@@ -106,7 +106,7 @@
         <string id="Task.Background" value="Background"/>
 
         <!-- write first parameter string as-is. -->
-        <string id="Event.WarningMessage" value="%1"/>
+        <string id="Event.WarningMessage" value="Warning code %1"/>
         <string id="Event.ErrorMessage" value="%1"/>
         <string id="Event.InteractiveInfoEvent" value="%1"/>
         <!-- include 6th and 5th parameters in string. -->

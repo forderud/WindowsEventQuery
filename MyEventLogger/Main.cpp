@@ -10,8 +10,8 @@ int wmain(void) {
     {
         // generate WarningMessage log entry
         std::vector<EVENT_DATA_DESCRIPTOR> params;
-        std::wstring path = L"Something strange happened...";
-        params.push_back(EventData(path.c_str(), (path.length() + 1) * sizeof(wchar_t))); // incl. null-termination
+        DWORD val = 41;
+        params.push_back(EventData(&val, sizeof(val)));
 
         wprintf(L"Writing log entry...\n");
         provider.Write(&WarningMessage, params.size(), params.data());
