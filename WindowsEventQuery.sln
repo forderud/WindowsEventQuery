@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35827.183
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsEventQuery", "WindowsEventQuery\WindowsEventQuery.vcxproj", "{B400B20C-F246-430E-851B-A32F722A4259}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EventQuery", "EventQuery\EventQuery.vcxproj", "{B400B20C-F246-430E-851B-A32F722A4259}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyEventLogger", "MyEventLogger\MyEventLogger.vcxproj", "{5B1822E6-5C54-4CDA-A562-EFEBE4D1DCED}"
 	ProjectSection(ProjectDependencies) = postProject

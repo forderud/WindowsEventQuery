@@ -6,11 +6,11 @@
 int wmain(int argc, wchar_t* argv[]) {
     if (argc < 2) {
         wprintf(L"Usage:\n");
-        wprintf(L"  XPath query: WindowsEventQuery.exe qe <channel> <query>\n");
-        wprintf(L"  List all channels: WindowsEventQuery.exe channels\n");
-        wprintf(L"  List all publishers: WindowsEventQuery.exe publishers\n");
+        wprintf(L"  XPath query: EventQuery.exe qe <channel> <query>\n");
+        wprintf(L"  List all channels: EventQuery.exe channels\n");
+        wprintf(L"  List all publishers: EventQuery.exe publishers\n");
         wprintf(L"Examples:\n");
-        wprintf(L"  List all MyLegacyEventProvider events: WindowsEventQuery.exe Application */System/Provider[@Name='MyLegacyEventProvider']\n");
+        wprintf(L"  List all MyLegacyEventProvider events: EventQuery.exe Application */System/Provider[@Name='MyLegacyEventProvider']\n");
         return 1;
     }
 
